@@ -1,4 +1,4 @@
-#include "include/ft_ls.h"
+#include "../includes/ft_ls.h"
 
 void mode_type(struct stat buf)
 {

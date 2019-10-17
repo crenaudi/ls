@@ -1,29 +1,42 @@
-#include "../include/ft_ls.h"
+#include "../includes/ft_ls.h"
 
-void stack(t_pile *pile, struct stat *dir)
+void stack(t_pile *pile, char *name, char *way, struct stat *dir)
 {
       t_elem      *new;
+      int         i;
 
+      i = -1;
       if (!(new = (t_elem *)malloc(sizeof(t_elem))) || pile == NULL)
             exit(EXIT_FAILURE);
       new->buf = dir;
+      new->way = ft_strdup(way);
+      while (name[++i])
+            new->name[i] = name[i];
       new->next = pile->first;
       pile->first = new;
 }
 
-struct stat *unstack(t_pile *pile)
+t_elem  *unstack(t_pile *pile)
 {
       t_elem      *tmp;
-      struct stat *ret;
 
+      //ft_bzero(way, sizeof(char) * 256);
+      //way = ft_strdup(pile->first->way);
       if (pile == NULL)
             exit(EXIT_FAILURE);
-      tmp = pile->premier;
-      if (tmp->first != NULL)
+      tmp = pile->first;
+      pile->first = tmp->next;
+      return(tmp);
+}
+
+void tab2pile(t_env *e, char *way, struct stat *buf, int i, int len)
+{
+      if (++i < len)
       {
-            ret = tmp->buf;
-            pile->first = tmp->next;
-            free(tmp);
+            tab2pile(e, way, buf, i, len);
+            if (device_type(buf[i]) == 'd')
+            {
+                  stack(e->pile, e->curr[i], way, buf);
+            }
       }
-      return (ret);
 }
