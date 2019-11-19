@@ -6,44 +6,61 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/02 13:32:42 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:53:21 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
+
+
+static void	sort_param(t_env *e, int size)
+{
+	int			i;
+	int			ln;
+	char		*abys;
+
+	ln = size;
+	size--;
+	while (ln--)
+	{
+		i = -1;
+		while (++i < size)
+		{
+			if (e->curr[i][0] > e->curr[i + 1][0])
+			{
+				abys = e->curr[i];
+				e->curr[i] = e->curr[i + 1];
+				e->curr[i + 1] = abys;
+			}
+		}
+	}
+}
 
 int	main(int ac, char **av)
 {
 	t_env		e;
 	int		i;
 	int		j;
-	struct stat	*buf;
-	t_elem	*one;
 
 	init_env(&e);
 	i = parse_flags(ac, av, &e);
 	if (av[i] == NULL)
 	{
-		if (!(one = (t_elem *)malloc(sizeof(t_elem))))
-			exit(EXIT_FAILURE);
-		one->name[0] = '.';
-
-		manage(one, &e);
-		//free(one);
+		empiler(e.pile, ".", NULL);
+    run(depiler(e.pile), &e);
 	}
 	else
 	{
 		j = -1;
 		while (av[i] != NULL)
-		{
 			e.curr[++j]= ft_strdup(av[i++]);
-			printf("%s\n", e.curr[j]);
-		}
-		buf = add_buf2pile(&e, "./", 1);
-		free(buf);
+	  sort_param(&e, ln_tab(e.curr));
+		j++;
+		while (j--)
+	        empiler(e.pile, e.curr[j], "./");
 		clean(e.curr);
-		manage(unstack(e.pile), &e);
+		run(depiler(e.pile), &e);
 	}
 	clean_env(&e);
 	return (0);
-}
+	}

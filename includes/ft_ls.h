@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:12:14 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/02 13:29:25 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/18 17:34:07 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ typedef struct s_env	t_env;
 typedef struct s_pile	t_pile;
 typedef struct s_elem	t_elem;
 typedef struct s_imp	t_imp;
-typedef struct s_time	t_time;
-typedef void       	(*t_sortf)(struct stat *, t_env *, int);
-typedef void       	(*t_printf)(struct stat *, char *, t_env *);
+typedef void			(*t_fsrt)(struct stat *, t_env *, int);
+typedef void			(*t_fprt)(struct stat *, char *, t_env *);
 
 struct					s_env
 {
-	t_sortf				f_sort;
-	t_printf				f_print;
+	t_fsrt				f_sort;
+	t_fprt				f_print;
 	int					a;
 	int					reccursive;
+	int					nb_elem;
 	char				**curr;
 	t_pile				*pile;
 };
@@ -53,7 +53,7 @@ struct					s_env
 struct					s_elem
 {
 	char				name[256];
-	char				*way;
+	char				 *way;
 	struct stat			*buf;
 	struct s_elem		*next;
 };
@@ -76,26 +76,28 @@ struct					s_imp
 };
 
 void					init_env(t_env *e);
-int        			parse_flags(int ac, char **av, t_env *e);
-int         			ln_tab(char **tab);
-struct stat 			*add_buf2pile(t_env *e, char *way);
-void					stack(t_pile *pl, char *nm, char *w, struct stat *d);
-t_elem				*unstack(t_pile *pile);
-void					manage(t_elem *dir, t_env *e);
-void					tri_reccursif(t_env *e, char *way,
-	struct stat *buf, int i, int ln);
+int						parse_flags(int ac, char **av, t_env *e);
+int						ln_tab(char **tab);
+t_imp					*init_size(t_env *e);
+void					error(char *av, int error);
+t_elem *add_new_elem(char *name, char *way);
+void					empiler(t_pile *pile, char *name, char *way);
+t_elem					*depiler(t_pile *pile);
+void afficher_pile(t_pile *pile);
+void free_elem(t_elem *elem);
+void					run(t_elem *elem, t_env *e);
+struct stat	*buf_tab(t_env *e, char *way);
 char					device_type(struct stat buf);
 void					mode_type(struct stat buf);
 void					sort_base(struct stat *buf, t_env *e, int size);
 void					sort_r(struct stat *buf, t_env *e, int size);
 void					sort_t(struct stat *buf, t_env *e, int size);
 void					sort_rt(struct stat *buf, t_env *e, int size);
-t_imp					*init_size(t_env *e);
-void					print_way(char *way);
-void					print_simple(struct stat *buf, char *way, t_env *e);
-void					print_all(struct stat *buf, char *way, t_env *e);
-void					error(char *av, int error);
 void					clean(char **tab);
+void					print_way(char *way);
+void					ls_simple(struct stat *buf, char *way, t_env *e);
+void					ls_all(struct stat *buf, char *way, t_env *e);
+void					clean_elem(t_elem *elem);
 void					clean_env(t_env *e);
 
 #endif

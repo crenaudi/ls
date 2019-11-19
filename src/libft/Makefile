@@ -88,11 +88,11 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo		"\033[0;34m [OK] \033[0m       \033[0;33m Compiling: Libft.a\033[0m"
+	@echo		"\033[0;32m [OK] \033[0m       \033[0;33m Compiling: Libft.a\033[0m"
 	@$(CC) $(CFLAGS) -g3 $(SRC) -I .
 	@$(AR) $(NAME) $(OBJ)
 	@$(RL) $(NAME)
-	@echo		"\033[0;34m [LIBFT][SUCCESS] \033[0m"
+	@echo		"\033[0;33m [LIBFT][SUCCESS] \033[0m"
 
 clean:
 	@$(RM) $(OBJ)

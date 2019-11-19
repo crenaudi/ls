@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:56 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/02 13:37:46 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/18 18:58:27 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void		init_env(t_env *e)
 	if (!(pile = (t_pile *)malloc(sizeof(t_pile))))
 		exit(EXIT_FAILURE);
 	e->pile = pile;
+	e->pile->first = NULL;
 }
 
 static int	ft_sizename(char **name)

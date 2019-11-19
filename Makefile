@@ -4,16 +4,16 @@ LIBFT_FOLDER = src/libft
 LIBFT = -L. $(LIBFT_FOLDER) -lft
 LIBFT_A = $(LIBFT_FOLDER)/libft.a
 EXEC = ft_ls
-SRC = src/main.c		\
+SRC = src/main.c	\
 	src/init.c		\
-	src/manage.c	\
+	src/parse_func.c	\
+	src/run.c			\
 	src/pile.c		\
 	src/device.c	\
 	src/sort.c		\
 	src/error.c		\
 	src/clean.c		\
 	src/mode.c		\
-	src/parse_func.c	\
 	src/print_ls.c
 OBJ = $(SRC:.c=.o)
 RM = rm -f

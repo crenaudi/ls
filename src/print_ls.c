@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:10 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/02 13:55:05 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/19 15:52:46 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ static void		ft_putspace(char const *s)
 
 void			print_way(char *way)
 {
-	if (ft_strcmp(way, "./"))
+	if (ft_strcmp(way, "./") != 0)
 	{
-		ft_putchar('\n');
-		ft_putendl(ft_strjoin(way, " :\n"));
+		ft_putendl(ft_strjoin(way, " :"));
 	}
 }
 
@@ -54,19 +53,21 @@ static void		ft_putinfo(struct stat buf, char *name)
 	ft_putendl(name);
 }
 
-void			print_simple(struct stat *buf, char *way, t_env *e)
+void			ls_simple(struct stat *buf, char *way, t_env *e)
 {
 	int	i;
 
 	(void)buf;
-	print_way(way);
 	i = -1;
+	print_way(way);
 	while (e->curr[++i][0] != 0)
 		ft_putspace(e->curr[i]);
+	//Ne pas oublier de changer en ft_putendl
+	ft_putchar('\n');
 	ft_putchar('\n');
 }
 
-void			print_all(struct stat *buf, char *way, t_env *e)
+void			ls_all(struct stat *buf, char *way, t_env *e)
 {
 	int		i;
 	t_imp	*size;

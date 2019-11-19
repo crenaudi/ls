@@ -5,58 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/02 13:07:55 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/02 13:44:22 by crenaudi         ###   ########.fr       */
+/*   Created: 2019/11/19 17:15:37 by crenaudi          #+#    #+#             */
+/*   Updated: 2019/11/19 17:17:28 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void	stack(t_pile *pile, char *name, char *way, struct stat *dir)
+t_elem *add_new_elem(char *name, char *way)
 {
-	t_elem	*new;
-	//int		i;
+  t_elem *new;
+  int i;
 
-	//i = -1;
-	if (!(new = (t_elem *)malloc(sizeof(t_elem))) || pile == NULL)
-		exit(EXIT_FAILURE);
-	new->buf = dir;
-	new->way = ft_strdup(way);
-	ft_strcpy(new->name, name);
-	/*while (name[++i])
-		new->name[i] = name[i];*/
-	new->next = pile->first;
-	pile->first = new;
+  i = -1;
+  if(!(new = (t_elem *)malloc(sizeof(t_elem))))
+    return (NULL);
+  while (name[++i] != 0)
+    new->name[i] = name[i];
+  new->way = way;
+  if(!(new->buf = (struct stat *)malloc(sizeof(struct stat))))
+    return (NULL);
+  if (name[0] != '.' && lstat(ft_strjoin(way, name), new->buf) != 0)
+    error(name, 0);
+  return (new);
 }
 
-t_elem	*unstack(t_pile *pile)
+void empiler(t_pile *pile, char *name, char *way)
 {
-	t_elem	*tmp;
+    t_elem *new;
 
-	tmp = pile->first;
-	printf("Dans ma pile il y a %s\n",pile->first->name);
-	while(tmp != NULL)
-	{
-		printf("Dans ma pile il y a %s\n",tmp->name);
-		tmp = tmp->next;
-	}
-
-	if (pile == NULL)
-		exit(EXIT_FAILURE);
-	tmp = pile->first;
-	pile->first = tmp->next;
-	printf("fini \n");
-	return (tmp);
+    new = add_new_elem(name, way);
+    if (pile == NULL || new == NULL)
+        exit(EXIT_FAILURE);
+    new->next = pile->first;
+    pile->first = new;
 }
 
-void	tri_reccursif(t_env *e, char *way, struct stat *buf, int i, int ln)
+t_elem *depiler(t_pile *pile)
 {
-	if (++i < ln)
-	{
-		tri_reccursif(e, way, buf, i, ln);
-		if (device_type(buf[i]) == 'd')
-		{
-			stack(e->pile, e->curr[i], way, buf);
-		}
-	}
+  t_elem *tmp;
+
+    tmp = pile->first;
+    if (pile == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+    if (pile != NULL && pile->first != NULL)
+        pile->first = tmp->next;
+    return(tmp);
+}
+
+void afficher_pile(t_pile *pile)
+{
+  t_elem *tmp;
+
+  tmp = pile->first;
+  while (tmp != NULL)
+  {
+    printf("dans ma pile il y a %s\n", tmp->name);
+    tmp = tmp->next;
+  }
+}
+
+void free_elem(t_elem *elem)
+{
+  char *name;
+  //char  *way;
+  struct stat *buf;
+
+  name = elem->name;
+  //way = elem->way;
+  buf = elem->buf;
+  free(name);
+  //free(way);
+  free(buf);
+  //free(elem);
 }
