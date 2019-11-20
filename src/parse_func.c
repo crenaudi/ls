@@ -44,6 +44,8 @@ int			parse_flags(int ac, char **av, t_env *e)
 	{
 		while (av[i] != NULL && (av[i][0] == '-' && av[i][1] != '-'))
 		{
+			if (ft_strchr(ft_strsub(av[i], 1, ft_strlen(av[i])), '-') != NULL)
+				return (-1);
 			flg = (flg == NULL) ? ft_strdup(av[i]) : ft_strjoin(flg, av[i]);
 			i++;
 		}

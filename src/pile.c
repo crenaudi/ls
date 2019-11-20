@@ -12,7 +12,7 @@
 
 #include "../includes/ft_ls.h"
 
-t_elem *add_new_elem(char *name, char *way)
+t_elem *add_new_elem(char *name, char *way, int is_R, int is_a)
 {
   t_elem *new;
   int i;
@@ -25,20 +25,21 @@ t_elem *add_new_elem(char *name, char *way)
   new->way = way;
   if(!(new->buf = (struct stat *)malloc(sizeof(struct stat))))
     return (NULL);
-  if (name[0] != '.' && lstat(ft_strjoin(way, name), new->buf) != 0)
-    error(name, 0);
+  if (is_R == 1 && is_a == 0 && name[0] != '.'
+    && lstat(ft_strjoin(way, name), new->buf) != 0)
+      error(name, 0);
   return (new);
 }
 
-void empiler(t_pile *pile, char *name, char *way)
+void empiler(t_env *e, char *name, char *way)
 {
     t_elem *new;
 
-    new = add_new_elem(name, way);
-    if (pile == NULL || new == NULL)
+    new = add_new_elem(name, way, e->reccursive, e->a);
+    if (e->pile == NULL || new == NULL)
         exit(EXIT_FAILURE);
-    new->next = pile->first;
-    pile->first = new;
+    new->next = e->pile->first;
+    e->pile->first = new;
 }
 
 t_elem *depiler(t_pile *pile)

@@ -44,9 +44,11 @@ int	main(int ac, char **av)
 
 	init_env(&e);
 	i = parse_flags(ac, av, &e);
-	if (av[i] == NULL)
+	if (i == -1)
+		error(NULL, -3);
+	else if (av[i] == NULL)
 	{
-		empiler(e.pile, ".", NULL);
+		empiler(&e, ".", NULL);
     run(depiler(e.pile), &e);
 	}
 	else
@@ -57,7 +59,7 @@ int	main(int ac, char **av)
 	  sort_param(&e, ln_tab(e.curr));
 		j++;
 		while (j--)
-	        empiler(e.pile, e.curr[j], "./");
+	        empiler(&e, e.curr[j], "./");
 		clean(e.curr);
 		run(depiler(e.pile), &e);
 	}

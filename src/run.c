@@ -15,7 +15,7 @@
 static int	check_permission(t_elem *elem)
 {
 	const char	*doc;
-
+//presicer si elem name == "."
 	doc = (elem->way == NULL) ? elem->name : ft_strjoin(elem->way, elem->name);
 	if (elem->name[0] != '.' && (elem->buf->st_mode & S_IRUSR) != S_IRUSR)
 	{
@@ -43,8 +43,8 @@ static void	next_step(t_env *e, char *way, char *dir)
 	if (e->reccursive == 1)
 	{
     while (i--)
-			if (device_type(buf[i]) == 'd')
-        empiler(e->pile, e->curr[i], way);
+			if (device_type(buf[i]) == 'd' && e->curr[i][0] != '.')
+        empiler(e, e->curr[i], way);
 	}
 	e->f_print(buf, way, e);
 	free(buf);
@@ -57,12 +57,12 @@ void		run(t_elem *elem, t_env *e)
 	struct dirent	*c;
 	int				i;
 
-	if (check_permission(elem) == 0)
+	if ((dirp = opendir((elem->way == NULL) ? elem->name
+		: ft_strjoin(elem->way, elem->name))) == NULL)
+		error(elem->name, -1);
+	else
 	{
-		if ((dirp = opendir((elem->way == NULL) ? elem->name
-			: ft_strjoin(elem->way, elem->name))) == NULL)
-			error(elem->name, -1);
-		else
+		if (check_permission(elem) == 0)
 		{
 			i = -1;
 			while ((c = readdir(dirp)) != NULL)
@@ -72,7 +72,7 @@ void		run(t_elem *elem, t_env *e)
 				next_step(e, elem->way, ft_strjoin(elem->name, "/"));
 			if (i == -1 && e->reccursive == 1)
 				print_way(ft_strjoin(elem->way, elem->name));
-		}
+			}
 	}
 	free_elem(elem);
 	if (e->pile != NULL && e->pile->first != NULL)

@@ -14,14 +14,24 @@
 
 void	error(char *av, int error)
 {
+	int er[5] = {-1, -2, -3, 1, '\0'};
+	int i;
+	const char *s[6] = {
+		": No such file or directory",
+		": Premission denied",
+		"illegal option -- -",
+		": error in flags",
+		": usage flags",
+		"\0"
+	};
+
 	ft_putstr("ls: ");
-	ft_putstr(av);
-	if (error == -1)
-		ft_putendl(": No such file or directory");
-	else if (error == -2)
-		ft_putendl(": Premission denied");
-	else if (error == -3)
-		ft_putendl("error in flags");
-	else
-		ft_putendl(": usage");
+	if (error != -3)
+		ft_putstr(av);
+		i = -1;
+	while (er[++i] != '\0')
+		if (error == er[i])
+			ft_putendl(s[i]);
+	if (error == -3)
+		ft_putendl("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]");
 }
