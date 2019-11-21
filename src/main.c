@@ -12,40 +12,17 @@
 
 #include "../includes/ft_ls.h"
 
-
-static void	sort_param(t_env *e, int size)
-{
-	int			i;
-	int			ln;
-	char		*abys;
-
-	ln = size;
-	size--;
-	while (ln--)
-	{
-		i = -1;
-		while (++i < size)
-		{
-			if (e->curr[i][0] > e->curr[i + 1][0])
-			{
-				abys = e->curr[i];
-				e->curr[i] = e->curr[i + 1];
-				e->curr[i + 1] = abys;
-			}
-		}
-	}
-}
-
 int	main(int ac, char **av)
 {
 	t_env		e;
 	int		i;
 	int		j;
+	struct stat	*buf;
 
 	init_env(&e);
 	i = parse_flags(ac, av, &e);
 	if (i == -1)
-		error(NULL, -3);
+		error(NULL, -3, &e.illegal);
 	else if (av[i] == NULL)
 	{
 		empiler(&e, ".", NULL);
@@ -56,11 +33,13 @@ int	main(int ac, char **av)
 		j = -1;
 		while (av[i] != NULL)
 			e.curr[++j]= ft_strdup(av[i++]);
-	  sort_param(&e, ln_tab(e.curr));
+		buf = buf_tab(&e, "./");
+	  e.f_sort(buf, &e, ln_tab(e.curr));
 		j++;
 		while (j--)
 	        empiler(&e, e.curr[j], "./");
 		clean(e.curr);
+		free(buf);
 		run(depiler(e.pile), &e);
 	}
 	clean_env(&e);

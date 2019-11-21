@@ -35,27 +35,3 @@ void		init_env(t_env *e)
 	e->pile = pile;
 	e->pile->first = NULL;
 }
-
-static int	ft_sizename(char **name)
-{
-	int		i;
-	size_t	max;
-
-	i = 0;
-	max = ft_strlen(name[i]);
-	while (name[++i][0] != '\0')
-		if (ft_strlen(name[i]) > max)
-			max = ft_strlen(name[i]);
-	return (max);
-}
-
-t_imp		*init_size(t_env *e)
-{
-	t_imp*size;
-
-	if (!(size = (t_imp *)malloc(sizeof(t_imp))))
-		return (NULL);
-	ft_bzero(size, sizeof(t_imp));
-	size->name = ft_sizename(e->curr);
-	return (size);
-}

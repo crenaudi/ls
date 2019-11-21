@@ -24,29 +24,30 @@ void			print_way(char *way)
 {
 	if (ft_strcmp(way, "./") != 0)
 	{
-		ft_putendl(ft_strjoin(way, " :"));
+		ft_putendl(ft_strjoin(ft_strsub(way, 0, ft_strlen(way) - 1), " :"));
 	}
 }
 
-static void		ft_putinfo(struct stat buf, char *name)
+static void		ft_putinfo(struct stat buf, char *name, t_vec2 nb_max, t_vec2 str_max)
 {
 	struct passwd	*pwd;
 	struct group	*grp;
 	char			*tm;
 	int				i;
 
-	i = -1;
 	pwd = getpwuid(buf.st_uid);
 	grp = getgrgid(buf.st_gid);
 	ft_putchar(device_type(buf));
 	mode_type(buf);
-	ft_putnbr(buf.st_nlink);
-	ft_putchar(' ');
-	ft_putspace(pwd->pw_name);
-	ft_putspace(grp->gr_name);
-	ft_putnbr(buf.st_size);
-	ft_putchar(' ');
+	nb_patern(nb_max.x, buf.st_nlink);
+	str_patern(str_max.x, pwd->pw_name);
+	str_patern(str_max.y, grp->gr_name);
+	nb_patern(nb_max.y, buf.st_size);
 	tm = ctime(&buf.st_ctime);
+	i = 3;
+	while (++i < 11)
+		ft_putchar(tm[i]);
+	i += 8;
 	while (tm[++i + 1] != '\0')
 		ft_putchar(tm[i]);
 	ft_putchar(' ');
@@ -64,19 +65,27 @@ void			ls_simple(struct stat *buf, char *way, t_env *e)
 		ft_putspace(e->curr[i]);
 	//Ne pas oublier de changer en ft_putendl
 	ft_putchar('\n');
-	ft_putchar('\n');
+	if (e->pile != NULL && e->pile->first != NULL)
+		ft_putchar('\n');
 }
 
 void			ls_all(struct stat *buf, char *way, t_env *e)
 {
 	int		i;
-	t_imp	*size;
+	int ln;
+	t_vec2	nb_max;
+	t_vec2	str_max;
 
 	i = -1;
-	size = init_size(e);
+	ln = ln_tab(e->curr);
+	nb_max.x = max_st_nlink(buf, ln);
+	nb_max.y = max_st_size(buf, ln);
+	str_max.x = max_st_nlink(buf, ln);
+	str_max.y = max_st_size(buf, ln);
 	print_way(way);
 	while (e->curr[++i][0] != 0)
-		ft_putinfo(buf[i], e->curr[i]);
+			ft_putinfo(buf[i], e->curr[i], nb_max, str_max);
 	ft_putchar('\n');
-	free(size);
+	if (e->pile != NULL && e->pile->first != NULL)
+		ft_putchar('\n');
 }

@@ -12,14 +12,18 @@
 
 #include "../includes/ft_ls.h"
 
-static void	add_flags(char *flags, t_env *e)
+int	add_flags(char *flags, t_env *e)
 {
+	char 	c;
+	int 	i;
+
+	c = 32;/*
 	if (flags == NULL)
 	{
 		e->f_sort = &sort_base;
 		e->f_print = &ls_simple;
-		return ;
-	}
+		return (0);
+	}*/
 	e->a = (ft_strchr(flags, 'a') != NULL) ? 1 : 0;
 	e->reccursive = (ft_strchr(flags, 'R') != NULL) ? 1 : 0;
 	e->f_print = (ft_strchr(flags, 'l') != NULL) ? &ls_all : &ls_simple;
@@ -31,6 +35,18 @@ static void	add_flags(char *flags, t_env *e)
 		e->f_sort = &sort_t;
 	else
 		e->f_sort = &sort_base;
+	while (++c <= '~')
+	{
+		i = -1;
+		while (flags[++i] != '\0')
+			if (flags[i] == c && flags[i] != 'a' && flags[i] != 'R' && flags[i] != 'l'
+				&& flags[i] != 't' && flags[i] != 'r' && flags[i] != '-')
+				{
+					e->illegal = c;
+					return (-1);
+				}
+	}
+	return (0);
 }
 
 int			parse_flags(int ac, char **av, t_env *e)
@@ -45,14 +61,21 @@ int			parse_flags(int ac, char **av, t_env *e)
 		while (av[i] != NULL && (av[i][0] == '-' && av[i][1] != '-'))
 		{
 			if (ft_strchr(ft_strsub(av[i], 1, ft_strlen(av[i])), '-') != NULL)
+			{
+				e->illegal = '-';
 				return (-1);
+			}
 			flg = (flg == NULL) ? ft_strdup(av[i]) : ft_strjoin(flg, av[i]);
 			i++;
 		}
-		add_flags(flg, e);
+		if (add_flags(flg, e) == -1)
+			return (-1);
 	}
 	else
-		add_flags(NULL, e);
+	{
+		e->f_sort = &sort_base;
+		e->f_print = &ls_simple;
+	}
 	return (i);
 }
 
@@ -79,7 +102,7 @@ struct stat	*buf_tab(t_env *e, char *way)
 	while (++i < len)
 	{
 		if (lstat(ft_strjoin(way, e->curr[i]), &buf[i]) != 0)
-			error(e->curr[i], 0);
+			error(e->curr[i], 0, NULL);
 	}
 	return (buf);
 }

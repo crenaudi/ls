@@ -12,14 +12,14 @@
 
 #include "../includes/ft_ls.h"
 
-void	error(char *av, int error)
+void	error(char *av, int error, char *illegal)
 {
 	int er[5] = {-1, -2, -3, 1, '\0'};
 	int i;
 	const char *s[6] = {
 		": No such file or directory",
 		": Premission denied",
-		"illegal option -- -",
+		"illegal option -- ",
 		": error in flags",
 		": usage flags",
 		"\0"
@@ -28,10 +28,10 @@ void	error(char *av, int error)
 	ft_putstr("ls: ");
 	if (error != -3)
 		ft_putstr(av);
-		i = -1;
+	i = -1;
 	while (er[++i] != '\0')
 		if (error == er[i])
-			ft_putendl(s[i]);
+			(error == -3) ? ft_putendl(ft_strjoin(s[i], illegal)) : ft_putendl(s[i]);
 	if (error == -3)
 		ft_putendl("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]");
 }

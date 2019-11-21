@@ -35,7 +35,8 @@
 typedef struct s_env	t_env;
 typedef struct s_pile	t_pile;
 typedef struct s_elem	t_elem;
-typedef struct s_imp	t_imp;
+typedef int	t_vec3 __attribute__((ext_vector_type(3)));
+typedef int	t_vec2 __attribute__((ext_vector_type(2)));
 typedef void			(*t_fsrt)(struct stat *, t_env *, int);
 typedef void			(*t_fprt)(struct stat *, char *, t_env *);
 
@@ -45,7 +46,7 @@ struct					s_env
 	t_fprt				f_print;
 	int					a;
 	int					reccursive;
-	int					nb_elem;
+	char					illegal;
 	char				**curr;
 	t_pile				*pile;
 };
@@ -63,23 +64,10 @@ struct					s_pile
 	t_elem				*first;
 };
 
-struct					s_imp
-{
-	size_t				name;
-	int					user;
-	char				*tab_user[256];
-	int					grp;
-	char				*tab_grp[256];
-	int					size;
-	int					*tab_size;
-	int					link;
-};
-
 void					init_env(t_env *e);
 int						parse_flags(int ac, char **av, t_env *e);
 int						ln_tab(char **tab);
-t_imp					*init_size(t_env *e);
-void					error(char *av, int error);
+void					error(char *av, int error, char *illegal);
 t_elem *add_new_elem(char *name, char *way, int is_R, int is_a);
 void					empiler(t_env *e, char *name, char *way);
 t_elem					*depiler(t_pile *pile);
@@ -97,6 +85,12 @@ void					clean(char **tab);
 void					print_way(char *way);
 void					ls_simple(struct stat *buf, char *way, t_env *e);
 void					ls_all(struct stat *buf, char *way, t_env *e);
+void		nb_patern(int start, int nb);
+int max_st_nlink(struct stat *buf, int ln);
+int max_st_size(struct stat *buf, int ln);
+void		str_patern(int start, char *str);
+int max_user(struct stat *buf, int ln);
+int max_grp(struct stat *buf, int ln);
 void					clean_elem(t_elem *elem);
 void					clean_env(t_env *e);
 

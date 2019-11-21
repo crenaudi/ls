@@ -27,7 +27,7 @@ t_elem *add_new_elem(char *name, char *way, int is_R, int is_a)
     return (NULL);
   if (is_R == 1 && is_a == 0 && name[0] != '.'
     && lstat(ft_strjoin(way, name), new->buf) != 0)
-      error(name, 0);
+      error(name, 0, NULL);
   return (new);
 }
 
@@ -52,7 +52,9 @@ t_elem *depiler(t_pile *pile)
         exit(EXIT_FAILURE);
     }
     if (pile != NULL && pile->first != NULL)
-        pile->first = tmp->next;
+    {
+      pile->first = tmp->next;
+    }
     return(tmp);
 }
 

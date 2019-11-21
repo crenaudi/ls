@@ -17,10 +17,11 @@ static int	check_permission(t_elem *elem)
 	const char	*doc;
 //presicer si elem name == "."
 	doc = (elem->way == NULL) ? elem->name : ft_strjoin(elem->way, elem->name);
+	lstat(doc, elem->buf);
 	if (elem->name[0] != '.' && (elem->buf->st_mode & S_IRUSR) != S_IRUSR)
 	{
 		ft_putendl(ft_strjoin(doc, " :"));
-		error(elem->name, -2);
+		error(elem->name, -2, NULL);
 		return (-1);
 	}
 	if (elem->name[0] != '.' && device_type(*elem->buf) != 'd')
@@ -59,7 +60,7 @@ void		run(t_elem *elem, t_env *e)
 
 	if ((dirp = opendir((elem->way == NULL) ? elem->name
 		: ft_strjoin(elem->way, elem->name))) == NULL)
-		error(elem->name, -1);
+		error(elem->name, -1, NULL);
 	else
 	{
 		if (check_permission(elem) == 0)

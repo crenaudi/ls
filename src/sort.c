@@ -14,26 +14,28 @@
 
 void	sort_base(struct stat *buf, t_env *e, int size)
 {
-	int			i;
-	int			ln;
+	t_vec3 index;
 	char		*abys;
 	struct stat	tmp;
 
-	ln = size;
+	index.z = size;
 	size--;
-	while (ln--)
+	while (index.z--)
 	{
-		i = -1;
-		while (++i < size)
+		index.x = -1;
+		while (++index.x < size)
 		{
-			if (e->curr[i][0] > e->curr[i + 1][0])
+			index.y = 0;
+			while (e->curr[index.x][index.y] == e->curr[index.x + 1][index.y])
+				index.y++;
+			if (e->curr[index.x][index.y] > e->curr[index.x + 1][index.y])
 			{
-				abys = e->curr[i];
-				e->curr[i] = e->curr[i + 1];
-				e->curr[i + 1] = abys;
-				tmp = buf[i];
-				buf[i] = buf[i + 1];
-				buf[i + 1] = tmp;
+				abys = e->curr[index.x];
+				e->curr[index.x] = e->curr[index.x + 1];
+				e->curr[index.x + 1] = abys;
+				tmp = buf[index.x];
+				buf[index.x] = buf[index.x + 1];
+				buf[index.x + 1] = tmp;
 			}
 		}
 	}
