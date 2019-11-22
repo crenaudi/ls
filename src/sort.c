@@ -6,15 +6,15 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:20 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/18 18:24:08 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/22 20:47:06 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void	sort_base(struct stat *buf, t_env *e, int size)
+void		sort_base(struct stat *buf, t_env *e, int size)
 {
-	t_vec3 index;
+	t_vec3		index;
 	char		*abys;
 	struct stat	tmp;
 
@@ -41,7 +41,7 @@ void	sort_base(struct stat *buf, t_env *e, int size)
 	}
 }
 
-void	sort_r(struct stat *buf, t_env *e, int size)
+void		sort_r(struct stat *buf, t_env *e, int size)
 {
 	int			i;
 	char		*abys;
@@ -72,7 +72,7 @@ static int	cmpt(struct stat b1, struct stat b2, char *s1, char *s2)
 	return (0);
 }
 
-void	sort_t(struct stat *buf, t_env *e, int size)
+void		sort_t(struct stat *buf, t_env *e, int size)
 {
 	int			i;
 	int			ln;
@@ -99,7 +99,7 @@ void	sort_t(struct stat *buf, t_env *e, int size)
 	}
 }
 
-void	sort_rt(struct stat *buf, t_env *e, int size)
+void		sort_rt(struct stat *buf, t_env *e, int size)
 {
 	int			i;
 	char		*abys;

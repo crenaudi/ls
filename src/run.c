@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:32 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/19 20:18:40 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/22 20:51:15 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,22 @@
 static int	check_permission(t_elem *elem)
 {
 	const char	*doc;
-//presicer si elem name == "."
+
 	doc = (elem->way == NULL) ? elem->name : ft_strjoin(elem->way, elem->name);
 	lstat(doc, elem->buf);
-	if (elem->name[0] != '.' && (elem->buf->st_mode & S_IRUSR) != S_IRUSR)
+	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
 	{
-		ft_putendl(ft_strjoin(doc, " :"));
-		error(elem->name, -2, NULL);
-		return (-1);
-	}
-	if (elem->name[0] != '.' && device_type(*elem->buf) != 'd')
-	{
+		if ((elem->buf->st_mode & S_IRUSR) != S_IRUSR)
+		{
+			ft_putendl(ft_strjoin(doc, " :"));
+			error(elem->name, -2, NULL);
+			return (-1);
+		}
+		if (device_type(*elem->buf) != 'd')
+		{
 			ft_putendl(elem->name);
 			return (-1);
+		}
 	}
 	return (0);
 }
@@ -43,9 +46,10 @@ static void	next_step(t_env *e, char *way, char *dir)
 	e->f_sort(buf, e, ln_tab(e->curr));
 	if (e->reccursive == 1)
 	{
-    while (i--)
-			if (device_type(buf[i]) == 'd' && e->curr[i][0] != '.')
-        empiler(e, e->curr[i], way);
+		while (i--)
+			if (device_type(buf[i]) == 'd' && ft_strcmp(e->curr[i], ".") != 0
+				&& ft_strcmp(e->curr[i], "..") != 0)
+				empiler(e, e->curr[i], way);
 	}
 	e->f_print(buf, way, e);
 	free(buf);
@@ -58,6 +62,8 @@ void		run(t_elem *elem, t_env *e)
 	struct dirent	*c;
 	int				i;
 
+	c = NULL;
+	dirp = NULL;
 	if ((dirp = opendir((elem->way == NULL) ? elem->name
 		: ft_strjoin(elem->way, elem->name))) == NULL)
 		error(elem->name, -1, NULL);
@@ -73,8 +79,11 @@ void		run(t_elem *elem, t_env *e)
 				next_step(e, elem->way, ft_strjoin(elem->name, "/"));
 			if (i == -1 && e->reccursive == 1)
 				print_way(ft_strjoin(elem->way, elem->name));
-			}
+		}
 	}
+	free(c);
+	if (dirp != NULL)
+		closedir(dirp);
 	free_elem(elem);
 	if (e->pile != NULL && e->pile->first != NULL)
 		run(depiler(e->pile), e);

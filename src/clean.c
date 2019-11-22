@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:09:22 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/18 18:51:09 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/22 21:02:27 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 void	clean_elem(t_elem *elem)
 {
-	//free(elem->name);
 	free(elem->way);
-	//free(elem->buf);
 	elem->next = NULL;
 	free(elem);
 }
@@ -43,13 +41,8 @@ void	clean_env(t_env *e)
 		free(tmp);
 		i++;
 	}
-	free(e->curr);
-	/*
-	if (e->pile != NULL && e->pile->first != NULL)
-		free(e->pile->first);
-	printf("hey\n");
+	free(e->curr);/*
 	if (e->pile != NULL)
-		free(e->pile);
-	*/
+		free(e->pile);*/
 	ft_bzero(e, sizeof(t_env));
 }

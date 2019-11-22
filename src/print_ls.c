@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:10 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/19 15:52:46 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/22 20:55:56 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void			print_way(char *way)
 {
 	if (ft_strcmp(way, "./") != 0)
 	{
-		ft_putendl(ft_strjoin(ft_strsub(way, 0, ft_strlen(way) - 1), " :"));
+		ft_putendl(ft_strjoin(ft_strsub(way, 0, ft_strlen(way) - 1), ":"));
 	}
 }
 
@@ -72,7 +72,7 @@ void			ls_simple(struct stat *buf, char *way, t_env *e)
 void			ls_all(struct stat *buf, char *way, t_env *e)
 {
 	int		i;
-	int ln;
+	int		ln;
 	t_vec2	nb_max;
 	t_vec2	str_max;
 
@@ -84,7 +84,7 @@ void			ls_all(struct stat *buf, char *way, t_env *e)
 	str_max.y = max_st_size(buf, ln);
 	print_way(way);
 	while (e->curr[++i][0] != 0)
-			ft_putinfo(buf[i], e->curr[i], nb_max, str_max);
+		ft_putinfo(buf[i], e->curr[i], nb_max, str_max);
 	ft_putchar('\n');
 	if (e->pile != NULL && e->pile->first != NULL)
 		ft_putchar('\n');
