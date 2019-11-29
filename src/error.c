@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:09:07 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/22 21:01:40 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/28 18:37:21 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 
 void	error(char *av, int error, char *illegal)
 {
-	int			er[5] = {
-		-1, -2, -3, 1, '\0'
-	};
+	int			er[5];
 	int			i;
 	const char	*s[6] = {
-		": No such file or directory",
-		": Premission denied",
-		"illegal option -- ",
-		": error in flags",
-		": usage flags",
-		"\0"
+		": No such file or directory", ": Premission denied",
+		"illegal option -- ", ": error in flags", ": usage flags", "\0"
 	};
 
+	er[0] = -1;
+	er[1] = -2;
+	er[2] = -3;
+	er[3] = 1;
+	er[4] = '\0';
 	ft_putstr("ls: ");
 	if (error != -3)
 		ft_putstr(av);
@@ -39,6 +38,5 @@ void	error(char *av, int error, char *illegal)
 	{
 		ft_putstr("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]");
 		ft_putendl(" [file ...]");
-		
 	}
 }

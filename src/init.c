@@ -20,6 +20,7 @@ void		init_env(t_env *e)
 
 	i = 0;
 	str = NULL;
+	pile = NULL;
 	ft_bzero(e, sizeof(t_env));
 	if (!(e->curr = (char **)malloc(sizeof(char *) * (BUF_SIZE))))
 		return ;

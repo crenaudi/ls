@@ -6,18 +6,16 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/22 20:52:54 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/28 18:15:13 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-int			add_flags(char *flags, t_env *e)
+int			add_flags(char *flags, t_env *e, char c)
 {
-	char	c;
 	int		i;
 
-	c = 32;
 	e->a = (ft_strchr(flags, 'a') != NULL) ? 1 : 0;
 	e->reccursive = (ft_strchr(flags, 'R') != NULL) ? 1 : 0;
 	e->f_print = (ft_strchr(flags, 'l') != NULL) ? &ls_all : &ls_simple;
@@ -25,10 +23,8 @@ int			add_flags(char *flags, t_env *e)
 		e->f_sort = &sort_rt;
 	else if (ft_strchr(flags, 'r') != NULL)
 		e->f_sort = &sort_r;
-	else if (ft_strchr(flags, 't') != NULL)
-		e->f_sort = &sort_t;
 	else
-		e->f_sort = &sort_base;
+		e->f_sort = (ft_strchr(flags, 't') != NULL) ? &sort_t : &sort_base;
 	while (++c <= '~')
 	{
 		i = -1;
@@ -60,13 +56,17 @@ int			parse_flags(int ac, char **av, t_env *e)
 			if (ft_strchr(ft_strsub(av[i], 1, ft_strlen(av[i])), '-') != NULL)
 			{
 				e->illegal = '-';
+				clean_ptr((void **)(&flg));
 				return (-1);
 			}
 			flg = (flg == NULL) ? ft_strdup(av[i]) : ft_strjoin(flg, av[i]);
 			i++;
 		}
-		if (flg != NULL && add_flags(flg, e) == -1)
+		if (flg != NULL && add_flags(flg, e, 32) == -1)
+		{
+			clean_ptr((void **)(&flg));
 			return (-1);
+		}
 	}
 	else
 	{
@@ -75,6 +75,7 @@ int			parse_flags(int ac, char **av, t_env *e)
 	}
 	if (ft_strcmp(av[i], "--") == 0)
 		i++;
+	clean_ptr((void **)(&flg));
 	return (i);
 }
 
@@ -95,6 +96,7 @@ struct stat	*buf_tab(t_env *e, char *way)
 	int			len;
 
 	i = -1;
+	buf = NULL;
 	len = ln_tab(e->curr);
 	if (!(buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
 		return (NULL);

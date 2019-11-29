@@ -6,18 +6,19 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 17:15:37 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/22 20:58:48 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/28 18:45:37 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-t_elem		*add_new_elem(char *name, char *way, int is_R)
+t_elem		*add_new_elem(char *name, char *way)
 {
 	t_elem	*new;
 	int		i;
 
 	i = 0;
+	new = NULL;
 	if (!(new = (t_elem *)malloc(sizeof(t_elem))))
 		return (NULL);
 	ft_bzero(new, sizeof(t_elem));
@@ -29,8 +30,6 @@ t_elem		*add_new_elem(char *name, char *way, int is_R)
 	new->way = way;
 	if (!(new->buf = (struct stat *)malloc(sizeof(struct stat))))
 		return (NULL);
-	if (is_R == 1 && lstat(ft_strjoin(way, name), new->buf) != 0)
-		error(name, 0, NULL);
 	return (new);
 }
 
@@ -38,7 +37,8 @@ void		empiler(t_env *e, char *name, char *way)
 {
 	t_elem	*new;
 
-	new = add_new_elem(name, way, e->reccursive);
+	new = NULL;
+	new = add_new_elem(name, way);
 	if (e->pile == NULL || new == NULL)
 		exit(EXIT_FAILURE);
 	new->next = e->pile->first;
@@ -49,6 +49,7 @@ t_elem		*depiler(t_pile *pile)
 {
 	t_elem	*tmp;
 
+	tmp = NULL;
 	tmp = pile->first;
 	if (pile == NULL)
 		exit(EXIT_FAILURE);
@@ -61,6 +62,7 @@ void		afficher_pile(t_pile *pile)
 {
 	t_elem	*tmp;
 
+	tmp = NULL;
 	tmp = pile->first;
 	while (tmp != NULL)
 	{
@@ -74,8 +76,10 @@ void		free_elem(t_elem *elem)
 	char			*name;
 	struct stat		*buf;
 
+	name = NULL;
+	buf = NULL;
 	name = elem->name;
 	buf = elem->buf;
-	free(name);
-	free(buf);
+	clean_ptr((void **)(&name));
+	clean_ptr((void **)(&buf));
 }

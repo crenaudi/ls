@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:12:14 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/22 20:46:14 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/28 18:45:56 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void					init_env(t_env *e);
 int						parse_flags(int ac, char **av, t_env *e);
 int						ln_tab(char **tab);
 void					error(char *av, int error, char *illegal);
-t_elem					*add_new_elem(char *name, char *way, int is_R);
+t_elem					*add_new_elem(char *name, char *way);
 void					empiler(t_env *e, char *name, char *way);
 t_elem					*depiler(t_pile *pile);
 void					afficher_pile(t_pile *pile);
@@ -86,13 +86,14 @@ void					clean(char **tab);
 void					print_way(char *way);
 void					ls_simple(struct stat *buf, char *way, t_env *e);
 void					ls_all(struct stat *buf, char *way, t_env *e);
+void					print_octet(struct stat *buf, int ln);
+void					time_patern(struct stat buf);
 void					nb_patern(int start, int nb);
-int						max_st_nlink(struct stat *buf, int ln);
-int						max_st_size(struct stat *buf, int ln);
 void					str_patern(int start, char *str);
-int						max_user(struct stat *buf, int ln);
-int						max_grp(struct stat *buf, int ln);
+void					max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max);
+void					max_st_str(struct stat *buf, int ln, t_vec2 *str_max);
 void					clean_elem(t_elem *elem);
 void					clean_env(t_env *e);
+void 					clean_ptr(void **ptr);
 
 #endif

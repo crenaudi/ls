@@ -48,6 +48,7 @@ void		sort_r(struct stat *buf, t_env *e, int size)
 	struct stat	tmp;
 
 	i = -1;
+	abys = NULL;
 	sort_base(buf, e, size);
 	while (++i < --size)
 	{
@@ -79,6 +80,7 @@ void		sort_t(struct stat *buf, t_env *e, int size)
 	char		*abys;
 	struct stat	tmp;
 
+	abys = NULL;
 	ln = size;
 	size--;
 	while (ln--)
@@ -106,6 +108,7 @@ void		sort_rt(struct stat *buf, t_env *e, int size)
 	struct stat	tmp;
 
 	i = -1;
+	abys = NULL;
 	sort_t(buf, e, size);
 	while (++i < --size)
 	{

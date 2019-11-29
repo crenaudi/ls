@@ -6,106 +6,71 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:10 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/22 20:53:49 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/25 20:51:04 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void		nb_patern(int start, int nb)
+void		print_octet(struct stat *buf, int ln)
 {
 	int		i;
-
-	i = start - ft_nblen(nb);
-	while (i-- > 0)
-		ft_putchar(' ');
-	ft_putnbr(nb);
-	ft_putchar(' ');
-}
-
-void		str_patern(int start, char *str)
-{
-	int		i;
-
-	i = start - ft_strlen(str);
-	ft_putstr(str);
-	while (i-- > 0)
-		ft_putchar(' ');
-	ft_putstr("  ");
-}
-
-int			max_st_nlink(struct stat *buf, int ln)
-{
-	int		i;
-	int		max;
-	int		current;
+	int		total;
 
 	i = 0;
-	max = 0;
+	total = 0;
 	while (i < ln)
 	{
-		current = ft_nblen(buf[i].st_nlink);
-		if (max < current)
-			max = current;
+		total += (buf[i].st_blocks);
 		i++;
 	}
-	return (max);
+	ft_putstr("total ");
+	ft_putnbr(total);
+	ft_putchar('\n');
 }
 
-int			max_st_size(struct stat *buf, int ln)
+void		max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max)
 {
 	int		i;
-	int		max;
-	int		current;
+	int		link_current;
+	int		size_current;
 
 	i = 0;
-	max = 0;
+	nb_max->x = 0;
+	nb_max->y = 0;
 	while (i < ln)
 	{
-		current = ft_nblen(buf[i].st_size);
-		if (max < current)
-			max = current;
+		link_current = ft_nblen(buf[i].st_nlink);
+		if (nb_max->x < link_current)
+			nb_max->x = link_current;
+		size_current = ft_nblen(buf[i].st_size);
+		if (nb_max->y < size_current)
+			nb_max->y = size_current;
 		i++;
 	}
-	return (max);
 }
 
-int			max_user(struct stat *buf, int ln)
+void		max_st_str(struct stat *buf, int ln, t_vec2 *str_max)
 {
 	int				i;
-	int				max;
-	int				current;
+	int				pwd_current;
+	int				grp_current;
 	struct passwd	*pwd;
-
-	i = 0;
-	max = 0;
-	while (i < ln)
-	{
-		pwd = getpwuid(buf->st_uid);
-		current = ft_strlen(pwd->pw_name);
-		if (max < current)
-			max = current;
-		i++;
-	}
-	return (max);
-}
-
-int			max_grp(struct stat *buf, int ln)
-{
-	int				i;
-	int				max;
-	int				current;
 	struct group	*grp;
 
 	i = 0;
-	max = 0;
+	str_max->x = 0;
+	str_max->y = 0;
 	while (i < ln)
 	{
+		pwd = getpwuid(buf->st_uid);
+		pwd_current = ft_strlen(pwd->pw_name);
+		if (str_max->x < pwd_current)
+			str_max->x = pwd_current;
 		grp = getgrgid(buf->st_gid);
-		current = ft_strlen(grp->gr_name);
-		if (max < current)
-			max = current;
+		grp_current = ft_strlen(grp->gr_name);
+		if (str_max->y < grp_current)
+			str_max->y = grp_current;
 		i++;
 	}
-	return (max);
 }

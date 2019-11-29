@@ -15,6 +15,7 @@ SRC = src/main.c		\
 	src/clean.c			\
 	src/mode.c			\
 	src/size.c			\
+	src/patern.c		\
 	src/print_ls.c
 OBJ = $(SRC:.c=.o)
 RM = rm -f

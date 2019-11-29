@@ -6,18 +6,36 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/22 20:56:46 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/11/28 18:50:05 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-int	main(int ac, char **av)
+static void		norme_main(t_env *e, char **av, int i)
+{
+	int			j;
+	struct stat	*buf;
+
+	j = -1;
+	buf = NULL;
+	while (av[i] != NULL)
+		 ft_strcpy(e->curr[++j], av[i++]);
+	buf = buf_tab(e, "./");
+	e->f_sort(buf, e, ln_tab(e->curr));
+	//mettre les dossiers non existant en premier
+	j++;
+	while (j--)
+		empiler(e, e->curr[j], "./");
+	clean(e->curr);
+	clean_ptr((void **)(&buf));
+	run(depiler(e->pile), e);
+}
+
+int				main(int ac, char **av)
 {
 	t_env		e;
 	int			i;
-	int			j;
-	struct stat	*buf;
 
 	init_env(&e);
 	i = parse_flags(ac, av, &e);
@@ -29,19 +47,9 @@ int	main(int ac, char **av)
 		run(depiler(e.pile), &e);
 	}
 	else
-	{
-		j = -1;
-		while (av[i] != NULL)
-			e.curr[++j] = ft_strdup(av[i++]);
-		buf = buf_tab(&e, "./");
-		e.f_sort(buf, &e, ln_tab(e.curr));
-		j++;
-		while (j--)
-			empiler(&e, e.curr[j], "./");
-		clean(e.curr);
-		free(buf);
-		run(depiler(e.pile), &e);
-	}
+		norme_main(&e, av, i);
 	clean_env(&e);
+	while (1)
+		i = 0;
 	return (0);
-	}
+}
