@@ -25,7 +25,7 @@
 # include <errno.h>
 # include "libft.h"
 
-# define BUF_SIZE		1000
+# define BUF_SIZE		6000
 # define FLG_NULL		0x00
 # define FLG_R_MAJ		0x40
 # define FLG_L			0x20
@@ -54,7 +54,7 @@ struct					s_env
 
 struct					s_elem
 {
-	char				name[256];
+	char				name[257];
 	char				*way;
 	struct stat			*buf;
 	struct s_elem		*next;

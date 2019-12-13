@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/28 18:15:13 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/10 14:22:48 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,21 @@ int			add_flags(char *flags, t_env *e, char c)
 	return (0);
 }
 
+static int norme(t_env *e, int i, char **av, char *flg)
+{
+	char *tmp;
+
+	tmp = ft_strsub(av[i], 1, ft_strlen(av[i]));
+	if (ft_strchr(tmp, '-') != NULL)
+	{
+		e->illegal = '-';
+		clean_ptr((void *)(&flg));
+		clean_ptr((void *)(&tmp));
+		return (-1);
+	}
+	return(0);
+}
+
 int			parse_flags(int ac, char **av, t_env *e)
 {
 	char	*flg;
@@ -53,12 +68,8 @@ int			parse_flags(int ac, char **av, t_env *e)
 		while (av[i] != NULL && av[i][0] == '-' && ft_strcmp(av[i], "--") != 0
 				&& ft_strcmp(av[i], "-") != 0)
 		{
-			if (ft_strchr(ft_strsub(av[i], 1, ft_strlen(av[i])), '-') != NULL)
-			{
-				e->illegal = '-';
-				clean_ptr((void **)(&flg));
-				return (-1);
-			}
+			if (norme(e, i, av, flg) == -1)
+				return(-1);
 			flg = (flg == NULL) ? ft_strdup(av[i]) : ft_strjoin(flg, av[i]);
 			i++;
 		}
@@ -92,6 +103,7 @@ int			ln_tab(char **tab)
 struct stat	*buf_tab(t_env *e, char *way)
 {
 	struct stat	*buf;
+	char *tmp;
 	int			i;
 	int			len;
 
@@ -101,6 +113,10 @@ struct stat	*buf_tab(t_env *e, char *way)
 	if (!(buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
 		return (NULL);
 	while (++i < len)
-		lstat(ft_strjoin(way, e->curr[i]), &buf[i]);
+	{
+		tmp = ft_strjoin(way, e->curr[i]);
+		lstat(tmp, &buf[i]);
+		clean_ptr((void *)(&tmp));
+	}
 	return (buf);
 }

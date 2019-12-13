@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:10 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/28 17:57:37 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/10 14:29:34 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ void			print_way(char *way)
 	tmp = NULL;
 	if (ft_strcmp(way, "./") != 0)
 	{
-		tmp = ft_strjoin(ft_strsub(way, 0, ft_strlen(way) - 1), ":");
+		tmp = ft_strsub(way, 0, ft_strlen(way) - 1);
+		tmp = ft_strjoin(tmp, ":");
 		ft_putendl(tmp);
+		clean_ptr((void *)(&tmp));
 	}
-	clean_ptr((void **)(&tmp));
 }
 
 static void		ft_putinfo(struct stat buf, char *name, t_vec2 nb_max,

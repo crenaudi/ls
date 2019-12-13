@@ -14,6 +14,7 @@
 
 void	error(char *av, int error, char *illegal)
 {
+	char *tmp;
 	int			er[5];
 	int			i;
 	const char	*s[6] = {
@@ -32,8 +33,11 @@ void	error(char *av, int error, char *illegal)
 	i = -1;
 	while (er[++i] != '\0')
 		if (error == er[i])
-			(error == -3) ? ft_putendl(ft_strjoin(s[i], illegal))
-				: ft_putendl(s[i]);
+		{
+			tmp = ft_strjoin(s[i], illegal);
+			(error == -3) ? ft_putendl(tmp) : ft_putendl(s[i]);
+			free(tmp);
+		}
 	if (error == -3)
 	{
 		ft_putstr("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]");

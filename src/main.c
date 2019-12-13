@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/28 18:50:05 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/10 14:19:38 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void		norme_main(t_env *e, char **av, int i)
 	//mettre les dossiers non existant en premier
 	j++;
 	while (j--)
-		empiler(e, e->curr[j], "./");
+		empiler(e, e->curr[j], ft_strdup("./"));
 	clean(e->curr);
 	clean_ptr((void **)(&buf));
 	run(depiler(e->pile), e);

@@ -70,16 +70,3 @@ void		afficher_pile(t_pile *pile)
 		tmp = tmp->next;
 	}
 }
-
-void		free_elem(t_elem *elem)
-{
-	char			*name;
-	struct stat		*buf;
-
-	name = NULL;
-	buf = NULL;
-	name = elem->name;
-	buf = elem->buf;
-	clean_ptr((void **)(&name));
-	clean_ptr((void **)(&buf));
-}

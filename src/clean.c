@@ -13,10 +13,9 @@
 #include "../includes/ft_ls.h"
 
 void clean_ptr(void **ptr)
-{/*
-	if (*ptr == NULL)
-		printf("FREE USELESS\n");
-		*/
+{
+	/*if (*ptr == NULL)
+		printf("FREE USELESS\n");*/
 	if (*ptr != NULL)
 	{
 		free(*ptr);
@@ -27,12 +26,12 @@ void clean_ptr(void **ptr)
 void	clean_elem(t_elem *elem)
 {
 	ft_bzero(elem->name, sizeof(char) * 256);
-	clean_ptr((void **)(&elem->name));
-	clean_ptr((void **)(&elem->way));
-	clean_ptr((void **)(&elem->buf));
-	clean_ptr((void **)(&elem->next));
+	clean_ptr((void *)(&elem->name));
+	clean_ptr((void *)(&elem->way));
+	clean_ptr((void *)(&elem->buf));
+	//clean_ptr((void *)(&elem->next));
 	elem->next = NULL;
-	clean_ptr((void **)(&elem));
+	clean_ptr((void *)(&elem));
 }
 
 void	clean(char **tab)
@@ -58,8 +57,8 @@ void	clean_env(t_env *e)
 		clean_ptr((void **)(&tmp));
 		i++;
 	}
-	clean_ptr((void **)(&e->pile->first));
-	clean_ptr((void **)(&e->pile));
-	clean_ptr((void **)(&e->curr));
+	clean_ptr((void *)(&e->pile->first));
+	clean_ptr((void *)(&e->pile));
+	clean_ptr((void *)(&e->curr));
 	ft_bzero(e, sizeof(t_env));
 }
