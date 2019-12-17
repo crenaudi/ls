@@ -6,16 +6,14 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:09:22 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/28 18:00:45 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/17 23:11:55 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void clean_ptr(void **ptr)
+void	clean_ptr(void **ptr)
 {
-	/*if (*ptr == NULL)
-		printf("FREE USELESS\n");*/
 	if (*ptr != NULL)
 	{
 		free(*ptr);
@@ -29,7 +27,6 @@ void	clean_elem(t_elem *elem)
 	clean_ptr((void *)(&elem->name));
 	clean_ptr((void *)(&elem->way));
 	clean_ptr((void *)(&elem->buf));
-	//clean_ptr((void *)(&elem->next));
 	elem->next = NULL;
 	clean_ptr((void *)(&elem));
 }
@@ -61,4 +58,14 @@ void	clean_env(t_env *e)
 	clean_ptr((void *)(&e->pile));
 	clean_ptr((void *)(&e->curr));
 	ft_bzero(e, sizeof(t_env));
+}
+
+int		ln_tab(char **tab)
+{
+	int		i;
+
+	i = 0;
+	while (tab[i][0] != '\0')
+		i++;
+	return (i);
 }

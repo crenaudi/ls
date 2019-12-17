@@ -26,7 +26,7 @@ static void		norme_main(t_env *e, char **av, int i)
 	//mettre les dossiers non existant en premier
 	j++;
 	while (j--)
-		empiler(e, e->curr[j], "./");
+		empiler(e, e->curr[j], ft_strdup("./"));
 	clean(e->curr);
 	clean_ptr((void **)(&buf));
 	run(depiler(e->pile), e);

@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:12:14 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/28 18:45:56 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/17 22:28:34 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ void					max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max);
 void					max_st_str(struct stat *buf, int ln, t_vec2 *str_max);
 void					clean_elem(t_elem *elem);
 void					clean_env(t_env *e);
-void 					clean_ptr(void **ptr);
+void					clean_ptr(void **ptr);
 
 #endif

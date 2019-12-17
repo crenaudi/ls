@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:10 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/10 14:29:34 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/17 22:30:20 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void			print_way(char *way)
 {
-	int i;
-	int idx;
+	int	i;
+	int	idx;
 
 	idx = 0;
 	i = ft_strlen(way) - 1;

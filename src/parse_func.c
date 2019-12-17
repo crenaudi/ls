@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/10 14:22:48 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/17 23:27:21 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			add_flags(char *flags, t_env *e, char c)
 	return (0);
 }
 
-static int norme(t_env *e, int i, char **av, char *flg)
+static int	norme(t_env *e, int i, char **av, char *flg)
 {
 	char *tmp;
 
@@ -54,7 +54,13 @@ static int norme(t_env *e, int i, char **av, char *flg)
 		return (-1);
 	}
 	clean_ptr((void *)(&tmp));
-	return(0);
+	return (0);
+}
+
+static void	name_funct(t_env *e)
+{
+	e->f_sort = &sort_base;
+	e->f_print = &ls_simple;
 }
 
 int			parse_flags(int ac, char **av, t_env *e)
@@ -71,38 +77,24 @@ int			parse_flags(int ac, char **av, t_env *e)
 				&& ft_strcmp(av[i], "-") != 0)
 		{
 			if (norme(e, i, av, flg) == -1)
-				return(-1);
-			flg = (flg == NULL) ? ft_strdup(av[i]) : ft_strjoin(flg, av[i]);
-			i++;
+				return (-1);
+			flg = ft_strjoin(flg, av[i++]);
 		}
 		if (flg != NULL && add_flags(flg, e, 32) == -1)
 			return (-1);
 	}
 	else
-	{
-		e->f_sort = &sort_base;
-		e->f_print = &ls_simple;
-	}
+		name_funct(e);
 	if (ft_strcmp(av[i], "--") == 0)
 		i++;
 	clean_ptr((void *)(&flg));
 	return (i);
 }
 
-int			ln_tab(char **tab)
-{
-	int		i;
-
-	i = 0;
-	while (tab[i][0] != '\0')
-		i++;
-	return (i);
-}
-
 struct stat	*buf_tab(t_env *e, char *way)
 {
 	struct stat	*buf;
-	char *tmp;
+	char		*tmp;
 	int			i;
 	int			len;
 

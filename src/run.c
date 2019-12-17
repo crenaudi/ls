@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:32 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/13 21:09:40 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/17 23:27:45 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	check_permission(t_elem *elem)
 	char	*doc;
 
 	doc = NULL;
-	doc = (elem->way == NULL) ? ft_strdup(elem->name) : ft_strjoin(elem->way, elem->name);
+	doc = ft_strjoin(elem->way, elem->name);
 	lstat(doc, elem->buf);
 	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
 	{
@@ -40,7 +40,7 @@ static int	check_permission(t_elem *elem)
 	return (0);
 }
 
-static void next_step(t_env *e, char *way)
+static void	next_step(t_env *e, char *way)
 {
 	struct stat	*buf;
 	int			i;
@@ -64,12 +64,11 @@ static void next_step(t_env *e, char *way)
 static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 {
 	struct dirent	*c;
-	char 					*tmp;
-	char				*way;
+	char			*tmp;
+	char			*way;
 	int				i;
 
 	tmp = NULL;
-	c = NULL;
 	way = NULL;
 	if (check_permission(elem) == 0)
 	{
@@ -80,15 +79,11 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 		if (i >= 0)
 		{
 			tmp = ft_strjoin(elem->name, "/");
-			way = (elem->way == NULL) ? ft_strdup(tmp) : ft_strjoin(elem->way, tmp);
-			next_step(e, way);
+			next_step(e, way = ft_strjoin(elem->way, tmp));
 			clean_ptr((void *)(&tmp));
 		}
 		if (i == -1 && e->reccursive == 1)
-		{
-			tmp = (way == NULL) ? ft_strdup(elem->name) : ft_strjoin(way, elem->name);
-			print_way(tmp);
-		}
+			print_way(tmp = ft_strjoin(way, elem->name));
 		clean_ptr((void *)(&way));
 		clean_ptr((void *)(&tmp));
 		clean_ptr((void *)(&c));
@@ -97,12 +92,12 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 
 void		run(t_elem *elem, t_env *e)
 {
-	DIR				*dirp;
-	char 			*tmp;
+	DIR		*dirp;
+	char	*tmp;
 
 	dirp = NULL;
 	tmp = NULL;
-	tmp = (elem->way == NULL) ? ft_strdup(elem->name) : ft_strjoin(elem->way, elem->name);
+	tmp = ft_strjoin(elem->way, elem->name);
 	if ((dirp = opendir(tmp)) == NULL)
 		error(elem->name, -1, NULL);
 	else
