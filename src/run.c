@@ -80,7 +80,7 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 		if (i >= 0)
 		{
 			tmp = ft_strjoin(elem->name, "/");
-			way = (elem->way == NULL) ? tmp : ft_strjoin(elem->way, tmp);
+			way = (elem->way == NULL) ? ft_strdup(tmp) : ft_strjoin(elem->way, tmp);
 			next_step(e, way);
 			clean_ptr((void *)(&tmp));
 		}
@@ -88,9 +88,8 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 		{
 			tmp = (way == NULL) ? ft_strdup(elem->name) : ft_strjoin(way, elem->name);
 			print_way(tmp);
-			clean_ptr((void *)(&tmp));
-			clean_ptr((void *)(&way));
 		}
+		clean_ptr((void *)(&way));
 		clean_ptr((void *)(&tmp));
 		clean_ptr((void *)(&c));
 	}
