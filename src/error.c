@@ -18,7 +18,7 @@ void	error(char *av, int error, char *illegal)
 	int			er[5];
 	int			i;
 	const char	*s[6] = {
-		": No such file or directory", ": Premission denied",
+		": No such file or directory", ": Permission denied",
 		"illegal option -- ", ": error in flags", ": usage flags", "\0"
 	};
 

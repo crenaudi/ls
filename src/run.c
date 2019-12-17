@@ -40,14 +40,13 @@ static int	check_permission(t_elem *elem)
 	return (0);
 }
 
-static void	next_step(t_env *e, char *way, char *dir)
+static void next_step(t_env *e, char *way)
 {
 	struct stat	*buf;
 	int			i;
 
 	buf = NULL;
 	i = ln_tab(e->curr);
-	way = (way == NULL) ? dir : ft_strjoin(way, dir);
 	buf = buf_tab(e, way);
 	e->f_sort(buf, e, ln_tab(e->curr));
 	if (e->reccursive == 1)
@@ -66,10 +65,12 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 {
 	struct dirent	*c;
 	char 					*tmp;
+	char				*way;
 	int				i;
 
 	tmp = NULL;
 	c = NULL;
+	way = NULL;
 	if (check_permission(elem) == 0)
 	{
 		i = -1;
@@ -79,15 +80,18 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 		if (i >= 0)
 		{
 			tmp = ft_strjoin(elem->name, "/");
-			next_step(e, elem->way, tmp);
+			way = (elem->way == NULL) ? tmp : ft_strjoin(elem->way, tmp);
+			next_step(e, way);
 			clean_ptr((void *)(&tmp));
 		}
 		if (i == -1 && e->reccursive == 1)
 		{
-			tmp = ft_strjoin(elem->way, elem->name);
+			tmp = (way == NULL) ? ft_strdup(elem->name) : ft_strjoin(way, elem->name);
 			print_way(tmp);
 			clean_ptr((void *)(&tmp));
+			clean_ptr((void *)(&way));
 		}
+		clean_ptr((void *)(&tmp));
 		clean_ptr((void *)(&c));
 	}
 }
