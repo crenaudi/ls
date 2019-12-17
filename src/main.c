@@ -26,7 +26,7 @@ static void		norme_main(t_env *e, char **av, int i)
 	//mettre les dossiers non existant en premier
 	j++;
 	while (j--)
-		empiler(e, e->curr[j], ft_strdup("./"));
+		empiler(e, e->curr[j], "./");
 	clean(e->curr);
 	clean_ptr((void **)(&buf));
 	run(depiler(e->pile), e);
@@ -36,6 +36,7 @@ int				main(int ac, char **av)
 {
 	t_env		e;
 	int			i;
+	char		c;
 
 	init_env(&e);
 	i = parse_flags(ac, av, &e);
@@ -49,7 +50,6 @@ int				main(int ac, char **av)
 	else
 		norme_main(&e, av, i);
 	clean_env(&e);
-	while (1)
-		i = 0;
+	read(0, &c, 1);
 	return (0);
 }

@@ -23,7 +23,8 @@ static int	check_permission(t_elem *elem)
 	{
 		if ((elem->buf->st_mode & S_IRUSR) != S_IRUSR)
 		{
-			ft_putendl(doc = ft_strjoin(doc, " :"));
+			ft_putstr(doc);
+			ft_putendl(" :");
 			error(elem->name, -2, NULL);
 			clean_ptr((void *)(&doc));
 			return (-1);

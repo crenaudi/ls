@@ -33,6 +33,7 @@ int			add_flags(char *flags, t_env *e, char c)
 					&& flags[i] != 'l' && flags[i] != 't' && flags[i] != 'r'
 					&& flags[i] != '-')
 			{
+				clean_ptr((void *)(&flags));
 				e->illegal = c;
 				return (-1);
 			}
@@ -52,6 +53,7 @@ static int norme(t_env *e, int i, char **av, char *flg)
 		clean_ptr((void *)(&tmp));
 		return (-1);
 	}
+	clean_ptr((void *)(&tmp));
 	return(0);
 }
 
@@ -74,10 +76,7 @@ int			parse_flags(int ac, char **av, t_env *e)
 			i++;
 		}
 		if (flg != NULL && add_flags(flg, e, 32) == -1)
-		{
-			clean_ptr((void **)(&flg));
 			return (-1);
-		}
 	}
 	else
 	{
@@ -86,7 +85,7 @@ int			parse_flags(int ac, char **av, t_env *e)
 	}
 	if (ft_strcmp(av[i], "--") == 0)
 		i++;
-	clean_ptr((void **)(&flg));
+	clean_ptr((void *)(&flg));
 	return (i);
 }
 

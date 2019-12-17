@@ -14,15 +14,16 @@
 
 void			print_way(char *way)
 {
-	char *tmp;
+	int i;
+	int idx;
 
-	tmp = NULL;
+	idx = 0;
+	i = ft_strlen(way) - 1;
 	if (ft_strcmp(way, "./") != 0)
 	{
-		tmp = ft_strsub(way, 0, ft_strlen(way) - 1);
-		tmp = ft_strjoin(tmp, ":");
-		ft_putendl(tmp);
-		clean_ptr((void *)(&tmp));
+		while (idx < i)
+			ft_putchar(way[idx++]);
+		ft_putendl(":");
 	}
 }
 
