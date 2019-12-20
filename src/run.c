@@ -56,6 +56,7 @@ static void	next_step(t_env *e, char *way)
 				&& ft_strcmp(e->curr[i], "..") != 0)
 				empiler(e, e->curr[i], ft_strdup(way));
 	}
+		printf("IMPRESSION\n");
 	e->f_print(buf, way, e);
 	clean_ptr((void *)(&buf));
 	clean(e->curr);
@@ -83,7 +84,7 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 			clean_ptr((void *)(&tmp));
 		}
 		if (i == -1 && e->reccursive == 1)
-			print_way(tmp = ft_strjoin(way, elem->name));
+			print_way(tmp = ft_strjoin(way, elem->name), e->reccursive);
 		clean_ptr((void *)(&way));
 		clean_ptr((void *)(&tmp));
 		clean_ptr((void *)(&c));

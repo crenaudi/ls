@@ -23,12 +23,23 @@ void		nb_patern(int start, int nb)
 	ft_putchar(' ');
 }
 
-void		str_patern(int start, char *str)
+void		id_patern(int start, int id)
 {
 	int		i;
 
-	i = start - ft_strlen(str);
-	ft_putstr(str);
+	i = start - ft_nblen(id);;
+	ft_putnbr(id);
+	while (i-- > 0)
+		ft_putchar(' ');
+	ft_putstr("  ");
+}
+
+void		str_patern(int start, char *name)
+{
+	int		i;
+
+	i = start - ft_strlen(name);
+	ft_putstr(name);
 	while (i-- > 0)
 		ft_putchar(' ');
 	ft_putstr("  ");

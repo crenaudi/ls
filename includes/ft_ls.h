@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:12:14 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/17 22:28:34 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/19 21:54:29 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ struct					s_env
 	t_fsrt				f_sort;
 	t_fprt				f_print;
 	int					a;
+	int					l;
 	int					reccursive;
 	char				illegal;
 	char				**curr;
@@ -83,13 +84,19 @@ void					sort_r(struct stat *buf, t_env *e, int size);
 void					sort_t(struct stat *buf, t_env *e, int size);
 void					sort_rt(struct stat *buf, t_env *e, int size);
 void					clean(char **tab);
-void					print_way(char *way);
+void					print_way(char *way, int rec);
 void					ls_simple(struct stat *buf, char *way, t_env *e);
 void					ls_all(struct stat *buf, char *way, t_env *e);
+void					all_file(struct stat *buf, char **file);
+struct stat				*buf_tab2(char **tab, char *way);
+void					ft_putinfo(struct stat buf, char *name, t_vec2 nb_max,
+		t_vec2 str_max);
+void					clean_strsplit(char **tab);
 void					print_octet(struct stat *buf, int ln);
 void					time_patern(struct stat buf);
 void					nb_patern(int start, int nb);
-void					str_patern(int start, char *str);
+void					id_patern(int start, int id);
+void					str_patern(int start, char *name);
 void					max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max);
 void					max_st_str(struct stat *buf, int ln, t_vec2 *str_max);
 void					clean_elem(t_elem *elem);

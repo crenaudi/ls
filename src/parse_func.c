@@ -6,34 +6,34 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/17 23:27:21 by crenaudi         ###   ########.fr       */
+/*   Updated: 2019/12/20 16:04:48 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-int			add_flags(char *flags, t_env *e, char c)
+int			add_flags(char *flg, t_env *e, char c)
 {
 	int		i;
 
-	e->a = (ft_strchr(flags, 'a') != NULL) ? 1 : 0;
-	e->reccursive = (ft_strchr(flags, 'R') != NULL) ? 1 : 0;
-	e->f_print = (ft_strchr(flags, 'l') != NULL) ? &ls_all : &ls_simple;
-	if (ft_strchr(flags, 'r') != NULL && ft_strchr(flags, 't') != NULL)
+	e->a = (ft_strchr(flg, 'a') != NULL) ? 1 : 0;
+	e->reccursive = (ft_strchr(flg, 'R') != NULL) ? 1 : 0;
+	e->f_print = (ft_strchr(flg, 'l') != NULL) ? &ls_all : &ls_simple;
+	e->l = (ft_strchr(flg, 'l') != NULL) ? 1 : 0;
+	if (ft_strchr(flg, 'r') != NULL && ft_strchr(flg, 't') != NULL)
 		e->f_sort = &sort_rt;
-	else if (ft_strchr(flags, 'r') != NULL)
+	else if (ft_strchr(flg, 'r') != NULL)
 		e->f_sort = &sort_r;
 	else
-		e->f_sort = (ft_strchr(flags, 't') != NULL) ? &sort_t : &sort_base;
+		e->f_sort = (ft_strchr(flg, 't') != NULL) ? &sort_t : &sort_base;
 	while (++c <= '~')
 	{
 		i = -1;
-		while (flags[++i] != '\0')
-			if (flags[i] == c && flags[i] != 'a' && flags[i] != 'R'
-					&& flags[i] != 'l' && flags[i] != 't' && flags[i] != 'r'
-					&& flags[i] != '-')
+		while (flg[++i] != '\0')
+			if (flg[i] == c && flg[i] != 'a' && flg[i] != 'R' && flg[i] != 'l'
+			&& flg[i] != 't' && flg[i] != 'r' && flg[i] != '-')
 			{
-				clean_ptr((void *)(&flags));
+				clean_ptr((void *)(&flg));
 				e->illegal = c;
 				return (-1);
 			}
@@ -61,6 +61,7 @@ static void	name_funct(t_env *e)
 {
 	e->f_sort = &sort_base;
 	e->f_print = &ls_simple;
+	e->l = 0;
 }
 
 int			parse_flags(int ac, char **av, t_env *e)

@@ -28,6 +28,8 @@ char			*ft_strdup(const char *src)
 	int		i;
 
 	i = 0;
+	if (src == NULL)
+		return(NULL);
 	if (!(copy = (char *)malloc(sizeof(char) * (forbidden_strlen(src) + 1))))
 		return (0);
 	while (src[i] != '\0')
