@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:32 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/17 23:27:45 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/09 20:19:02 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ static int	check_permission(t_elem *elem)
 			error(elem->name, -2, NULL);
 			clean_ptr((void *)(&doc));
 			return (-1);
-		}
+		}/*
 		if (device_type(*elem->buf) != 'd')
 		{
 			clean_ptr((void *)(&doc));
 			ft_putendl(elem->name);
 			return (-1);
-		}
+		}*/
 	}
 	clean_ptr((void *)(&doc));
 	return (0);
@@ -56,7 +56,6 @@ static void	next_step(t_env *e, char *way)
 				&& ft_strcmp(e->curr[i], "..") != 0)
 				empiler(e, e->curr[i], ft_strdup(way));
 	}
-		printf("IMPRESSION\n");
 	e->f_print(buf, way, e);
 	clean_ptr((void *)(&buf));
 	clean(e->curr);

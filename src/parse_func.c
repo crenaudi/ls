@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/20 16:04:48 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/09 19:28:50 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ struct stat	*buf_tab(t_env *e, char *way)
 		return (NULL);
 	while (++i < len)
 	{
-		tmp = ft_strjoin(way, e->curr[i]);
+		tmp = ft_strjoin((e->curr[i][0] == '/') ? NULL : way, e->curr[i]);
 		lstat(tmp, &buf[i]);
 		clean_ptr((void *)(&tmp));
 	}

@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/20 15:28:46 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/09 20:13:41 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,13 @@ static void		norme_main(t_env *e, int j)
 	e->f_sort(buf, e, ln_tab(e->curr));
 	while (j--)
 	{
-		if (device_type(buf[j]) != 100)
-			test_argv(e->curr[j], buf[j], &file, &none);
+		if (device_type(buf[j]) == 100 || device_type(buf[j]) == 99)
+		{
+			empiler(e, e->curr[j],
+					(e->curr[j][0] == '/') ? NULL : ft_strdup("./"));
+		}
 		else
-			empiler(e, e->curr[j], ft_strdup("./"));
+			test_argv(e->curr[j], buf[j], &file, &none);
 	}
 	clean(e->curr);
 	clean_ptr((void **)(&buf));
@@ -96,7 +99,9 @@ static void		norme_main(t_env *e, int j)
 	if (file != NULL)
 		print_argv_file(e, &file);
 	if (e->pile->first != NULL)
+	{
 		run(depiler(e->pile), e);
+	}
 }
 
 int				main(int ac, char **av)
