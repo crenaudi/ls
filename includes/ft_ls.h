@@ -25,7 +25,7 @@
 # include <errno.h>
 # include "libft.h"
 
-# define BUF_SIZE		6000
+# define BUF_SIZE		17500
 # define FLG_NULL		0x00
 # define FLG_R_MAJ		0x40
 # define FLG_L			0x20
@@ -37,7 +37,7 @@ typedef struct s_env	t_env;
 typedef struct s_pile	t_pile;
 typedef struct s_elem	t_elem;
 typedef int	t_vec3 __attribute__((ext_vector_type(3)));
-typedef int	t_vec2 __attribute__((ext_vector_type(2)));
+typedef unsigned int	t_vec2 __attribute__((ext_vector_type(2)));
 typedef void			(*t_fsrt)(struct stat *, t_env *, int);
 typedef void			(*t_fprt)(struct stat *, char *, t_env *);
 
@@ -75,6 +75,7 @@ void					empiler(t_env *e, char *name, char *way);
 t_elem					*depiler(t_pile *pile);
 void					afficher_pile(t_pile *pile);
 void					free_elem(t_elem *elem);
+void					print_c(struct stat buf, char *way, t_env *e);
 void					run(t_elem *elem, t_env *e);
 struct stat				*buf_tab(t_env *e, char *way);
 char					device_type(struct stat buf);

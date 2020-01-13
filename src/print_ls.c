@@ -45,6 +45,11 @@ void	ft_putinfo(struct stat buf, char *name, t_vec2 nb_max, t_vec2 str_max)
 	nb_patern(nb_max.y, buf.st_size);
 	time_patern(buf);
 	ft_putchar(' ');
+	if (device_type(buf) == 'c')
+	{
+		ft_putstr(name);
+		ft_putstr(" private -> ");
+	}
 	ft_putendl(name);
 }
 
@@ -76,6 +81,22 @@ void	ls_all(struct stat *buf, char *way, t_env *e)
 	print_octet(buf, ln);
 	while (e->curr[++i][0] != 0)
 		ft_putinfo(buf[i], e->curr[i], nb_max, str_max);
+	if (e->pile != NULL && e->pile->first != NULL)
+		ft_putchar('\n');
+}
+
+void	print_c(struct stat buf, char *way, t_env *e)
+{
+	int		i;
+	int		ln;
+	t_vec2	nb_max;
+	t_vec2	str_max;
+
+	i = -1;
+	ln = 1;
+	max_st_nb(&buf, ln, &nb_max);
+	max_st_str(&buf, ln, &str_max);
+	ft_putinfo(buf, way, nb_max, str_max);
 	if (e->pile != NULL && e->pile->first != NULL)
 		ft_putchar('\n');
 }

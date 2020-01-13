@@ -31,9 +31,10 @@ static int	check_permission(t_elem *elem)
 		}/*
 		if (device_type(*elem->buf) != 'd')
 		{
-			clean_ptr((void *)(&doc));
-			ft_putendl(elem->name);
-			return (-1);
+			if (device_type(*elem->buf) != 'c')
+				clean_ptr((void *)(&doc));
+				ft_putendl(elem->name);
+				return (-1);
 		}*/
 	}
 	clean_ptr((void *)(&doc));
@@ -74,8 +75,10 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 	{
 		i = -1;
 		while ((c = readdir(dirp)) != NULL)
+		{
 			if (e->a == 1 || c->d_name[0] != '.')
 				ft_strcpy(e->curr[++i], c->d_name);
+		}
 		if (i >= 0)
 		{
 			tmp = ft_strjoin(elem->name, "/");
@@ -90,6 +93,24 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 	}
 }
 
+static int is_var(t_env *e, char *s)
+{
+	struct stat	buf;
+	int		i;
+
+	i = 0;
+	lstat(s, &buf);
+	if (device_type(buf) == 99)
+	{
+		while (s[++i] != '\0')
+			if (s[i] == '/')
+				return (0);
+		print_c(buf, s, e);
+		return (1);
+	}
+	return(0);
+}
+
 void		run(t_elem *elem, t_env *e)
 {
 	DIR		*dirp;
@@ -98,12 +119,15 @@ void		run(t_elem *elem, t_env *e)
 	dirp = NULL;
 	tmp = NULL;
 	tmp = ft_strjoin(elem->way, elem->name);
-	if ((dirp = opendir(tmp)) == NULL)
-		error(elem->name, -1, NULL);
-	else
-		for_norme(dirp, e, elem);
-	if (dirp != NULL)
-		closedir(dirp);
+	if (is_var(e, tmp) == 0)
+	{
+		if ((dirp = opendir(tmp)) == NULL)
+			error(elem->name, -1, NULL);
+		else
+			for_norme(dirp, e, elem);
+		if (dirp != NULL)
+			closedir(dirp);
+	}
 	clean_ptr((void *)(&tmp));
 	clean_elem(elem);
 	if (e->pile != NULL && e->pile->first != NULL)

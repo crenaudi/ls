@@ -32,8 +32,8 @@ void		print_octet(struct stat *buf, int ln)
 void		max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max)
 {
 	int		i;
-	int		link_current;
-	int		size_current;
+	unsigned int	link_current;
+	unsigned int	size_current;
 
 	i = 0;
 	nb_max->x = 0;
@@ -53,8 +53,6 @@ void		max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max)
 void		max_st_str(struct stat *buf, int ln, t_vec2 *str_max)
 {
 	int				i;
-	int				pwd_current;
-	int				grp_current;
 	struct passwd	*pwd;
 	struct group	*grp;
 
@@ -63,14 +61,18 @@ void		max_st_str(struct stat *buf, int ln, t_vec2 *str_max)
 	str_max->y = 0;
 	while (i < ln)
 	{
-		pwd = getpwuid(buf->st_uid);
-		pwd_current = ft_strlen(pwd->pw_name);
-		if (str_max->x < pwd_current)
-			str_max->x = pwd_current;
-		grp = getgrgid(buf->st_gid);
-		grp_current = ft_strlen(grp->gr_name);
-		if (str_max->y < grp_current)
-			str_max->y = grp_current;
+		if ((pwd = getpwuid(buf->st_uid)) == NULL)
+			str_max->x = ((size_t)(str_max->x) < ft_nblen(buf->st_uid)) ?
+				str_max->x : ft_nblen(buf->st_uid);
+		else
+			str_max->x = ((size_t)(str_max->x) < ft_strlen(pwd->pw_name)) ?
+				str_max->x : ft_strlen(pwd->pw_name);
+		if ((grp = getgrgid(buf->st_gid)) == NULL)
+			str_max->y = ((size_t)(str_max->y) < ft_nblen(buf->st_uid)) ?
+				str_max->y : ft_nblen(buf->st_uid);
+		else
+			str_max->y = ((size_t)(str_max->y) < ft_strlen(grp->gr_name)) ?
+				str_max->y : ft_strlen(grp->gr_name);
 		i++;
 	}
 }

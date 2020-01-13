@@ -85,10 +85,8 @@ static void		norme_main(t_env *e, int j)
 	while (j--)
 	{
 		if (device_type(buf[j]) == 100 || device_type(buf[j]) == 99)
-		{
 			empiler(e, e->curr[j],
 					(e->curr[j][0] == '/') ? NULL : ft_strdup("./"));
-		}
 		else
 			test_argv(e->curr[j], buf[j], &file, &none);
 	}
@@ -99,9 +97,7 @@ static void		norme_main(t_env *e, int j)
 	if (file != NULL)
 		print_argv_file(e, &file);
 	if (e->pile->first != NULL)
-	{
 		run(depiler(e->pile), e);
-	}
 }
 
 int				main(int ac, char **av)
