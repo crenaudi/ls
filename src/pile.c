@@ -15,34 +15,39 @@
 t_elem		*add_new_elem(char *name, char *way)
 {
 	t_elem	*new;
+	struct stat	*buf;
 	int		i;
 
-	i = 0;
-	new = NULL;
+	i = -1;
 	if (!(new = (t_elem *)malloc(sizeof(t_elem))))
 		return (NULL);
 	ft_bzero(new, sizeof(t_elem));
-	while (name[i] != '\0')
-	{
-		new->name[i] = name[i];
-		i++;
-	}
-	new->way = way;
-	if (!(new->buf = (struct stat *)malloc(sizeof(struct stat))))
+	ft_strcpy(e->curr[++i], name);
+	new->way = ft_strdup(way);
+	buf = NULL;
+	if (!(buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
 		return (NULL);
+	if (!(buf = lstat(tmp = ft_strjoin(way, name), &buf)))
+		return (NULL);
+	new->buf = buf;
+	clean_ptr((void *)(&tmp));
 	return (new);
 }
 
-void		empiler(t_env *e, char *name, char *way)
+void		empiler(t_pile *e, char *name, char *way)
 {
 	t_elem	*new;
 
-	new = NULL;
 	new = add_new_elem(name, way);
-	if (e->pile == NULL || new == NULL)
+	if (new == NULL)
 		exit(EXIT_FAILURE);
-	new->next = e->pile->first;
-	e->pile->first = new;
+	if (pile == NULL)
+		pile->first = new;
+	else
+	{
+		new->next = pile->first;
+		pile->first = new;
+	}
 }
 
 t_elem		*depiler(t_pile *pile)

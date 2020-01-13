@@ -26,12 +26,6 @@
 # include "libft.h"
 
 # define BUF_SIZE		10500
-# define FLG_NULL		0x00
-# define FLG_R_MAJ		0x40
-# define FLG_L			0x20
-# define FLG_A			0x10
-# define FLG_R			0x02
-# define FLG_T			0x01
 
 typedef struct s_env	t_env;
 typedef struct s_pile	t_pile;
@@ -48,8 +42,8 @@ struct					s_env
 	int					a;
 	int					l;
 	int					reccursive;
-	char				illegal;
 	char				**curr;
+	t_pile				*pile2start;
 	t_pile				*pile;
 };
 
@@ -67,7 +61,7 @@ struct					s_pile
 };
 
 void					init_env(t_env *e);
-int						parse_flags(int ac, char **av, t_env *e);
+int						parse_flags(char **av, t_env *e);
 int						ln_tab(char **tab);
 void					error(char *av, int error, char *illegal);
 t_elem					*add_new_elem(char *name, char *way);

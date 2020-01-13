@@ -12,6 +12,47 @@
 
 #include "../includes/ft_ls.h"
 
+static void			type_flags(char *tmp, t_env *e)
+{
+	e->a = (ft_strchr(tmp, 'a') != NULL) ? 1 : 0;
+	e->reccursive = (ft_strchr(tmp, 'R') != NULL) ? 1 : 0;
+	e->f_print = (ft_strchr(tmp, 'l') != NULL) ? &ls_all : &ls_simple;
+	e->l = (ft_strchr(tmp, 'l') != NULL) ? 1 : 0;
+	if (ft_strchr(tmp, 'r') != NULL && ft_strchr(tmp, 't') != NULL)
+		e->f_sort = &sort_rt;
+	else if (ft_strchr(tmp, 'r') != NULL)
+		e->f_sort = &sort_r;
+	else
+		e->f_sort = (ft_strchr(tmp, 't') != NULL) ? &sort_t : &sort_base;
+}
+
+int			parse_flags(char **av, t_env *e)
+{
+	char	**argv;
+	char	*tmp;
+	int 	i;
+	int 	index;
+
+	i = -1;
+	index = 0;
+	argv = av;
+	tmp = NULL;
+	while (argv[++index] != NULL && argv[index][0] == '-' && argv[index][1] != '-')
+		tmp = ft_strjoin(tmp, argv[index]);
+	type_flags(tmp, e);
+	while (tmp[++i] != '\0')
+		if (tmp[i] != 'a' && tmp[i] != 'R' && tmp[i] != 'r' && tmp[i] != 'a'
+			&& tmp[i] != 't' && tmp[i] != 'l')
+		{
+					free(tmp);
+					error(NULL, -3, &tmp[i]);
+					return(-1);
+		}
+		free(tmp);
+		return(0);
+}
+
+/*
 int			add_flags(char *flg, t_env *e, char c)
 {
 	int		i;
@@ -91,8 +132,8 @@ int			parse_flags(int ac, char **av, t_env *e)
 	clean_ptr((void *)(&flg));
 	return (i);
 }
-
-struct stat	*buf_tab(t_env *e, char *way)
+*/
+struct stat	*buf_tab(char **argv, char *way)
 {
 	struct stat	*buf;
 	char		*tmp;
@@ -101,14 +142,15 @@ struct stat	*buf_tab(t_env *e, char *way)
 
 	i = -1;
 	buf = NULL;
-	len = ln_tab(e->curr);
+	len = ln_tab(argv);
 	if (!(buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
 		return (NULL);
 	while (++i < len)
 	{
-		tmp = ft_strjoin((e->curr[i][0] == '/') ? NULL : way, e->curr[i]);
+		tmp = ft_strjoin((argv[i][0] == '/') ? NULL : way, argv[i]);
 		lstat(tmp, &buf[i]);
 		clean_ptr((void *)(&tmp));
 	}
 	return (buf);
 }
+*/

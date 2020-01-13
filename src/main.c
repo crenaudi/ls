@@ -100,29 +100,46 @@ static void		norme_main(t_env *e, int j)
 		run(depiler(e->pile), e);
 }
 
+void		add_pile_stack(t_pile *pile, char **argv)
+{
+
+	int i;
+	struct stat	*buf;
+
+	i = 0;
+	buf = buf_tab(argv, way);
+	while (argv[++i] != NULL)
+		if (buf[0] != '-')
+			(argv[i][0] == '/') ? empiler(init, argv[i], "./")
+				: empiler(init, argv[i], NULL);
+	if (pile == NULL)
+		empiler(init, ".", NULL);
+}
+
 int				main(int ac, char **av)
 {
 	t_env		e;
-	int			i;
-	int			j;
+	t_pile 	*init;
+	/*int			i;
+	int			j;*/
 	char c;
 
-	j = -1;
+	//j = -1;
+	i = 0;
 	init_env(&e);
-	i = parse_flags(ac, av, &e);
-	if (i == -1)
-		error(NULL, -3, &e.illegal);
-	else if (av[i] == NULL)
-	{
-		empiler(&e, ".", NULL);
-		run(depiler(e.pile), &e);
-	}
+	init = init_pile;
+	if (parse_flags(ac, av, &e) == 0 && ac != 1)
+		add_first_stack(init, av);
+	else
+		empiler(init, ".", NULL);
+
+/*
 	else
 	{
 		while (av[i] != NULL)
 			ft_strcpy(e.curr[++j], av[i++]);
 		norme_main(&e, j + 1);
-	}
+	}*/
 	clean_env(&e);
 	read(0,&c,1);
 	return (0);

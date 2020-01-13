@@ -12,16 +12,30 @@
 
 #include "../includes/ft_ls.h"
 
+t_pile	*init_pile()
+{
+	t_pile	*pile;
+
+	if (!(pile = (t_pile *)malloc(sizeof(t_pile))))
+		exit(EXIT_FAILURE);
+	e->pile->first = NULL;
+	return (pile);
+}
+
 void		init_env(t_env *e)
 {
 	int		i;
 	char	*str;
-	t_pile	*pile;
 
 	i = 0;
 	str = NULL;
 	pile = NULL;
 	ft_bzero(e, sizeof(t_env));
+	e->f_sort = &sort_base;
+	e->f_print = &ls_simple;
+	e->reccursive = 0;
+	e->a = 0;
+	e->l = 0;
 	if (!(e->curr = (char **)malloc(sizeof(char *) * (BUF_SIZE))))
 		return ;
 	while (i < BUF_SIZE)
@@ -31,8 +45,5 @@ void		init_env(t_env *e)
 		ft_bzero(str, sizeof(256));
 		e->curr[i++] = str;
 	}
-	if (!(pile = (t_pile *)malloc(sizeof(t_pile))))
-		exit(EXIT_FAILURE);
-	e->pile = pile;
-	e->pile->first = NULL;
+	e->pile = init_pile;
 }
