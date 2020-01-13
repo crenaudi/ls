@@ -16,6 +16,8 @@ char	device_type(struct stat buf)
 {
 	if ((buf.st_mode & S_IFIFO) == S_IFIFO)
 		return ('p');
+	if ((buf.st_mode & S_IFLNK) == S_IFLNK)
+		return ('l');
 	if ((buf.st_mode & S_IFCHR) == S_IFCHR)
 		return ('c');
 	if ((buf.st_mode & S_IFDIR) == S_IFDIR)
@@ -24,7 +26,5 @@ char	device_type(struct stat buf)
 		return ('b');
 	if ((buf.st_mode & S_IFREG) == S_IFREG)
 		return ('-');
-	if ((buf.st_mode & S_IFLNK) == S_IFLNK)
-		return ('l');
 	return ('f');
 }

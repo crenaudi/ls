@@ -15,10 +15,12 @@
 void	print_way(char *way, int rec)
 {
 	int	i;
+	int tmp;
 	int	idx;
 
-	idx = (rec == 1) ? 0 : 2;
-	i = ft_strlen(way) - 1;
+	idx = (rec == 1 || way[0] == '/') ? 0 : 2;
+	tmp = ft_strlen(way) - 1;
+	i = (way[tmp] == '/') ? tmp : tmp + 1;
 	if (ft_strcmp(way, "./") != 0)
 	{
 		while (idx < i)
@@ -26,7 +28,6 @@ void	print_way(char *way, int rec)
 		ft_putendl(":");
 	}
 }
-
 
 void	ft_putinfo(struct stat buf, char *name, t_vec2 nb_max, t_vec2 str_max)
 {
@@ -37,7 +38,7 @@ void	ft_putinfo(struct stat buf, char *name, t_vec2 nb_max, t_vec2 str_max)
 	grp = getgrgid(buf.st_gid);
 	ft_putchar(device_type(buf));
 	mode_type(buf);
-	nb_patern(nb_max.x, buf.st_nlink);
+	(device_type(buf) == 'c') ? nb_patern(nb_max.x, buf.st_blksize) : nb_patern(nb_max.x, buf.st_nlink);
 	(pwd == NULL) ? id_patern(str_max.x, buf.st_uid) :
 		str_patern(str_max.x, pwd->pw_name);
 	(grp == NULL) ? id_patern(str_max.x, buf.st_gid) :
@@ -45,7 +46,7 @@ void	ft_putinfo(struct stat buf, char *name, t_vec2 nb_max, t_vec2 str_max)
 	nb_patern(nb_max.y, buf.st_size);
 	time_patern(buf);
 	ft_putchar(' ');
-	if (device_type(buf) == 'c')
+	if (device_type(buf) == 'l')
 	{
 		ft_putstr(name);
 		ft_putstr(" private -> ");
@@ -89,6 +90,7 @@ void	print_c(struct stat buf, char *way, t_env *e)
 {
 	int		i;
 	int		ln;
+	char 	*tmp;
 	t_vec2	nb_max;
 	t_vec2	str_max;
 
@@ -96,7 +98,9 @@ void	print_c(struct stat buf, char *way, t_env *e)
 	ln = 1;
 	max_st_nb(&buf, ln, &nb_max);
 	max_st_str(&buf, ln, &str_max);
-	ft_putinfo(buf, way, nb_max, str_max);
+	tmp = (way[0] != '/') ? ft_strdup(way) : ft_strsub(way, 1, ft_strlen(way));
+	ft_putinfo(buf, tmp, nb_max, str_max);
+	clean_ptr((void *)(&tmp));
 	if (e->pile != NULL && e->pile->first != NULL)
 		ft_putchar('\n');
 }

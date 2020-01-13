@@ -79,6 +79,7 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 			if (e->a == 1 || c->d_name[0] != '.')
 				ft_strcpy(e->curr[++i], c->d_name);
 		}
+		printf("i = %d\n", i);
 		if (i >= 0)
 		{
 			tmp = ft_strjoin(elem->name, "/");
@@ -86,7 +87,9 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 			clean_ptr((void *)(&tmp));
 		}
 		if (i == -1 && e->reccursive == 1)
-			print_way(tmp = ft_strjoin(way, elem->name), e->reccursive);
+		{
+			print_way(tmp = ft_strjoin(elem->way, elem->name), e->reccursive);
+		}
 		clean_ptr((void *)(&way));
 		clean_ptr((void *)(&tmp));
 		clean_ptr((void *)(&c));

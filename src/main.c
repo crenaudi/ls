@@ -105,6 +105,7 @@ int				main(int ac, char **av)
 	t_env		e;
 	int			i;
 	int			j;
+	char c;
 
 	j = -1;
 	init_env(&e);
@@ -123,5 +124,6 @@ int				main(int ac, char **av)
 		norme_main(&e, j + 1);
 	}
 	clean_env(&e);
+	read(0,&c,1);
 	return (0);
 }
