@@ -35,18 +35,19 @@ typedef struct s_pile	t_pile;
 typedef struct s_elem	t_elem;
 typedef int	t_vec3 __attribute__((ext_vector_type(3)));
 typedef unsigned int	t_vec2 __attribute__((ext_vector_type(2)));
-typedef void			(*t_fsrt)(struct stat *, t_env *, int);
-typedef void			(*t_fprt)(struct stat *, char *, t_env *);
+typedef void			(*t_fsrt)(struct stat *, char **, int);
+typedef void			(*t_fprt)(char *, t_env *);
 
 struct					s_env
 {
 	t_fsrt				f_sort;
 	t_fprt				f_print;
-	int					a;
-	int					l;
-	int					reccursive;
-	char				**curr;
-	t_pile				*pile2start;
+	int						a;
+	int						l;
+	int						recursive;
+	char					**current;
+	char 					*wrong_argv;
+	struct stat 	*buf;
 	t_pile				*pile;
 };
 
@@ -64,31 +65,44 @@ struct					s_pile
 };
 
 void					init_env(t_env *e);
-int						parse_flags(char **av, t_env *e);
-int						ln_tab(char **tab);
-void					error(char *av, int error, char *illegal);
-t_elem					*add_new_elem(char *name, char *way);
-void					empiler(t_env *e, char *name, char *way);
-t_elem					*depiler(t_pile *pile);
+char 					**init_file();
+t_pile				*init_pile();
+
+void					error(char *av, int error, char c);
+void					clean(char **tab);
+void					clean_elem(t_elem *elem);
+void					clean_env(t_env *e);
+void					clean_ptr(void **ptr);
+
+t_elem				*add_new_elem(char *name, char *way);
+int						push(t_pile *pile, char *name, char *way);
+t_elem				*pop(t_pile *pile);
 void					afficher_pile(t_pile *pile);
 void					free_elem(t_elem *elem);
-void					print_c(struct stat buf, char *way, t_env *e);
-void					run(t_elem *elem, t_env *e);
-struct stat				*buf_tab(t_env *e, char *way);
-char					device_type(struct stat buf);
+
+int						parse_flags(char **av, t_env *e);
+int						ln_tab(char **tab);
+char					device(struct stat buf);
 void					mode_type(struct stat buf);
-void					sort_base(struct stat *buf, t_env *e, int size);
-void					sort_r(struct stat *buf, t_env *e, int size);
-void					sort_t(struct stat *buf, t_env *e, int size);
-void					sort_rt(struct stat *buf, t_env *e, int size);
-void					clean(char **tab);
+
+void					run(t_elem *elem, t_env *e);
+
 void					print_way(char *way, int rec);
-void					ls_simple(struct stat *buf, char *way, t_env *e);
-void					ls_all(struct stat *buf, char *way, t_env *e);
-void					all_file(struct stat *buf, char **file);
-struct stat				*buf_tab2(char **tab, char *way);
+void					ls_simple(char *way, t_env *e);
+void					ls_all(char *way, t_env *e);
+void					print_lnk(struct stat buf, char *lnk, t_pile *pile);
 void					ft_putinfo(struct stat buf, char *name, t_vec2 nb_max,
 		t_vec2 str_max);
+
+void 					buf_tab(char *way, t_env *e);
+
+void					sort_base(struct stat *buf, char **s, int size);
+void					sort_r(struct stat *buf, char **s, int size);
+void					sort_t(struct stat *buf, char **s, int size);
+void					sort_rt(struct stat *buf, char **s, int size);
+
+void					print_way(char *way, int rec);
+
 void					clean_strsplit(char **tab);
 void					print_octet(struct stat *buf, int ln);
 void					time_patern(struct stat buf);
@@ -97,8 +111,6 @@ void					id_patern(int start, int id);
 void					str_patern(int start, char *name);
 void					max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max);
 void					max_st_str(struct stat *buf, int ln, t_vec2 *str_max);
-void					clean_elem(t_elem *elem);
-void					clean_env(t_env *e);
-void					clean_ptr(void **ptr);
+
 
 #endif

@@ -24,9 +24,9 @@ void	clean_ptr(void **ptr)
 void	clean_elem(t_elem *elem)
 {
 	ft_bzero(elem->name, sizeof(char) * PATH_MAX);
-	ft_strdel(&elem->name);
+	ft_memdel((void **)(&elem->name));
 	ft_strdel(&elem->way);
-	ft_memdel(&elem->buf);
+	ft_memdel((void **)(&elem->buf));
 	elem->next = NULL;
 	clean_ptr((void *)(&elem));
 }
@@ -49,14 +49,14 @@ void	clean_env(t_env *e)
 	tmp = NULL;
 	while (i < BUF_SIZE)
 	{
-		ft_bzero(e->curr[i], sizeof(PATH_MAX));
-		tmp = e->curr[i];
+		ft_bzero(e->current[i], sizeof(PATH_MAX));
+		tmp = e->current[i];
 		clean_ptr((void **)(&tmp));
 		i++;
 	}
-	clean_ptr((void *)(&e->pile->first));
-	clean_ptr((void *)(&e->pile));
-	clean_ptr((void *)(&e->curr));
+	clean_ptr((void **)(&e->pile->first));
+	clean_ptr((void **)(&e->pile));
+	clean_ptr((void **)(&e->current));
 	ft_bzero(e, sizeof(t_env));
 }
 

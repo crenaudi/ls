@@ -12,134 +12,84 @@
 
 #include "../includes/ft_ls.h"
 
-static void		test_argv(char *wrg, struct stat buf, char **file, char **none)
+static void		check_wrong_av(char **wrong)
 {
-	char	*add_slash;
-	char	*tmp;
-
-	tmp = NULL;
-	add_slash = ft_strjoin(wrg, "\n");
-	if (device_type(buf) != 102)
-	{
-		tmp = *file;
-		*file = ft_strjoin(add_slash, tmp);
-	}
-	else
-	{
-		tmp = *none;
-		*none = ft_strjoin(add_slash, tmp);
-	}
-	clean_ptr((void *)(&add_slash));
-	clean_ptr((void *)(&tmp));
-}
-
-static void		print_argv_error(char **none)
-{
-	char	**tab;
-	int		i;
-
-	i = -1;
-	tab = NULL;
-	if (none != NULL)
-	{
-		tab = ft_strsplit(*none, '\n');
-		while (tab[++i] != NULL)
-			error(tab[i], -1, NULL);
-		clean_ptr((void *)(none));
-	}
-}
-
-static void		print_argv_file(t_env *e, char **file)
-{
-	char		**tab2;
-	struct stat	*buf;
-	int			i;
-
-	i = -1;
-	tab2 = NULL;
-	if (e->l == 1)
-	{
-		tab2 = ft_strsplit(*file, '\n');
-		buf = buf_tab2(tab2, "./");
-		all_file(buf, tab2);
-		clean_ptr((void *)(&buf));
-	}
-	else
-		ft_putstr(*file);
-	clean_ptr((void *)(file));
-	if (e->pile->first != NULL)
-		ft_putchar('\n');
-}
-
-static void		norme_main(t_env *e, int j)
-{
-	char		*file;
-	char		*none;
-	struct stat	*buf;
-
-	buf = NULL;
-	file = NULL;
-	none = NULL;
-	buf = buf_tab(e, "./");
-	e->f_sort(buf, e, ln_tab(e->curr));
-	while (j--)
-	{
-		if (device_type(buf[j]) == 100 || device_type(buf[j]) == 99)
-			empiler(e, e->curr[j],
-					(e->curr[j][0] == '/') ? NULL : ft_strdup("./"));
-		else
-			test_argv(e->curr[j], buf[j], &file, &none);
-	}
-	clean(e->curr);
-	clean_ptr((void **)(&buf));
-	if (none != NULL)
-		print_argv_error(&none);
-	if (file != NULL)
-		print_argv_file(e, &file);
-	if (e->pile->first != NULL)
-		run(depiler(e->pile), e);
-}
-
-void		add_pile_stack(t_pile *pile, char **argv)
-{
-
 	int i;
-	struct stat	*buf;
 
 	i = 0;
-	buf = buf_tab(argv, way);
-	while (argv[++i] != NULL)
-		if (buf[0] != '-')
-			(argv[i][0] == '/') ? empiler(init, argv[i], "./")
-				: empiler(init, argv[i], NULL);
-	if (pile == NULL)
-		empiler(init, ".", NULL);
+	if (wrong[i][0] != 0)
+	{
+		sort_base(NULL, wrong, ln_tab(wrong));
+		while (wrong[i][0] != 0)
+				error(wrong[i++], -1, ' ');
+		clean(wrong);
+	}
+	clean_ptr((void **)(&wrong));
+}
+
+void check_argv(char **argv, t_env *e, int i, int len)
+{
+	char		*tmp;
+	char		**wrong;
+	int			j;
+	int			k;
+
+	j = -1;
+	k = 0;
+	wrong = init_file();
+	if (!(e->buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
+		return ;
+	while (++i < len)
+	{
+		tmp = ft_strjoin((argv[i][0] == '/') ? argv[i] : "./", argv[i]);
+		if (!(lstat(tmp, &e->buf[k])))
+			ft_strcpy(e->current[k++], argv[i]);
+		else
+			ft_strcpy(wrong[++j], argv[i]);
+		ft_strdel(&tmp);
+	}
+	check_wrong_av(wrong);
+}
+
+int 	push_stack(t_env *e, char **argv, int start, int len)
+{
+	int 	i;
+
+	i = -1;
+	check_argv(argv, e, start - 1, len);
+	e->f_sort(e->buf, e->current, ln_tab(e->current));
+	while (e->current[++i][0] != 0)
+	{
+			if (device(e->buf[i]) == 'l' && e->current[i][ft_strlen(e->current[i]) - 1] != '/')
+				print_lnk(e->buf[i], e->current[i], e->pile);
+			else if (e->current[i][0] != '-' && (device(e->buf[i]) == 'd' || device(e->buf[i]) == 'l'))
+			{
+				(e->current[i][0] == '/') ? push(e->pile, e->current[i], NULL)
+					: push(e->pile, argv[i], "./");
+			}
+			else
+				ft_putendl(e->current[i]);
+	}
+	clean(e->current);
+	if (e->pile->first == NULL)
+		push(e->pile, ".", NULL);
+	ft_putchar('\n');
+	return (i);
 }
 
 int				main(int ac, char **av)
 {
 	t_env		e;
-	t_pile 	*init;
-	/*int			i;
-	int			j;*/
-	char c;
+	int 		i;
+	char 		c;
 
-	//j = -1;
-	i = 0;
 	init_env(&e);
-	init = init_pile;
-	if (parse_flags(ac, av, &e) == ERROR)
-		return; 
-	if (ac != 1)
-		empiler(init, ".", NULL);
-
-/*
-	else
-	{
-		while (av[i] != NULL)
-			ft_strcpy(e.curr[++j], av[i++]);
-		norme_main(&e, j + 1);
-	}*/
+	if ((i = parse_flags(av, &e)) == ERROR)
+		return (0);
+	if (push_stack(&e, av, i, ac) == ERROR)
+		printf("pb dans push stack\n");
+	afficher_pile(e.pile);
+	//run(&e);
 	clean_env(&e);
 	read(0,&c,1);
 	return (0);

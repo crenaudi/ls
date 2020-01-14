@@ -12,7 +12,7 @@
 
 #include "../includes/ft_ls.h"
 
-char	device_type(struct stat buf)
+char	device(struct stat buf)
 {
 	if ((buf.st_mode & S_IFIFO) == S_IFIFO)
 		return ('p');

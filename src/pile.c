@@ -14,33 +14,33 @@
 
 t_elem		*add_new_elem(char *name, char *way)
 {
-	t_elem	*new;
+	t_elem			*new;
 	struct stat	*buf;
-	int		i;
+	char 				*tmp;
+	int					i;
 
 	i = -1;
 	if (!(new = (t_elem *)malloc(sizeof(t_elem))))
 		return (NULL);
 	ft_bzero(new, sizeof(t_elem));
-	ft_strcpy(e->curr[++i], name);
+	ft_strcpy(new->name, name);
 	new->way = ft_strdup(way);
-	buf = NULL;
-	if (!(buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
+	if (!(buf = (struct stat *)malloc(sizeof(struct stat))))
 		return (NULL);
-	if (!(buf = lstat(tmp = ft_strjoin(way, name), &buf)))
-		return (NULL);
+	tmp = ft_strjoin(way, name);
+	lstat(tmp, buf);
 	new->buf = buf;
-	clean_ptr((void *)(&tmp));
+	ft_strdel(&tmp);
 	return (new);
 }
 
-void		push(t_pile *e, char *name, char *way)
+int		push(t_pile *pile, char *name, char *way)
 {
 	t_elem	*new;
 
 	new = add_new_elem(name, way);
 	if (new == NULL)
-		exit(EXIT_FAILURE);
+		return (ERROR);
 	if (pile->first == NULL)
 		pile->first = new;
 	else
@@ -48,6 +48,7 @@ void		push(t_pile *e, char *name, char *way)
 		new->next = pile->first;
 		pile->first = new;
 	}
+	return (SUCCESS);
 }
 
 t_elem		*pop(t_pile *pile)
@@ -57,7 +58,7 @@ t_elem		*pop(t_pile *pile)
 	tmp = NULL;
 	tmp = pile->first;
 	if (pile == NULL)
-		exit(EXIT_FAILURE);
+		return (NULL);
 	if (pile != NULL && pile->first != NULL)
 		pile->first = tmp->next;
 	return (tmp);

@@ -12,7 +12,7 @@
 
 #include "../includes/ft_ls.h"
 
-void		sort_base(struct stat *buf, t_env *e, int size)
+void		sort_base(struct stat *buf, char **s, int size)
 {
 	t_vec3		index;
 	char		*abys;
@@ -26,22 +26,25 @@ void		sort_base(struct stat *buf, t_env *e, int size)
 		while (++index.x < size)
 		{
 			index.y = 0;
-			while (e->curr[index.x][index.y] == e->curr[index.x + 1][index.y])
+			while (s[index.x][index.y] == s[index.x + 1][index.y])
 				index.y++;
-			if (e->curr[index.x][index.y] > e->curr[index.x + 1][index.y])
+			if (s[index.x][index.y] > s[index.x + 1][index.y])
 			{
-				abys = e->curr[index.x];
-				e->curr[index.x] = e->curr[index.x + 1];
-				e->curr[index.x + 1] = abys;
-				tmp = buf[index.x];
-				buf[index.x] = buf[index.x + 1];
-				buf[index.x + 1] = tmp;
+				abys = s[index.x];
+				s[index.x] = s[index.x + 1];
+				s[index.x + 1] = abys;
+				if (buf != NULL)
+				{
+					tmp = buf[index.x];
+					buf[index.x] = buf[index.x + 1];
+					buf[index.x + 1] = tmp;
+				}
 			}
 		}
 	}
 }
 
-void		sort_r(struct stat *buf, t_env *e, int size)
+void		sort_r(struct stat *buf, char **s, int size)
 {
 	int			i;
 	char		*abys;
@@ -49,15 +52,18 @@ void		sort_r(struct stat *buf, t_env *e, int size)
 
 	i = -1;
 	abys = NULL;
-	sort_base(buf, e, size);
+	sort_base(buf, s, size);
 	while (++i < --size)
 	{
-		abys = e->curr[i];
-		e->curr[i] = e->curr[size];
-		e->curr[size] = abys;
-		tmp = buf[i];
-		buf[i] = buf[size];
-		buf[size] = tmp;
+		abys = s[i];
+		s[i] = s[size];
+		s[size] = abys;
+		if (buf != NULL)
+		{
+			tmp = buf[i];
+			buf[i] = buf[size];
+			buf[size] = tmp;
+		}
 	}
 }
 
@@ -73,7 +79,7 @@ static int	cmpt(struct stat b1, struct stat b2, char *s1, char *s2)
 	return (0);
 }
 
-void		sort_t(struct stat *buf, t_env *e, int size)
+void		sort_t(struct stat *buf, char **s, int size)
 {
 	int			i;
 	int			ln;
@@ -83,16 +89,16 @@ void		sort_t(struct stat *buf, t_env *e, int size)
 	abys = NULL;
 	ln = size;
 	size--;
-	while (ln--)
+	while (ln-- && buf != NULL)
 	{
 		i = -1;
 		while (++i < size)
 		{
-			if (cmpt(buf[i], buf[i + 1], e->curr[i], e->curr[i + 1]) == 0)
+			if (cmpt(buf[i], buf[i + 1], s[i], s[i + 1]) == 0)
 			{
-				abys = e->curr[i];
-				e->curr[i] = e->curr[i + 1];
-				e->curr[i + 1] = abys;
+				abys = s[i];
+				s[i] = s[i + 1];
+				s[i + 1] = abys;
 				tmp = buf[i];
 				buf[i] = buf[i + 1];
 				buf[i + 1] = tmp;
@@ -101,7 +107,7 @@ void		sort_t(struct stat *buf, t_env *e, int size)
 	}
 }
 
-void		sort_rt(struct stat *buf, t_env *e, int size)
+void		sort_rt(struct stat *buf, char **s, int size)
 {
 	int			i;
 	char		*abys;
@@ -109,14 +115,17 @@ void		sort_rt(struct stat *buf, t_env *e, int size)
 
 	i = -1;
 	abys = NULL;
-	sort_t(buf, e, size);
+	sort_t(buf, s, size);
 	while (++i < --size)
 	{
-		abys = e->curr[i];
-		e->curr[i] = e->curr[size];
-		e->curr[size] = abys;
-		tmp = buf[i];
-		buf[i] = buf[size];
-		buf[size] = tmp;
+		abys = s[i];
+		s[i] = s[size];
+		s[size] = abys;
+		if (buf != NULL)
+		{
+			tmp = buf[i];
+			buf[i] = buf[size];
+			buf[size] = tmp;
+		}
 	}
 }

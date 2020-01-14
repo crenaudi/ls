@@ -21,9 +21,8 @@ static void	init(int *er)
 	er[4] = '\0';
 }
 
-void		error(char *av, int error, char *illegal)
+void		error(char *av, int error, char c)
 {
-	char		*tmp;
 	int			er[5];
 	int			i;
 	const char	*s[6] = {
@@ -39,9 +38,10 @@ void		error(char *av, int error, char *illegal)
 	while (er[++i] != '\0')
 		if (error == er[i])
 		{
-			tmp = ft_strjoin(s[i], illegal);
-			(error == -3) ? ft_putendl(tmp) : ft_putendl(s[i]);
-			free(tmp);
+			ft_putstr(s[i]);
+			if (error == -3)
+				ft_putchar(c);
+			ft_putchar('\n');
 		}
 	if (error == -3)
 	{

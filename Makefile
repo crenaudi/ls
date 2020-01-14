@@ -8,7 +8,6 @@ EXEC = ft_ls
 SRC = src/main.c		\
 	src/init.c			\
 	src/parse_func.c	\
-	src/run.c			\
 	src/pile.c			\
 	src/device.c		\
 	src/sort.c			\
@@ -17,7 +16,6 @@ SRC = src/main.c		\
 	src/mode.c			\
 	src/size.c			\
 	src/patern.c		\
-	src/file.c			\
 	src/print_ls.c
 OBJ = $(SRC:.c=.o)
 RM = rm -f

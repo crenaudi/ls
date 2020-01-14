@@ -47,19 +47,19 @@ static void	next_step(t_env *e, char *way)
 	int			i;
 
 	buf = NULL;
-	i = ln_tab(e->curr);
+	i = ln_tab(e->current);
 	buf = buf_tab(e, way);
-	e->f_sort(buf, e, ln_tab(e->curr));
-	if (e->reccursive == 1)
+	e->f_sort(buf, e, ln_tab(e->current));
+	if (e->recursive == 1)
 	{
 		while (i--)
-			if (device_type(buf[i]) == 'd' && ft_strcmp(e->curr[i], ".") != 0
-				&& ft_strcmp(e->curr[i], "..") != 0)
-				empiler(e, e->curr[i], ft_strdup(way));
+			if (device_type(buf[i]) == 'd' && ft_strcmp(e->current[i], ".") != 0
+				&& ft_strcmp(e->current[i], "..") != 0)
+				empiler(e, e->current[i], ft_strdup(way));
 	}
 	e->f_print(buf, way, e);
 	clean_ptr((void *)(&buf));
-	clean(e->curr);
+	clean(e->current);
 }
 
 static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
@@ -77,7 +77,7 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 		while ((c = readdir(dirp)) != NULL)
 		{
 			if (e->a == 1 || c->d_name[0] != '.')
-				ft_strcpy(e->curr[++i], c->d_name);
+				ft_strcpy(e->current[++i], c->d_name);
 		}
 		printf("i = %d\n", i);
 		if (i >= 0)
@@ -86,9 +86,9 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 			next_step(e, way = ft_strjoin(elem->way, tmp));
 			clean_ptr((void *)(&tmp));
 		}
-		if (i == -1 && e->reccursive == 1)
+		if (i == -1 && e->recursive == 1)
 		{
-			print_way(tmp = ft_strjoin(elem->way, elem->name), e->reccursive);
+			print_way(tmp = ft_strjoin(elem->way, elem->name), e->recursive);
 		}
 		ft_strdel(&way);
 		ft_strdel(&tmp);
