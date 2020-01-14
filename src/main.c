@@ -128,9 +128,9 @@ int				main(int ac, char **av)
 	i = 0;
 	init_env(&e);
 	init = init_pile;
-	if (parse_flags(ac, av, &e) == 0 && ac != 1)
-		add_first_stack(init, av);
-	else
+	if (parse_flags(ac, av, &e) == ERROR)
+		return; 
+	if (ac != 1)
 		empiler(init, ".", NULL);
 
 /*

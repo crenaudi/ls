@@ -23,9 +23,12 @@
 # include <stdio.h>
 # include <dirent.h>
 # include <errno.h>
+#include <limits.h>
 # include "libft.h"
 
 # define BUF_SIZE		10500
+# define SUCCESS 		0
+# define ERROR 		-1
 
 typedef struct s_env	t_env;
 typedef struct s_pile	t_pile;
@@ -49,7 +52,7 @@ struct					s_env
 
 struct					s_elem
 {
-	char				name[256];
+	char				name[PATH_MAX];
 	char				*way;
 	struct stat			*buf;
 	struct s_elem		*next;

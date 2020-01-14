@@ -23,10 +23,10 @@ void	clean_ptr(void **ptr)
 
 void	clean_elem(t_elem *elem)
 {
-	ft_bzero(elem->name, sizeof(char) * 256);
-	clean_ptr((void *)(&elem->name));
-	clean_ptr((void *)(&elem->way));
-	clean_ptr((void *)(&elem->buf));
+	ft_bzero(elem->name, sizeof(char) * PATH_MAX);
+	ft_strdel(&elem->name);
+	ft_strdel(&elem->way);
+	ft_memdel(&elem->buf);
 	elem->next = NULL;
 	clean_ptr((void *)(&elem));
 }
@@ -37,7 +37,7 @@ void	clean(char **tab)
 
 	i = 0;
 	while (i < BUF_SIZE)
-		ft_bzero(tab[i++], sizeof(256));
+		ft_bzero(tab[i++], sizeof(PATH_MAX));
 }
 
 void	clean_env(t_env *e)
@@ -49,7 +49,7 @@ void	clean_env(t_env *e)
 	tmp = NULL;
 	while (i < BUF_SIZE)
 	{
-		ft_bzero(e->curr[i], sizeof(256));
+		ft_bzero(e->curr[i], sizeof(PATH_MAX));
 		tmp = e->curr[i];
 		clean_ptr((void **)(&tmp));
 		i++;

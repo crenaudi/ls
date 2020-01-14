@@ -34,14 +34,14 @@ t_elem		*add_new_elem(char *name, char *way)
 	return (new);
 }
 
-void		empiler(t_pile *e, char *name, char *way)
+void		push(t_pile *e, char *name, char *way)
 {
 	t_elem	*new;
 
 	new = add_new_elem(name, way);
 	if (new == NULL)
 		exit(EXIT_FAILURE);
-	if (pile == NULL)
+	if (pile->first == NULL)
 		pile->first = new;
 	else
 	{
@@ -50,7 +50,7 @@ void		empiler(t_pile *e, char *name, char *way)
 	}
 }
 
-t_elem		*depiler(t_pile *pile)
+t_elem		*pop(t_pile *pile)
 {
 	t_elem	*tmp;
 

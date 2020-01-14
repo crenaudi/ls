@@ -46,10 +46,10 @@ int			parse_flags(char **av, t_env *e)
 		{
 					free(tmp);
 					error(NULL, -3, &tmp[i]);
-					return(-1);
+					return(ERROR);
 		}
 		free(tmp);
-		return(0);
+		return(SUCCESS);
 }
 
 /*
@@ -153,4 +153,3 @@ struct stat	*buf_tab(char **argv, char *way)
 	}
 	return (buf);
 }
-*/

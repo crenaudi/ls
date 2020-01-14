@@ -26,7 +26,7 @@ static int	check_permission(t_elem *elem)
 			ft_putstr(doc);
 			ft_putendl(" :");
 			error(elem->name, -2, NULL);
-			clean_ptr((void *)(&doc));
+			ft_strdel(&doc);
 			return (-1);
 		}/*
 		if (device_type(*elem->buf) != 'd')
@@ -37,7 +37,7 @@ static int	check_permission(t_elem *elem)
 				return (-1);
 		}*/
 	}
-	clean_ptr((void *)(&doc));
+	ft_strdel(&doc);
 	return (0);
 }
 
@@ -90,9 +90,9 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 		{
 			print_way(tmp = ft_strjoin(elem->way, elem->name), e->reccursive);
 		}
-		clean_ptr((void *)(&way));
-		clean_ptr((void *)(&tmp));
-		clean_ptr((void *)(&c));
+		ft_strdel(&way);
+		ft_strdel(&tmp);
+		ft_strdel(&c);
 	}
 }
 
@@ -113,7 +113,7 @@ static int is_var(t_env *e, char *s)
 	}
 	return(0);
 }
-
+/*
 void		run(t_elem *elem, t_env *e)
 {
 	DIR		*dirp;
@@ -135,4 +135,29 @@ void		run(t_elem *elem, t_env *e)
 	clean_elem(elem);
 	if (e->pile != NULL && e->pile->first != NULL)
 		run(depiler(e->pile), e);
+}*/
+void        run(t_env *e)
+{
+    t_elem    *elem;
+    DIR        *dirp;
+    char    	*tmp;
+
+
+    while ((elem = pop(e->pile)))
+  {
+      if ((tmp = ft_strjoin(elem->way, elem->name))
+	    return FATAL_ERROR; // tmtc tacompri, faut quand même free toussa
+      if (is_var(e, tmp) == 0)
+      {
+	    if ((dirp = opendir(tmp)) == NULL)
+		  error(elem->name, -1, NULL);
+	    else
+	   {
+		  for_norme(dirp, e, elem);
+		  closedir(dirp);
+	  }
+      }
+      ft_strdel(&tmp);
+      clean_elem(elem);
+  }
 }

@@ -40,9 +40,9 @@ void		init_env(t_env *e)
 		return ;
 	while (i < BUF_SIZE)
 	{
-		if (!(str = (char *)malloc(sizeof(char) * (256))))
+		if (!(str = (char *)malloc(sizeof(char) * (PATH_MAX))))
 			return ;
-		ft_bzero(str, sizeof(256));
+		str[0] = '\0';
 		e->curr[i++] = str;
 	}
 	e->pile = init_pile;
