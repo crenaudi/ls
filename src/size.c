@@ -12,7 +12,7 @@
 
 #include "../includes/ft_ls.h"
 
-void		print_octet(struct stat *buf, int ln)
+void		print_octet(struct stat *stat, int ln)
 {
 	int		i;
 	int		total;
@@ -21,7 +21,7 @@ void		print_octet(struct stat *buf, int ln)
 	total = 0;
 	while (i < ln)
 	{
-		total += (buf[i].st_blocks);
+		total += (stat[i].st_blocks);
 		i++;
 	}
 	ft_putstr("total ");
@@ -29,7 +29,7 @@ void		print_octet(struct stat *buf, int ln)
 	ft_putchar('\n');
 }
 
-void		max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max)
+void		max_st_nb(struct stat *stat, int ln, t_vec2 *nb_max)
 {
 	int		i;
 	unsigned int	link_current;
@@ -40,17 +40,17 @@ void		max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max)
 	nb_max->y = 0;
 	while (i < ln)
 	{
-		link_current = ft_nblen(buf[i].st_nlink);
+		link_current = ft_nblen(stat[i].st_nlink);
 		if (nb_max->x < link_current)
 			nb_max->x = link_current;
-		size_current = ft_nblen(buf[i].st_size);
+		size_current = ft_nblen(stat[i].st_size);
 		if (nb_max->y < size_current)
 			nb_max->y = size_current;
 		i++;
 	}
 }
 
-void		max_st_str(struct stat *buf, int ln, t_vec2 *str_max)
+void		max_st_str(struct stat *stat, int ln, t_vec2 *str_max)
 {
 	int				i;
 	struct passwd	*pwd;
@@ -61,15 +61,15 @@ void		max_st_str(struct stat *buf, int ln, t_vec2 *str_max)
 	str_max->y = 0;
 	while (i < ln)
 	{
-		if ((pwd = getpwuid(buf->st_uid)) == NULL)
-			str_max->x = ((size_t)(str_max->x) < ft_nblen(buf->st_uid)) ?
-				str_max->x : ft_nblen(buf->st_uid);
+		if ((pwd = getpwuid(stat->st_uid)) == NULL)
+			str_max->x = ((size_t)(str_max->x) < ft_nblen(stat->st_uid)) ?
+				str_max->x : ft_nblen(stat->st_uid);
 		else
 			str_max->x = ((size_t)(str_max->x) < ft_strlen(pwd->pw_name)) ?
 				str_max->x : ft_strlen(pwd->pw_name);
-		if ((grp = getgrgid(buf->st_gid)) == NULL)
-			str_max->y = ((size_t)(str_max->y) < ft_nblen(buf->st_uid)) ?
-				str_max->y : ft_nblen(buf->st_uid);
+		if ((grp = getgrgid(stat->st_gid)) == NULL)
+			str_max->y = ((size_t)(str_max->y) < ft_nblen(stat->st_uid)) ?
+				str_max->y : ft_nblen(stat->st_uid);
 		else
 			str_max->y = ((size_t)(str_max->y) < ft_strlen(grp->gr_name)) ?
 				str_max->y : ft_strlen(grp->gr_name);

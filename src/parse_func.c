@@ -56,7 +56,7 @@ int			parse_flags(char **av, t_env *e)
 	return (index);
 }
 
-void buf_tab(char *way, t_env *e)
+void stat_tab(char *way, t_env *e)
 {
 	char		*tmp;
 	int			i;
@@ -64,12 +64,12 @@ void buf_tab(char *way, t_env *e)
 
 	i = -1;
 	len = ln_tab(e->current);
-	if (!(e->buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
+	if (!(e->stat = (struct stat *)malloc(sizeof(struct stat) * (len))))
 		return;
 	while (++i < len)
 	{
 		tmp = ft_strjoin((e->current[i][0] == '/') ? e->current[i] : way, e->current[i]);
-		while (!(lstat(tmp, &e->buf[i])))
+		while (!(lstat(tmp, &e->stat[i])))
 		{
 			ft_strdel(&tmp);
 			i++;

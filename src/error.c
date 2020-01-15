@@ -12,40 +12,23 @@
 
 #include "../includes/ft_ls.h"
 
-static void	init(int *er)
-{
-	er[0] = -1;
-	er[1] = -2;
-	er[2] = -3;
-	er[3] = 1;
-	er[4] = '\0';
-}
-
 void		error(char *av, int error, char c)
 {
-	int			er[5];
-	int			i;
-	const char	*s[6] = {
-		": No such file or directory", ": Permission denied",
-		"illegal option -- ", ": error in flags", ": usage flags", "\0"
-	};
-
-	init(er);
-	ft_putstr("ls: ");
+	ft_putstr(LS);
 	if (error != -3)
 		ft_putstr(av);
-	i = -1;
-	while (er[++i] != '\0')
-		if (error == er[i])
-		{
-			ft_putstr(s[i]);
-			if (error == -3)
-				ft_putchar(c);
-			ft_putchar('\n');
-		}
+	if (error == -1)
+		ft_putendl(ERROR_01);
+	if (error == -2)
+		ft_putendl(ERROR_02);
 	if (error == -3)
 	{
-		ft_putstr("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]");
-		ft_putendl(" [file ...]");
+		ft_putstr(ERROR_03);
+		ft_putchar(c);
+		ft_putchar('\n');
+		ft_putstr(USAGE);
+		ft_putendl(ERROR_06);
 	}
+	if (error == 1)
+		ft_putendl(ERROR_04);
 }

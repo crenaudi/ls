@@ -29,6 +29,14 @@
 # define BUF_SIZE		10500
 # define SUCCESS 		0
 # define ERROR 		-1
+# define LS			"ls: "
+# define USAGE		"usage: "
+# define ERROR_01		": No such file or directory"
+# define ERROR_02		": Permission denied"
+# define ERROR_03		"illegal option -- "
+# define ERROR_04		": error in flags"
+# define ERROR_05		": usage flags"
+# define ERROR_06		"ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]"
 
 typedef struct s_env	t_env;
 typedef struct s_pile	t_pile;
@@ -47,7 +55,7 @@ struct					s_env
 	int						recursive;
 	char					**current;
 	char 					*wrong_argv;
-	struct stat 	*buf;
+	struct stat 	*stat;
 	t_pile				*pile;
 };
 
@@ -55,7 +63,7 @@ struct					s_elem
 {
 	char				name[PATH_MAX];
 	char				*way;
-	struct stat			*buf;
+	struct stat			*stat;
 	struct s_elem		*next;
 };
 
@@ -82,35 +90,35 @@ void					free_elem(t_elem *elem);
 
 int						parse_flags(char **av, t_env *e);
 int						ln_tab(char **tab);
-char					device(struct stat buf);
-void					mode_type(struct stat buf);
+char					device(struct stat stat);
+void					mode_type(struct stat stat);
 
 void					run(t_elem *elem, t_env *e);
 
 void					print_way(char *way, int rec);
 void					ls_simple(char *way, t_env *e);
 void					ls_all(char *way, t_env *e);
-void					print_lnk(struct stat buf, char *lnk, t_pile *pile);
-void					ft_putinfo(struct stat buf, char *name, t_vec2 nb_max,
+void					print_lnk(struct stat stat, char *lnk, t_pile *pile);
+void					ft_putinfo(struct stat stat, char *name, t_vec2 nb_max,
 		t_vec2 str_max);
 
-void 					buf_tab(char *way, t_env *e);
+void 					stat_tab(char *way, t_env *e);
 
-void					sort_base(struct stat *buf, char **s, int size);
-void					sort_r(struct stat *buf, char **s, int size);
-void					sort_t(struct stat *buf, char **s, int size);
-void					sort_rt(struct stat *buf, char **s, int size);
+void					sort_base(struct stat *stat, char **s, int size);
+void					sort_r(struct stat *stat, char **s, int size);
+void					sort_t(struct stat *stat, char **s, int size);
+void					sort_rt(struct stat *stat, char **s, int size);
 
 void					print_way(char *way, int rec);
 
 void					clean_strsplit(char **tab);
-void					print_octet(struct stat *buf, int ln);
-void					time_patern(struct stat buf);
+void					print_octet(struct stat *stat, int ln);
+void					time_patern(struct stat stat);
 void					nb_patern(int start, int nb);
 void					id_patern(int start, int id);
 void					str_patern(int start, char *name);
-void					max_st_nb(struct stat *buf, int ln, t_vec2 *nb_max);
-void					max_st_str(struct stat *buf, int ln, t_vec2 *str_max);
+void					max_st_nb(struct stat *stat, int ln, t_vec2 *nb_max);
+void					max_st_str(struct stat *stat, int ln, t_vec2 *str_max);
 
 
 #endif

@@ -12,7 +12,7 @@
 
 #include "../includes/ft_ls.h"
 
-static void		print_wrongORfile(char **str, int bool)
+static void		print_wrongORfile(char **str, int is_file)
 {
 	int i;
 
@@ -21,30 +21,36 @@ static void		print_wrongORfile(char **str, int bool)
 	{
 		sort_base(NULL, str, ln_tab(str));
 		while (str[++i][0] != 0)
-				(bool == 0) ? ft_putendl(str[i]) : error(str[i], -1, ' ');
+				(is_file == 0) ? ft_putendl(str[i]) : error(str[i], -1, ' ');
 		clean(str);
 	}
-	clean_ptr((void **)(&str));
+	ft_memdel((void **)(&str));
 }
 
-void check_argv(char **argv, t_env *e, int i, int len)
+static void init(int index[4])
+{
+	index[0] = -1;
+	index[1] = -1;
+	index[2] = 0;
+	index[3] = 0;
+}
+
+int check_argv(char **argv, t_env *e, int i, int len)
 {
 	char		*tmp;
 	char		**wrong;
 	char 		**file;
-	int 		index[4] = {-1, -1, 0, 0};
+	int 		index[4];
 
 	wrong = init_file();
 	file = init_file();
-	if (!(e->buf = (struct stat *)malloc(sizeof(struct stat) * (len))))
-		return ;
+	init(index);
 	while (++i < len)
 	{
 		tmp = ft_strjoin((argv[i][0] == '/') ? NULL : "./", argv[i]);
-		if (!(stat(tmp, &e->buf[index[2]])))
+		if (!(stat(tmp, &e->stat[index[2]])))
 		{
-
-			if (device(e->buf[index[2]]) == 'd' || device(e->buf[index[2]]) == 'l')
+			if (device(e->stat[index[2]]) == 'd' || device(e->stat[index[2]]) == 'l')
 				ft_strcpy(e->current[index[3]++], argv[i]);
 			else
 				ft_strcpy(file[++index[0]], argv[i]);
@@ -56,25 +62,29 @@ void check_argv(char **argv, t_env *e, int i, int len)
 	}
 	print_wrongORfile(wrong, -1);
 	print_wrongORfile(file, 0);
+	return (index[1]);
 }
 
-int 	push_stack(t_env *e, char **argv, int start, int end)
+void 	push_stack(t_env *e, char **argv, int start, int end)
 {
+	int 	only_wrong;
 	int 	len;
 	int 	i;
 
 	i = 0;
-	check_argv(argv, e, start - 1, end);
+	if (!(e->stat = (struct stat *)malloc(sizeof(struct stat) * (end))))
+		return ;
+	only_wrong = check_argv(argv, e, start - 1, end);
 	len = ln_tab(e->current);
-	e->f_sort(e->buf, e->current, len);
+	e->f_sort(e->stat, e->current, len);
 	while (i <= --len)
 		(e->current[len][0] == '/') ? push(e->pile, e->current[len], NULL)
 				: push(e->pile, e->current[len], "./");
 	clean(e->current);
-	if (e->pile->first == NULL)
+	if (e->pile->first == NULL && only_wrong == -1)
 		push(e->pile, ".", NULL);
+	ft_memdel((void **)&e->stat);
 	ft_putchar('\n');
-	return (SUCCESS);
 }
 
 int				main(int ac, char **av)
@@ -86,8 +96,7 @@ int				main(int ac, char **av)
 	init_env(&e);
 	if ((i = parse_flags(av, &e)) == ERROR)
 		return (0);
-	if (push_stack(&e, av, i, ac) == ERROR)
-		printf("pb dans push stack\n");
+	push_stack(&e, av, i, ac);
 	afficher_pile(e.pile);
 	//run(&e);
 	clean_env(&e);

@@ -26,7 +26,7 @@ void	clean_elem(t_elem *elem)
 	ft_bzero(elem->name, sizeof(char) * PATH_MAX);
 	ft_memdel((void **)(&elem->name));
 	ft_strdel(&elem->way);
-	ft_memdel((void **)(&elem->buf));
+	ft_memdel((void **)(&elem->stat));
 	elem->next = NULL;
 	clean_ptr((void *)(&elem));
 }

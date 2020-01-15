@@ -18,10 +18,10 @@ static int	check_permission(t_elem *elem)
 
 	doc = NULL;
 	doc = ft_strjoin(elem->way, elem->name);
-	lstat(doc, elem->buf);
+	lstat(doc, elem->stat);
 	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
 	{
-		if ((elem->buf->st_mode & S_IRUSR) != S_IRUSR)
+		if ((elem->stat->st_mode & S_IRUSR) != S_IRUSR)
 		{
 			ft_putstr(doc);
 			ft_putendl(" :");
@@ -29,9 +29,9 @@ static int	check_permission(t_elem *elem)
 			ft_strdel(&doc);
 			return (-1);
 		}/*
-		if (device_type(*elem->buf) != 'd')
+		if (device_type(*elem->stat) != 'd')
 		{
-			if (device_type(*elem->buf) != 'c')
+			if (device_type(*elem->stat) != 'c')
 				clean_ptr((void *)(&doc));
 				ft_putendl(elem->name);
 				return (-1);
@@ -43,22 +43,22 @@ static int	check_permission(t_elem *elem)
 
 static void	next_step(t_env *e, char *way)
 {
-	struct stat	*buf;
+	struct stat	*stat;
 	int			i;
 
-	buf = NULL;
+	stat = NULL;
 	i = ln_tab(e->current);
-	buf = buf_tab(e, way);
-	e->f_sort(buf, e, ln_tab(e->current));
+	stat = stat_tab(e, way);
+	e->f_sort(stat, e, ln_tab(e->current));
 	if (e->recursive == 1)
 	{
 		while (i--)
-			if (device_type(buf[i]) == 'd' && ft_strcmp(e->current[i], ".") != 0
+			if (device_type(stat[i]) == 'd' && ft_strcmp(e->current[i], ".") != 0
 				&& ft_strcmp(e->current[i], "..") != 0)
 				empiler(e, e->current[i], ft_strdup(way));
 	}
-	e->f_print(buf, way, e);
-	clean_ptr((void *)(&buf));
+	e->f_print(stat, way, e);
+	clean_ptr((void *)(&stat));
 	clean(e->current);
 }
 
@@ -98,17 +98,17 @@ static void	for_norme(DIR *dirp, t_env *e, t_elem *elem)
 
 static int is_var(t_env *e, char *s)
 {
-	struct stat	buf;
+	struct stat	stat;
 	int		i;
 
 	i = 0;
-	lstat(s, &buf);
-	if (device_type(buf) == 99)
+	lstat(s, &stat);
+	if (device_type(stat) == 99)
 	{
 		while (s[++i] != '\0')
 			if (s[i] == '/')
 				return (0);
-		print_c(buf, s, e);
+		print_c(stat, s, e);
 		return (1);
 	}
 	return(0);

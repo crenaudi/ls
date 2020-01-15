@@ -15,7 +15,7 @@
 t_elem		*add_new_elem(char *name, char *way)
 {
 	t_elem			*new;
-	struct stat	*buf;
+	struct stat	*stat;
 	char 				*tmp;
 	int					i;
 
@@ -25,11 +25,11 @@ t_elem		*add_new_elem(char *name, char *way)
 	ft_bzero(new, sizeof(t_elem));
 	ft_strcpy(new->name, name);
 	new->way = ft_strdup(way);
-	if (!(buf = (struct stat *)malloc(sizeof(struct stat))))
+	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
 		return (NULL);
 	tmp = ft_strjoin(way, name);
-	lstat(tmp, buf);
-	new->buf = buf;
+	lstat(tmp, stat);
+	new->stat = stat;
 	ft_strdel(&tmp);
 	return (new);
 }
