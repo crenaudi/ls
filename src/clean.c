@@ -37,6 +37,8 @@ void	destroy_elem(t_lst *elem)
 {
 	//ft_memdel((void **)(&elem->name));
 	//ft_memdel((void **)(&elem->way));
+	ft_bzero(elem->name, sizeof(char) * NAME_MAX);
+	ft_bzero(elem->way, sizeof(char) * PATH_MAX);
 	if (elem->mode != 0)
 		ft_memdel((void **)(&elem->mode));
 	elem->next = NULL;
@@ -53,6 +55,7 @@ void	destroy_lst(t_lst *lst)
 		destroy_elem(lst);
 		lst = tmp;
       }
+	lst = NULL;
 }
 
 void	destroy_cntr_file(t_file_cntr *cntr)

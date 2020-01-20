@@ -31,7 +31,7 @@ void		print_octet(struct stat *stat, int ln)
 
 void		max_st_nb(struct stat *stat, int ln, unsigned int nb_max[2])
 {
-	int		i;
+	int			i;
 	unsigned int	link_current;
 	unsigned int	size_current;
 

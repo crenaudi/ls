@@ -44,7 +44,7 @@ typedef struct s_pile_cntr	t_pile_cntr;
 typedef struct s_lst		t_lst;
 typedef struct s_print_all	t_print_all;
 typedef void			(*t_fsrt)(t_file_cntr *files);
-typedef void			(*t_fprt)(t_env *e, char *way, t_lst origine);
+typedef void			(*t_fprt)(t_env *e, char *way);
 
 struct					s_env
 {
@@ -92,10 +92,10 @@ void					clean_env(t_env *e);
 int					parse_flags(char **av, t_env *e);
 char					device(mode_t mode);
 void					mode_type(mode_t st_mode);
-void					run(t_env *e);
+void       				run(t_env *e);
 void					print_way(char *way, int rec);
-void					ls_simple(t_env *e, char *way, t_lst origine);
-void					ls_all(t_env *e, char *way, t_lst origine);
+void					ls_simple(t_env *e, char *way);
+void					ls_all(t_env *e, char *way);
 void					ft_putinfo(struct stat stat, char *name,
 	unsigned int nb_max[2], unsigned int str_max[2]);
 struct stat 			add_stat(t_lst *lst);

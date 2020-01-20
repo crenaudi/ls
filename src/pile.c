@@ -81,6 +81,29 @@ int         add2file(t_file_cntr *cntr, char *name, char *way, mode_t *mode)
 	return (SUCCESS);
 }
 
+void 	push2stack(t_env *e)
+{
+	t_lst 	*lst;
+	char 		*tmp;
+	size_t 	i;
+
+	tmp = NULL;
+	lst = e->file_cntr->lst;
+	if (e->pile_cntr->first == NULL)
+		tmp = "./";
+	else
+		tmp = e->pile_cntr->first->way;
+	i = 0;
+	while (i < e->file_cntr->size)
+	{
+		if (device(lst->mode) == 'd' || device(lst->mode) == 'l')
+			push(e->pile_cntr, lst->name, lst->way, &lst->mode);
+		else
+			ft_putendl(lst->name); //a prevoir si flag l
+		i++;
+	}
+}
+
 void		print_pile_cntr(t_pile_cntr *pile_cntr)
 {
 	t_lst		*tmp;

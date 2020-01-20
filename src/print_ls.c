@@ -56,13 +56,12 @@ void	ft_putinfo(struct stat stat, char *name, unsigned int nb_max[2],
 	ft_putendl(name);
 }
 
-void	ls_simple(t_env *e, char *way, t_lst origine)
+void	ls_simple(t_env *e, char *way)
 {
 	int		i;
 	t_lst 	*lst;
 
 	i = -1;
-	(void)origine;
 	lst = e->file_cntr->lst;
 	print_way(way, e->recursive);
 	while (lst)
@@ -74,13 +73,12 @@ void	ls_simple(t_env *e, char *way, t_lst origine)
 		ft_putchar('\n');
 }
 
-void	ls_all(t_env *e, char *way, t_lst origine)
+void	ls_all(t_env *e, char *way)
 {
 	t_print_all	info;
 	int i;
 
 	i = -1;
-	(void)origine;
 	info = init_info2print(e->file_cntr);
 	print_way(way, e->recursive);
 	print_octet(info.stat, e->file_cntr->size);
