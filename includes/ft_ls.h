@@ -23,7 +23,7 @@
 # include <stdio.h>
 # include <dirent.h>
 # include <errno.h>
-#include <limits.h>
+# include <limits.h>
 # include "libft.h"
 
 # define BUF_SIZE		10500
@@ -38,87 +38,96 @@
 # define ERROR_05		": usage flags"
 # define ERROR_06		"ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]"
 
-typedef struct s_env	t_env;
-typedef struct s_pile	t_pile;
-typedef struct s_elem	t_elem;
-typedef int	t_vec3 __attribute__((ext_vector_type(3)));
-typedef unsigned int	t_vec2 __attribute__((ext_vector_type(2)));
-typedef void			(*t_fsrt)(struct stat *, char **, int);
-typedef void			(*t_fprt)(char *, t_env *);
+typedef struct s_env		t_env;
+typedef struct s_file_cntr	t_file_cntr;
+typedef struct s_pile_cntr	t_pile_cntr;
+typedef struct s_lst		t_lst;
+typedef struct s_print_all	t_print_all;
+typedef void			(*t_fsrt)(t_file_cntr *files);
+typedef void			(*t_fprt)(t_env *e, char *way, t_lst origine);
 
 struct					s_env
 {
 	t_fsrt				f_sort;
 	t_fprt				f_print;
-	int						a;
-	int						l;
-	int						recursive;
-	char					**current;
-	char 					*wrong_argv;
-	struct stat 	*stat;
-	t_pile				*pile;
+	int					a;
+	int					l;
+	int					recursive;
+	t_file_cntr				*file_cntr;
+	t_pile_cntr				*pile_cntr;
 };
 
-struct					s_elem
+struct 					s_file_cntr
 {
-	char				name[PATH_MAX];
-	char				*way;
-	struct stat			*stat;
-	struct s_elem		*next;
+  	t_lst 				*lst;
+  	size_t      			size;
 };
 
-struct					s_pile
+struct					s_pile_cntr
 {
-	t_elem				*first;
+	t_lst					*first;
+	mode_t    			      mode;
+};
+
+struct					s_lst
+{
+	char					name[NAME_MAX];
+	char					way[PATH_MAX];
+	mode_t        			mode;
+	struct s_lst			*next;
+};
+
+struct					s_print_all
+{
+	t_lst 				*lst;
+	struct stat 			*stat;
+	unsigned int			nb_max[2];
+	unsigned int			str_max[2];
 };
 
 void					init_env(t_env *e);
-char 					**init_file();
-t_pile				*init_pile();
-
 void					error(char *av, int error, char c);
 void					clean(char **tab);
-void					clean_elem(t_elem *elem);
 void					clean_env(t_env *e);
-void					clean_ptr(void **ptr);
-
-t_elem				*add_new_elem(char *name, char *way);
-int						push(t_pile *pile, char *name, char *way);
-t_elem				*pop(t_pile *pile);
-void					afficher_pile(t_pile *pile);
-void					free_elem(t_elem *elem);
-
-int						parse_flags(char **av, t_env *e);
-int						ln_tab(char **tab);
-char					device(struct stat stat);
-void					mode_type(struct stat stat);
-
-void					run(t_elem *elem, t_env *e);
-
+int					parse_flags(char **av, t_env *e);
+char					device(mode_t mode);
+void					mode_type(mode_t st_mode);
+void					run(t_env *e);
 void					print_way(char *way, int rec);
-void					ls_simple(char *way, t_env *e);
-void					ls_all(char *way, t_env *e);
-void					print_lnk(struct stat stat, char *lnk, t_pile *pile);
-void					ft_putinfo(struct stat stat, char *name, t_vec2 nb_max,
-		t_vec2 str_max);
-
-void 					stat_tab(char *way, t_env *e);
-
-void					sort_base(struct stat *stat, char **s, int size);
-void					sort_r(struct stat *stat, char **s, int size);
-void					sort_t(struct stat *stat, char **s, int size);
-void					sort_rt(struct stat *stat, char **s, int size);
-
-void					print_way(char *way, int rec);
-
-void					clean_strsplit(char **tab);
+void					ls_simple(t_env *e, char *way, t_lst origine);
+void					ls_all(t_env *e, char *way, t_lst origine);
+void					ft_putinfo(struct stat stat, char *name,
+	unsigned int nb_max[2], unsigned int str_max[2]);
+struct stat 			add_stat(t_lst *lst);
+void					sort_base(t_file_cntr *files);
+void					sort_r(t_file_cntr *files);
+void					sort_t(t_file_cntr *files);
+void					sort_rt(t_file_cntr *files);
 void					print_octet(struct stat *stat, int ln);
 void					time_patern(struct stat stat);
 void					nb_patern(int start, int nb);
 void					id_patern(int start, int id);
 void					str_patern(int start, char *name);
-void					max_st_nb(struct stat *stat, int ln, t_vec2 *nb_max);
-void					max_st_str(struct stat *stat, int ln, t_vec2 *str_max);
-
+void					max_st_nb(struct stat *stat, int ln,
+	unsigned int nb_max[2]);
+void					max_st_str(struct stat *stat, int ln,
+	unsigned int str_max[2]);
+void 					push2stack(t_env *e);
+t_file_cntr				*init_file_cntr();
+t_pile_cntr				*init_pile_cntr();
+t_print_all				init_info2print(t_file_cntr *cntr);
+t_lst					*new_elem(char *name, char *way, mode_t *st_mode);
+size_t      			ft_lstlen(t_lst *lst);
+void					ft_swap_elem(t_lst *elem1, t_lst *elem2);
+int                           add2file(t_file_cntr *cntr, char *name,
+	char *way, mode_t *mode);
+int					push(t_pile_cntr *pile, char *name,
+	char *way, mode_t *mode);
+t_lst					*pop(t_pile_cntr *pile);
+void					print_pile(t_pile_cntr *pile);
+void					destroy_elem(t_lst *elem);
+void					destroy_lst(t_lst *lst);
+void					destroy_cntr_file(t_file_cntr *cntr);
+void					destroy_cntr_pile(t_pile_cntr *cntr);
 
 #endif

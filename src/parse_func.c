@@ -56,25 +56,32 @@ int			parse_flags(char **av, t_env *e)
 	return (index);
 }
 
-void stat_tab(char *way, t_env *e)
+size_t      ft_lstlen(t_lst *lst)
 {
-	char		*tmp;
-	int			i;
-	int			len;
+      size_t      i;
 
-	i = -1;
-	len = ln_tab(e->current);
-	if (!(e->stat = (struct stat *)malloc(sizeof(struct stat) * (len))))
-		return;
-	while (++i < len)
-	{
-		tmp = ft_strjoin((e->current[i][0] == '/') ? e->current[i] : way, e->current[i]);
-		while (!(lstat(tmp, &e->stat[i])))
-		{
-			ft_strdel(&tmp);
-			i++;
-			tmp = ft_strjoin((e->current[i][0] == '/') ? e->current[i] : way, e->current[i]);
-		}
-		ft_strdel(&tmp);
-	}
+      i = 0;
+      while (lst != NULL)
+      {
+            i++;
+            lst = lst->next;
+      }
+      return (i);
+}
+
+void		ft_swap_elem(t_lst *elem1, t_lst *elem2)
+{
+      t_lst      *tmp;
+
+      tmp = elem1;
+      ft_bzero(elem1, sizeof(t_lst));
+      ft_strcpy(elem1->name, elem2->name);
+      ft_strcpy(elem1->way, elem2->way);
+      elem1->mode = elem2->mode;
+      elem1->next = elem2->next;
+      ft_bzero(elem2, sizeof(t_lst));
+      ft_strcpy(elem2->name, tmp->name);
+      ft_strcpy(elem2->way, tmp->way);
+      elem2->mode = tmp->mode;
+      elem2->next = tmp->next;
 }

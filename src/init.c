@@ -12,33 +12,61 @@
 
 #include "../includes/ft_ls.h"
 
-t_pile	*init_pile()
+struct stat add_stat(t_lst *lst)
 {
-	t_pile	*pile;
+	struct stat stt;
+	char 		*tmp;
 
-	if (!(pile = (t_pile *)malloc(sizeof(t_pile))))
-		return (NULL);
-	pile->first = NULL;
-	return (pile);
+	tmp = (lst->name[0] == '/') ?
+		ft_strdup(lst->name) : ft_strjoin(lst->way, lst->name);
+	stat(tmp, &stt);
+	ft_strdel(&tmp);
+	return (stt);
+
 }
 
-char 	**init_file()
+t_print_all	init_info2print(t_file_cntr *cntr)
 {
-	char 	**current;
-	char 	*str;
-	int 	i;
+	t_print_all		info;
+	struct stat 	*stat;
+	size_t		i;
+	t_lst			*lst;
 
-	i = 0;
-	if (!(current = (char **)malloc(sizeof(char *) * (BUF_SIZE))))
-		return (NULL);
-	while (i < BUF_SIZE)
+	i = -1;
+	lst = cntr->lst;
+	if (!(stat = (struct stat *)malloc(sizeof(struct stat) * cntr->size)))
+		ft_putstr("ERROR MALLOC");
+	while (++i < cntr->size)
 	{
-		if (!(str = (char *)malloc(sizeof(char) * (PATH_MAX))))
-			return (NULL);
-		str[0] = '\0';
-		current[i++] = str;
+		stat[i] = add_stat(lst);
+		lst = lst->next;
 	}
-	return (current);
+	max_st_nb(stat, cntr->size, info.nb_max);
+	max_st_str(stat, cntr->size, info.str_max);
+	info.lst = cntr->lst;
+	return (info);
+}
+
+t_pile_cntr	*init_pile_cntr()
+{
+	t_pile_cntr	*cntr;
+
+	if (!(cntr = (t_pile_cntr *)malloc(sizeof(t_pile_cntr))))
+		return (NULL);
+	cntr->first = NULL;
+	ft_bzero(cntr, sizeof(t_pile_cntr));
+	return (cntr);
+}
+
+t_file_cntr	*init_file_cntr()
+{
+	t_file_cntr	*cntr;
+
+	if (!(cntr = (t_file_cntr *)malloc(sizeof(t_file_cntr))))
+		return (NULL);
+	cntr->lst = NULL;
+	cntr->size = 0;
+	return (cntr);
 }
 
 void		init_env(t_env *e)
@@ -49,6 +77,6 @@ void		init_env(t_env *e)
 	e->recursive = 0;
 	e->a = 0;
 	e->l = 0;
-	e->pile = init_pile();
-	e->current = init_file();
+	e->pile_cntr = init_pile_cntr();
+	e->file_cntr = init_file_cntr();
 }

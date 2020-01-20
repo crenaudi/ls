@@ -29,6 +29,89 @@ void	print_way(char *way, int rec)
 	}
 }
 
+void	ft_putinfo(struct stat stat, char *name, unsigned int nb_max[2],
+	unsigned int str_max[2])
+{
+	struct passwd	*pwd;
+	struct group	*grp;
+
+	pwd = getpwuid(stat.st_uid);
+	grp = getgrgid(stat.st_gid);
+	ft_putchar(device(stat.st_mode));
+	mode_type(stat.st_mode);
+	(device(stat.st_mode) == 'c') ? nb_patern(nb_max[0], stat.st_blksize) :
+		nb_patern(nb_max[0], stat.st_nlink);
+	(pwd == NULL) ? id_patern(str_max[0], stat.st_uid) :
+		str_patern(str_max[0], pwd->pw_name);
+	(grp == NULL) ? id_patern(str_max[0], stat.st_gid) :
+		str_patern(str_max[1], grp->gr_name);
+	nb_patern(nb_max[1], stat.st_size);
+	time_patern(stat);
+	ft_putchar(' ');
+	if (device(stat.st_mode) == 'l')
+	{
+		ft_putstr(name);
+		ft_putstr(" private -> ");
+	}
+	ft_putendl(name);
+}
+
+void	ls_simple(t_env *e, char *way, t_lst origine)
+{
+	int		i;
+	t_lst 	*lst;
+
+	i = -1;
+	(void)origine;
+	lst = e->file_cntr->lst;
+	print_way(way, e->recursive);
+	while (lst)
+	{
+		ft_putendl(lst->name);
+		lst = lst->next;
+	}
+	if (e->pile_cntr->first != NULL)
+		ft_putchar('\n');
+}
+
+void	ls_all(t_env *e, char *way, t_lst origine)
+{
+	t_print_all	info;
+	int i;
+
+	i = -1;
+	(void)origine;
+	info = init_info2print(e->file_cntr);
+	print_way(way, e->recursive);
+	print_octet(info.stat, e->file_cntr->size);
+	while (info.lst)
+	{
+		ft_putinfo(info.stat[++i], info.lst->name, info.nb_max, info.str_max);
+		info.lst = info.lst->next;
+	}
+	if (e->pile_cntr->first != NULL)
+		ft_putchar('\n');
+	free(info.stat);
+}
+
+/*
+void	print_way(char *way, int rec)
+{
+	int	i;
+	int tmp;
+	int	idx;
+
+	idx = (rec == 1 || way[0] == '/') ? 0 : 2;
+	tmp = ft_strlen(way) - 1;
+	i = (way[tmp] == '/') ? tmp : tmp + 1;
+	if (ft_strcmp(way, "./") != 0)
+	{
+		while (idx < i)
+			ft_putchar(way[idx++]);
+		ft_putendl(":");
+	}
+}
+
 void	ft_putinfo(struct stat stat, char *name, t_vec2 nb_max, t_vec2 str_max)
 {
 	struct passwd	*pwd;
@@ -101,3 +184,4 @@ void	print_lnk(struct stat stat, char *lnk, t_pile *pile)
 	if (pile != NULL && pile->first != NULL)
 		ft_putchar('\n');
 }
+*/

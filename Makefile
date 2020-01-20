@@ -11,9 +11,7 @@ SRC = src/main.c		\
 	src/pile.c			\
 	src/device.c		\
 	src/sort.c			\
-	src/error.c			\
 	src/clean.c			\
-	src/mode.c			\
 	src/size.c			\
 	src/patern.c		\
 	src/print_ls.c
@@ -30,7 +28,7 @@ all : $(EXEC)
 $(LIBFT_A):
 	@make -sC $(LIBFT_FOLDER)
 
-$(EXEC): $(OBJ) $(LIBFT_A)
+$(EXEC): $(OBJ) $(LIBFT_A) $(LIBPILE_A)
 	@echo		"\033[0;34m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 	@$(CC) -g3  -o $(EXEC) -L./src/libft $(LIBFT_A) $(OBJ)
 	@echo		"\033[0;34m [LS][SUCCESS] \033[0m"

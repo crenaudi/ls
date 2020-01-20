@@ -45,7 +45,7 @@ void		str_patern(int start, char *name)
 	ft_putstr("  ");
 }
 
-void		time_patern(struct stat buf)
+void		time_patern(struct stat stat)
 {
 	char	*tm;
 	time_t	today;
@@ -53,12 +53,12 @@ void		time_patern(struct stat buf)
 	int		i;
 
 	tm = NULL;
-	tm = ctime(&buf.st_mtime);
+	tm = ctime(&stat.st_mtime);
 	time(&today);
-	if (today < buf.st_mtimespec.tv_sec)
+	if (today < stat.st_mtimespec.tv_sec)
 		ret = 1;
 	else
-		ret = ((today - buf.st_mtimespec.tv_sec) < 15778458) ? 1 : 0;
+		ret = ((today - stat.st_mtimespec.tv_sec) < 15778458) ? 1 : 0;
 	i = 3;
 	while (++i < 11)
 		ft_putchar(tm[i]);

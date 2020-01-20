@@ -12,60 +12,66 @@
 
 #include "../includes/ft_ls.h"
 
-void	clean_ptr(void **ptr)
+void		error(char *av, int error, char c)
 {
-	if (*ptr != NULL)
+	ft_putstr(LS);
+	if (error != -3)
+		ft_putstr(av);
+	if (error == -1)
+		ft_putendl(ERROR_01);
+	if (error == -2)
+		ft_putendl(ERROR_02);
+	if (error == -3)
 	{
-		free(*ptr);
-		*ptr = NULL;
+		ft_putstr(ERROR_03);
+		ft_putchar(c);
+		ft_putchar('\n');
+		ft_putstr(USAGE);
+		ft_putendl(ERROR_06);
 	}
+	if (error == 1)
+		ft_putendl(ERROR_04);
 }
 
-void	clean_elem(t_elem *elem)
+void	destroy_elem(t_lst *elem)
 {
-	ft_bzero(elem->name, sizeof(char) * PATH_MAX);
-	ft_memdel((void **)(&elem->name));
-	ft_strdel(&elem->way);
-	ft_memdel((void **)(&elem->stat));
+	//ft_memdel((void **)(&elem->name));
+	//ft_memdel((void **)(&elem->way));
+	if (elem->mode != 0)
+		ft_memdel((void **)(&elem->mode));
 	elem->next = NULL;
-	clean_ptr((void *)(&elem));
+	ft_memdel((void **)(&elem));
 }
 
-void	clean(char **tab)
+void	destroy_lst(t_lst *lst)
 {
-	int	i;
+	t_lst 	*tmp;
 
-	i = 0;
-	while (i < BUF_SIZE)
-		ft_bzero(tab[i++], sizeof(PATH_MAX));
+	while (lst != NULL)
+      {
+            tmp = lst->next;
+		destroy_elem(lst);
+		lst = tmp;
+      }
+}
+
+void	destroy_cntr_file(t_file_cntr *cntr)
+{
+	if (cntr->lst != NULL)
+		destroy_lst(cntr->lst);
+	ft_memdel((void **)(&cntr));
+}
+
+void	destroy_cntr_pile(t_pile_cntr *cntr)
+{
+	if (cntr->first != NULL)
+		destroy_lst(cntr->first);
+	ft_memdel((void **)(&cntr));
 }
 
 void	clean_env(t_env *e)
 {
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	tmp = NULL;
-	while (i < BUF_SIZE)
-	{
-		ft_bzero(e->current[i], sizeof(PATH_MAX));
-		tmp = e->current[i];
-		clean_ptr((void **)(&tmp));
-		i++;
-	}
-	clean_ptr((void **)(&e->pile->first));
-	clean_ptr((void **)(&e->pile));
-	clean_ptr((void **)(&e->current));
+	destroy_cntr_file(e->file_cntr);
+	destroy_cntr_pile(e->pile_cntr);
 	ft_bzero(e, sizeof(t_env));
-}
-
-int		ln_tab(char **tab)
-{
-	int		i;
-
-	i = 0;
-	while (tab[i][0] != '\0')
-		i++;
-	return (i);
 }

@@ -12,79 +12,58 @@
 
 #include "../includes/ft_ls.h"
 
-static void		print_wrongORfile(char **str, int is_file)
+void 	push2stack(t_env *e)
 {
-	int i;
+	t_lst 	*lst;
+	char 		*tmp;
+	size_t 	i;
 
-	i = -1;
-	if (str[0][0] != 0)
-	{
-		sort_base(NULL, str, ln_tab(str));
-		while (str[++i][0] != 0)
-				(is_file == 0) ? ft_putendl(str[i]) : error(str[i], -1, ' ');
-		clean(str);
-	}
-	ft_memdel((void **)(&str));
-}
-
-static void init(int index[4])
-{
-	index[0] = -1;
-	index[1] = -1;
-	index[2] = 0;
-	index[3] = 0;
-}
-
-int check_argv(char **argv, t_env *e, int i, int len)
-{
-	char		*tmp;
-	char		**wrong;
-	char 		**file;
-	int 		index[4];
-
-	wrong = init_file();
-	file = init_file();
-	init(index);
-	while (++i < len)
-	{
-		tmp = ft_strjoin((argv[i][0] == '/') ? NULL : "./", argv[i]);
-		if (!(stat(tmp, &e->stat[index[2]])))
-		{
-			if (device(e->stat[index[2]]) == 'd' || device(e->stat[index[2]]) == 'l')
-				ft_strcpy(e->current[index[3]++], argv[i]);
-			else
-				ft_strcpy(file[++index[0]], argv[i]);
-			index[2]++;
-		}
-		else
-			ft_strcpy(wrong[++index[1]], argv[i]);
-		ft_strdel(&tmp);
-	}
-	print_wrongORfile(wrong, -1);
-	print_wrongORfile(file, 0);
-	return (index[1]);
-}
-
-void 	push_stack(t_env *e, char **argv, int start, int end)
-{
-	int 	only_wrong;
-	int 	len;
-	int 	i;
-
+	tmp = NULL;
+	lst = e->file_cntr->lst;
+	if (e->pile_cntr->first == NULL)
+		tmp = "./";
+	else
+		tmp = e->pile_cntr->first->way;
 	i = 0;
-	if (!(e->stat = (struct stat *)malloc(sizeof(struct stat) * (end))))
-		return ;
-	only_wrong = check_argv(argv, e, start - 1, end);
-	len = ln_tab(e->current);
-	e->f_sort(e->stat, e->current, len);
-	while (i <= --len)
-		(e->current[len][0] == '/') ? push(e->pile, e->current[len], NULL)
-				: push(e->pile, e->current[len], "./");
-	clean(e->current);
-	if (e->pile->first == NULL && only_wrong == -1)
-		push(e->pile, ".", NULL);
-	ft_memdel((void **)&e->stat);
-	ft_putchar('\n');
+	printf("i = %zu, e->file_cntr->size = %zu\n", i, e->file_cntr->size);
+	while (i < e->file_cntr->size)
+	{
+		printf("A\n");
+		printf("device =  %c\n", device(lst->mode));
+		if (device(lst->mode) == 'd' || device(lst->mode) == 'l')
+			push(e->pile_cntr, lst->name, lst->way, &lst->mode);
+		else
+			ft_putendl(lst->name); //a prevoir si flag l
+		i++;
+	}
+}
+
+void		excute_argv(t_env *e, char **av, int start, int end)
+{
+	char *tmp;
+	struct stat stt;
+
+	while (start < end)
+	{
+		//stat = NULL;
+		tmp = (av[start][0] == '/') ?
+			ft_strdup(av[start]) : ft_strjoin("./", av[start]);
+		if (!(stat(tmp, &stt)))
+			add2file(e->file_cntr, av[start], (av[start][0] == '/') ?
+				NULL : "./", &stt.st_mode);
+		else
+			error(av[start], -1, ' ');
+		ft_strdel(&tmp);
+		start++;
+	}
+
+	if (e->file_cntr->lst == NULL)
+		push(e->pile_cntr, ".", NULL, NULL);
+	else
+	{
+		e->f_sort(e->file_cntr);
+		push2stack(e);
+	}
 }
 
 int				main(int ac, char **av)
@@ -96,8 +75,7 @@ int				main(int ac, char **av)
 	init_env(&e);
 	if ((i = parse_flags(av, &e)) == ERROR)
 		return (0);
-	push_stack(&e, av, i, ac);
-	afficher_pile(e.pile);
+	excute_argv(&e, av, i, ac);
 	//run(&e);
 	clean_env(&e);
 	read(0,&c,1);

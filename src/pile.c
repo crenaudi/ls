@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pile.c                                             :+:      :+:    :+:   */
+/*   pile_cntr.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,67 +12,84 @@
 
 #include "../includes/ft_ls.h"
 
-t_elem		*add_new_elem(char *name, char *way)
+t_lst		*new_elem(char *name, char *way, mode_t *st_mode)
 {
-	t_elem			*new;
-	struct stat	*stat;
-	char 				*tmp;
-	int					i;
+	t_lst			*new;
+	mode_t		mode;
 
-	i = -1;
-	if (!(new = (t_elem *)malloc(sizeof(t_elem))))
+	if (!(new = (t_lst *)malloc(sizeof(t_lst))))
 		return (NULL);
-	ft_bzero(new, sizeof(t_elem));
-	ft_strcpy(new->name, name);
-	new->way = ft_strdup(way);
-	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
+	if (name != NULL)
+		ft_strcpy(new->name, name);
+	if (way != NULL)
+		ft_strcpy(new->way, way);
+	if (!(mode = (mode_t)malloc(sizeof(mode_t))))
 		return (NULL);
-	tmp = ft_strjoin(way, name);
-	lstat(tmp, stat);
-	new->stat = stat;
-	ft_strdel(&tmp);
+	if (st_mode != NULL)
+	{
+		mode = *st_mode;
+		new->mode = mode;
+	}
 	return (new);
 }
 
-int		push(t_pile *pile, char *name, char *way)
+int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *mode)
 {
-	t_elem	*new;
+	t_lst	*new;
 
-	new = add_new_elem(name, way);
-	if (new == NULL)
+	if ((new = new_elem(name, way, mode)) == NULL)
 		return (ERROR);
-	if (pile->first == NULL)
-		pile->first = new;
+	if (pile_cntr->first == NULL)
+		pile_cntr->first = new;
 	else
 	{
-		new->next = pile->first;
-		pile->first = new;
+		new->next = pile_cntr->first;
+		pile_cntr->first = new;
 	}
+	if (mode != NULL)
+		pile_cntr->mode = *mode;
 	return (SUCCESS);
 }
 
-t_elem		*pop(t_pile *pile)
+t_lst		*pop(t_pile_cntr *pile_cntr)
 {
-	t_elem	*tmp;
+	t_lst	*tmp;
 
 	tmp = NULL;
-	tmp = pile->first;
-	if (pile == NULL)
+	tmp = pile_cntr->first;
+	if (pile_cntr == NULL)
 		return (NULL);
-	if (pile != NULL && pile->first != NULL)
-		pile->first = tmp->next;
+	if (pile_cntr != NULL && pile_cntr->first != NULL)
+		pile_cntr->first = tmp->next;
 	return (tmp);
 }
 
-void		afficher_pile(t_pile *pile)
+int         add2file(t_file_cntr *cntr, char *name, char *way, mode_t *mode)
 {
-	t_elem	*tmp;
+      t_lst	*new;
+
+	if ((new = new_elem(name, way, mode)) == NULL)
+		return (ERROR);
+	if (cntr->lst == NULL)
+		cntr->lst = new;
+	else
+	{
+		new->next = cntr->lst;
+		cntr->lst = cntr->lst;
+	}
+	cntr->size += 1;
+	return (SUCCESS);
+}
+
+void		print_pile_cntr(t_pile_cntr *pile_cntr)
+{
+	t_lst		*tmp;
 
 	tmp = NULL;
-	tmp = pile->first;
+	tmp = pile_cntr->first;
 	while (tmp != NULL)
 	{
-		printf("dans ma pile il y a %s\n", tmp->name);
+		printf("dans ma pile_cntr il y a %s\n", tmp->name);
 		tmp = tmp->next;
 	}
 }
