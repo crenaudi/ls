@@ -39,8 +39,8 @@ void	destroy_elem(t_lst *elem)
 	//ft_memdel((void **)(&elem->way));
 	ft_bzero(elem->name, sizeof(char) * NAME_MAX);
 	ft_bzero(elem->way, sizeof(char) * PATH_MAX);
-	if (elem->mode != 0)
-		ft_memdel((void **)(&elem->mode));
+	if (elem->mode != NULL)
+		free(&elem->mode));*/
 	elem->next = NULL;
 	ft_memdel((void **)(&elem));
 }
@@ -60,13 +60,16 @@ void	destroy_lst(t_lst *lst)
 
 void	destroy_cntr_file(t_file_cntr *cntr)
 {
+	printf("destroy_cntr_file\n");
 	if (cntr->lst != NULL)
 		destroy_lst(cntr->lst);
+	cntr->size = 0;
 	ft_memdel((void **)(&cntr));
 }
 
 void	destroy_cntr_pile(t_pile_cntr *cntr)
 {
+	printf("destroy_cntr_pile\n");
 	if (cntr->first != NULL)
 		destroy_lst(cntr->first);
 	ft_memdel((void **)(&cntr));
@@ -74,6 +77,7 @@ void	destroy_cntr_pile(t_pile_cntr *cntr)
 
 void	clean_env(t_env *e)
 {
+	printf("destroy_env\n");
 	destroy_cntr_file(e->file_cntr);
 	destroy_cntr_pile(e->pile_cntr);
 	ft_bzero(e, sizeof(t_env));

@@ -38,7 +38,7 @@ void	ft_putinfo(struct stat stat, char *name, unsigned int nb_max[2],
 	pwd = getpwuid(stat.st_uid);
 	grp = getgrgid(stat.st_gid);
 	ft_putchar(device(stat.st_mode));
-	mode_type(stat.st_mode);
+	st_mode_type(stat.st_mode);
 	(device(stat.st_mode) == 'c') ? nb_patern(nb_max[0], stat.st_blksize) :
 		nb_patern(nb_max[0], stat.st_nlink);
 	(pwd == NULL) ? id_patern(str_max[0], stat.st_uid) :

@@ -12,30 +12,81 @@
 
 #include "../includes/ft_ls.h"
 
+int		sort_base(t_lst *first, t_lst *second)
+{
+      int i;
+
+      i = 0;
+	while (first->name[i] == second->name[i])
+		i++;
+	if (first->name[i] <= second->name[i])
+		return (1);
+	return (0);
+}
+
+int		sort_r(t_lst *first, t_lst *second)
+{
+      int i;
+
+      i = 0;
+	while (first->name[i] == second->name[i])
+		i++;
+	if (first->name[i] >= second->name[i])
+		return (1);
+	return (0);
+}
+
+static int	cmpt(struct stat b1, struct stat b2, char *s1, char *s2)
+{
+	if (b1.st_mtimespec.tv_sec > b2.st_mtimespec.tv_sec
+	|| (b1.st_mtimespec.tv_sec == b2.st_mtimespec.tv_sec
+	&& b1.st_mtimespec.tv_nsec > b2.st_mtimespec.tv_nsec)
+	|| (b1.st_mtimespec.tv_sec == b2.st_mtimespec.tv_sec
+	&& b1.st_mtimespec.tv_nsec == b2.st_mtimespec.tv_nsec
+	&& ft_strcmp(s1, s2) < 0))
+		return (1);
+	return (0);
+}
+
+int		sort_t(t_file_cntr *files)
+{
+	if (cmpt(add_stat(lst), add_stat(lst->next), lst->name,
+		lst->next->name) == 0)
+		return (1);
+	return (0);
+}
+
+int		sort_rt(t_file_cntr *files)
+{
+	if (cmpt(add_stat(lst), add_stat(lst->next), lst->name,
+		lst->next->name) == 1)
+            return (1);
+	return (0);
+}
+/*
 void		sort_base(t_file_cntr *files)
 {
 	size_t 	size;
 	t_lst		*lst;
 	int 		i;
 
-	printf("sort_base\n");
 	size = files->size;
 	lst = files->lst;
 	while (size--)
 	{
-		printf("size = %zu\n", size);
 		lst = files->lst;
-		while (lst)
+		while (lst && lst->next != NULL)
 		{
 			i = 0;
-			while (lst->name[i] == lst->next->name[i])
+			while (lst->next != NULL && lst->name[i] == lst->next->name[i])
 				i++;
-			if (lst->name[i] > lst->next->name[i])
+			if (lst->next != NULL && lst->name[i] > lst->next->name[i])
 				ft_swap_elem(lst, lst->next);
 			lst = lst->next;
 		}
+		print_file(files);
 	}
-	printf("FINI\n");
+	//printf("FINI\n");
 }
 
 void		sort_r(t_file_cntr *files)
@@ -97,124 +148,5 @@ void		sort_rt(t_file_cntr *files)
 	printf("sort_rt\n");
 	sort_t(files);
 	sort_r(files);
-}
-/*
-
-void		sort_base(struct stat *stat, char **s, int size)
-{
-	t_vec3		index;
-	char		*abys;
-	struct stat	tmp;
-
-	index.z = size;
-	size--;
-	while (index.z--)
-	{
-		index.x = -1;
-		while (++index.x < size)
-		{
-			index.y = 0;
-			while (s[index.x][index.y] == s[index.x + 1][index.y])
-				index.y++;
-			if (s[index.x][index.y] > s[index.x + 1][index.y])
-			{
-				abys = s[index.x];
-				s[index.x] = s[index.x + 1];
-				s[index.x + 1] = abys;
-				if (stat != NULL)
-				{
-					tmp = stat[index.x];
-					stat[index.x] = stat[index.x + 1];
-					stat[index.x + 1] = tmp;
-				}
-			}
-		}
-	}
-}
-
-void		sort_r(struct stat *stat, char **s, int size)
-{
-	int			i;
-	char		*abys;
-	struct stat	tmp;
-
-	i = -1;
-	abys = NULL;
-	sort_base(stat, s, size);
-	while (++i < --size)
-	{
-		abys = s[i];
-		s[i] = s[size];
-		s[size] = abys;
-		if (stat != NULL)
-		{
-			tmp = stat[i];
-			stat[i] = stat[size];
-			stat[size] = tmp;
-		}
-	}
-}
-
-static int	cmpt(struct stat b1, struct stat b2, char *s1, char *s2)
-{
-	if (b1.st_mtimespec.tv_sec > b2.st_mtimespec.tv_sec
-	|| (b1.st_mtimespec.tv_sec == b2.st_mtimespec.tv_sec
-	&& b1.st_mtimespec.tv_nsec > b2.st_mtimespec.tv_nsec)
-	|| (b1.st_mtimespec.tv_sec == b2.st_mtimespec.tv_sec
-	&& b1.st_mtimespec.tv_nsec == b2.st_mtimespec.tv_nsec
-	&& ft_strcmp(s1, s2) < 0))
-		return (1);
-	return (0);
-}
-
-void		sort_t(struct stat *stat, char **s, int size)
-{
-	int			i;
-	int			ln;
-	char		*abys;
-	struct stat	tmp;
-
-	abys = NULL;
-	ln = size;
-	size--;
-	while (ln-- && stat != NULL)
-	{
-		i = -1;
-		while (++i < size)
-		{
-			if (cmpt(stat[i], stat[i + 1], s[i], s[i + 1]) == 0)
-			{
-				abys = s[i];
-				s[i] = s[i + 1];
-				s[i + 1] = abys;
-				tmp = stat[i];
-				stat[i] = stat[i + 1];
-				stat[i + 1] = tmp;
-			}
-		}
-	}
-}
-
-void		sort_rt(struct stat *stat, char **s, int size)
-{
-	int			i;
-	char		*abys;
-	struct stat	tmp;
-
-	i = -1;
-	abys = NULL;
-	sort_t(stat, s, size);
-	while (++i < --size)
-	{
-		abys = s[i];
-		s[i] = s[size];
-		s[size] = abys;
-		if (stat != NULL)
-		{
-			tmp = stat[i];
-			stat[i] = stat[size];
-			stat[size] = tmp;
-		}
-	}
 }
 */

@@ -12,19 +12,19 @@
 
 #include "../includes/ft_ls.h"
 
-char	device(mode_t mode)
+char	device(mode_t st_mode)
 {
-	if ((mode & S_IFIFO) == S_IFIFO)
+	if ((st_mode & S_IFIFO) == S_IFIFO)
 		return ('p');
-	if ((mode & S_IFLNK) == S_IFLNK)
+	if ((st_mode & S_IFLNK) == S_IFLNK)
 		return ('l');
-	if ((mode & S_IFCHR) == S_IFCHR)
+	if ((st_mode & S_IFCHR) == S_IFCHR)
 		return ('c');
-	if ((mode & S_IFDIR) == S_IFDIR)
+	if ((st_mode & S_IFDIR) == S_IFDIR)
 		return ('d');
-	if ((mode & S_IFBLK) == S_IFBLK)
+	if ((st_mode & S_IFBLK) == S_IFBLK)
 		return ('b');
-	if ((mode & S_IFREG) == S_IFREG)
+	if ((st_mode & S_IFREG) == S_IFREG)
 		return ('-');
 	return ('f');
 }
@@ -65,21 +65,21 @@ static char	other_x(mode_t st_mode)
 		return ('-');
 }
 
-void		mode_type(mode_t st_mode)
+void		st_mode_type(mode_t st_mode)
 {
-	char	mode[12];
+	char	mod[12];
 
-	mode[0] = (st_mode & S_IRUSR) ? 'r' : '-';
-	mode[1] = (st_mode & S_IWUSR) ? 'w' : '-';
-	mode[2] = user_x(st_mode);
-	mode[3] = (st_mode & S_IRGRP) ? 'r' : '-';
-	mode[4] = (st_mode & S_IWGRP) ? 'w' : '-';
-	mode[5] = grp_x(st_mode);
-	mode[6] = (st_mode & S_IROTH) ? 'r' : '-';
-	mode[7] = (st_mode & S_IWOTH) ? 'w' : '-';
-	mode[8] = other_x(st_mode);
-	mode[9] = ' ';
-	mode[10] = ' ';
-	mode[11] = '\0';
-	ft_putstr(mode);
+	mod[0] = (st_mode & S_IRUSR) ? 'r' : '-';
+	mod[1] = (st_mode & S_IWUSR) ? 'w' : '-';
+	mod[2] = user_x(st_mode);
+	mod[3] = (st_mode & S_IRGRP) ? 'r' : '-';
+	mod[4] = (st_mode & S_IWGRP) ? 'w' : '-';
+	mod[5] = grp_x(st_mode);
+	mod[6] = (st_mode & S_IROTH) ? 'r' : '-';
+	mod[7] = (st_mode & S_IWOTH) ? 'w' : '-';
+	mod[8] = other_x(st_mode);
+	mod[9] = ' ';
+	mod[10] = ' ';
+	mod[11] = '\0';
+	ft_putstr(mod);
 }

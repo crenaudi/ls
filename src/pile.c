@@ -15,7 +15,7 @@
 t_lst		*new_elem(char *name, char *way, mode_t *st_mode)
 {
 	t_lst			*new;
-	mode_t		mode;
+	mode_t		mod;
 
 	if (!(new = (t_lst *)malloc(sizeof(t_lst))))
 		return (NULL);
@@ -23,21 +23,18 @@ t_lst		*new_elem(char *name, char *way, mode_t *st_mode)
 		ft_strcpy(new->name, name);
 	if (way != NULL)
 		ft_strcpy(new->way, way);
-	if (!(mode = (mode_t)malloc(sizeof(mode_t))))
+	if (!(mod = (mode_t)malloc(sizeof(mode_t))))
 		return (NULL);
-	if (st_mode != NULL)
-	{
-		mode = *st_mode;
-		new->mode = mode;
-	}
+	mod = *st_mode;
+	new->st_mode = mod;
 	return (new);
 }
 
-int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *mode)
+int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *st_mode)
 {
 	t_lst	*new;
 
-	if ((new = new_elem(name, way, mode)) == NULL)
+	if ((new = new_elem(name, way, st_mode)) == NULL)
 		return (ERROR);
 	if (pile_cntr->first == NULL)
 		pile_cntr->first = new;
@@ -46,8 +43,8 @@ int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *mode)
 		new->next = pile_cntr->first;
 		pile_cntr->first = new;
 	}
-	if (mode != NULL)
-		pile_cntr->mode = *mode;
+	if (st_mode != NULL)
+		pile_cntr->st_mode = *st_mode;
 	return (SUCCESS);
 }
 
@@ -64,19 +61,21 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 	return (tmp);
 }
 
-int         add2file(t_file_cntr *cntr, char *name, char *way, mode_t *mode)
+
+int         add2file(t_file_cntr *cntr, char *name, char *way, mode_t *st_mode)
 {
       t_lst	*new;
 
-	if ((new = new_elem(name, way, mode)) == NULL)
+	if ((new = new_elem(name, way, st_mode)) == NULL)
 		return (ERROR);
 	if (cntr->lst == NULL)
 		cntr->lst = new;
 	else
 	{
 		new->next = cntr->lst;
-		cntr->lst = cntr->lst;
+		cntr->lst = new;
 	}
+	//print_file(cntr);
 	cntr->size += 1;
 	return (SUCCESS);
 }
@@ -96,8 +95,8 @@ void 	push2stack(t_env *e)
 	i = 0;
 	while (i < e->file_cntr->size)
 	{
-		if (device(lst->mode) == 'd' || device(lst->mode) == 'l')
-			push(e->pile_cntr, lst->name, lst->way, &lst->mode);
+		if (device(lst->st_mode) == 'd' || device(lst->st_mode) == 'l')
+			push(e->pile_cntr, lst->name, lst->way, &lst->st_mode);
 		else
 			ft_putendl(lst->name); //a prevoir si flag l
 		i++;

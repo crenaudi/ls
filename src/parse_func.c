@@ -69,19 +69,14 @@ size_t      ft_lstlen(t_lst *lst)
       return (i);
 }
 
-void		ft_swap_elem(t_lst *elem1, t_lst *elem2)
+void         print_file(t_file_cntr *cntr)
 {
-      t_lst      *tmp;
+      t_lst	*new;
 
-      tmp = elem1;
-      ft_bzero(elem1, sizeof(t_lst));
-      ft_strcpy(elem1->name, elem2->name);
-      ft_strcpy(elem1->way, elem2->way);
-      elem1->mode = elem2->mode;
-      elem1->next = elem2->next;
-      ft_bzero(elem2, sizeof(t_lst));
-      ft_strcpy(elem2->name, tmp->name);
-      ft_strcpy(elem2->way, tmp->way);
-      elem2->mode = tmp->mode;
-      elem2->next = tmp->next;
+	new = cntr->lst;
+	while (new)
+	{
+		printf("...............%s\n", new->name);
+		new = new->next;
+	}
 }

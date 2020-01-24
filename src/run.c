@@ -16,10 +16,11 @@ static int	check_permission(t_lst *elem)
 {
 	char	*doc;
 
+	//printf("PERMISSION\n");
 	doc = ft_strjoin(elem->way, elem->name);
 	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
 	{
-		if ((elem->mode & S_IRUSR) != S_IRUSR)
+		if ((elem->st_mode & S_IRUSR) != S_IRUSR)
 		{
 			ft_putstr(doc);
 			ft_putendl(" :");
@@ -34,6 +35,7 @@ static int	check_permission(t_lst *elem)
 
 static void	sort_push_print(t_env *e, char *tmp)
 {
+	//printf("SORT PUSH PRINT\n");
 	e->f_sort(e->file_cntr);
 	if (e->recursive == 1)
 	{
@@ -53,6 +55,7 @@ static void	read_file(DIR *dirp, t_env *e, t_lst *file)
 	char			*tmp;
 	char			*way;
 
+	//printf("READ FILE\n");
 	if (check_permission(file) == 0)
 	{
 		while ((c = readdir(dirp)) != NULL)
@@ -79,6 +82,7 @@ static int is_var(t_env *e, t_lst *elem, char *s)
 	unsigned int 	nb[2];
 	int			i;
 
+	//printf("IS VAR\n");
 	i = 0;
 	lstat(s, &stt);
 	if (device(stt.st_mode) == 99 && e->l == 1)
@@ -99,23 +103,23 @@ static int is_var(t_env *e, t_lst *elem, char *s)
 
 void        run(t_env *e)
 {
-    t_lst	*elem;
-    DIR 	*dirp;
-    char	*tmp;
+	t_lst	*elem;
+	DIR 	*dirp;
+	char	*tmp;
 
-
-    while ((elem = pop(e->pile_cntr)))
-  {
-      tmp = ft_strjoin(elem->way, elem->name); // tmtc tacompri, faut quand même free toussa
-      if (is_var(e, elem, tmp) == 0)
-      {
-	    if ((dirp = opendir(tmp)) == NULL)
-		  error(elem->name, -1, 'o');
-	    else
-	   {
-		  read_file(dirp, e, elem);
-		  closedir(dirp);
-	  }
+	while ((elem = pop(e->pile_cntr)))
+	{
+		//printf("RUN : %s\n", elem->name);
+      	tmp = ft_strjoin(elem->way, elem->name); // tmtc tacompri, faut quand même free toussa
+      	if (is_var(e, elem, tmp) == 0)
+      	{
+	    		if ((dirp = opendir(tmp)) == NULL)
+		  		error(elem->name, -1, 'o');
+	    	else
+	   	{
+		  	read_file(dirp, e, elem);
+		  	closedir(dirp);
+	  	}
       }
       ft_strdel(&tmp);
       destroy_elem(elem);

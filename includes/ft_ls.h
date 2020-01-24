@@ -66,14 +66,14 @@ struct 					s_file_cntr
 struct					s_pile_cntr
 {
 	t_lst					*first;
-	mode_t    			      mode;
+	mode_t    			      st_mode;
 };
 
 struct					s_lst
 {
 	char					name[NAME_MAX];
 	char					way[PATH_MAX];
-	mode_t        			mode;
+	mode_t        			st_mode;
 	struct s_lst			*next;
 };
 
@@ -90,8 +90,8 @@ void					error(char *av, int error, char c);
 void					clean(char **tab);
 void					clean_env(t_env *e);
 int					parse_flags(char **av, t_env *e);
-char					device(mode_t mode);
-void					mode_type(mode_t st_mode);
+char					device(mode_t st_mode);
+void					st_mode_type(mode_t st_mode);
 void       				run(t_env *e);
 void					print_way(char *way, int rec);
 void					ls_simple(t_env *e, char *way);
@@ -120,9 +120,9 @@ t_lst					*new_elem(char *name, char *way, mode_t *st_mode);
 size_t      			ft_lstlen(t_lst *lst);
 void					ft_swap_elem(t_lst *elem1, t_lst *elem2);
 int                           add2file(t_file_cntr *cntr, char *name,
-	char *way, mode_t *mode);
+	char *way, mode_t *st_mode);
 int					push(t_pile_cntr *pile, char *name,
-	char *way, mode_t *mode);
+	char *way, mode_t *st_mode);
 t_lst					*pop(t_pile_cntr *pile);
 void					print_pile(t_pile_cntr *pile);
 void					destroy_elem(t_lst *elem);
