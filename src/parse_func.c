@@ -68,15 +68,3 @@ size_t      ft_lstlen(t_lst *lst)
       }
       return (i);
 }
-
-void         print_file(t_file_cntr *cntr)
-{
-      t_lst	*new;
-
-	new = cntr->lst;
-	while (new)
-	{
-		printf("...............%s\n", new->name);
-		new = new->next;
-	}
-}

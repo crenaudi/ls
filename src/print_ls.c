@@ -81,7 +81,8 @@ void	ls_all(t_env *e, char *way)
 
 	i = -1;
 	info = init_info2print(e->file_cntr);
-	print_way(way, e->recursive);
+	if (e->pile_cntr->first != NULL)
+		print_way(way, e->recursive);
 	print_octet(info.stat, e->file_cntr->size);
 	while (info.lst)
 	{

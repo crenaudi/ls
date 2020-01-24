@@ -14,13 +14,15 @@
 
 static int	check_permission(t_lst *elem)
 {
-	char	*doc;
+	char		*doc;
+	struct stat stt;
 
 	//printf("PERMISSION\n");
 	doc = ft_strjoin(elem->way, elem->name);
 	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
 	{
-		if ((*elem->st_mode & S_IRUSR) != S_IRUSR)
+		stat(doc, &stt);
+		if ((stt.st_mode & S_IRUSR) != S_IRUSR)
 		{
 			ft_putstr(doc);
 			ft_putendl(" :");
@@ -36,7 +38,7 @@ static int	check_permission(t_lst *elem)
 static void	sort_push_print(t_env *e, char *tmp)
 {
 	//printf("SORT PUSH PRINT\n");
-	TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
+	e->file_cntr->lst = TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
 	if (e->recursive == 1)
 	{
 		push2stack(e);
@@ -63,7 +65,7 @@ static void	read_file(DIR *dirp, t_env *e, t_lst *file)
 			lstat(tmp = ft_strjoin(file->way, c->d_name), &stt);
 			way = ft_strjoin(tmp, "/");
 			if (e->a == 1 || c->d_name[0] != '.')
-				add2file(e->file_cntr, c->d_name, file->way, &stt.st_mode);
+				add2fil(e->file_cntr, c->d_name, file->way);
 			ft_strdel(&tmp);
 			ft_strdel(&way);
 		}

@@ -12,30 +12,25 @@
 
 #include "../includes/ft_ls.h"
 
-t_lst		*new_elem(char *name, char *way, mode_t *st_mode)
+t_lst		*new_elem(char *name, char *way)
 {
 	t_lst			*new;
-	//mode_t		mod;
 
 	if (!(new = (t_lst *)malloc(sizeof(t_lst))))
 		return (NULL);
 	if (name != NULL)
 		ft_strcpy(new->name, name);
 	if (way != NULL)
-		ft_strcpy(new->way, way);/*
-	if (!(mod = (mode_t)malloc(sizeof(mode_t))))
-		return (NULL);*/
-	//mod = *st_mode;
-	new->st_mode = st_mode;
+		ft_strcpy(new->way, way);
 	return (new);
 }
 
-int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *st_mode)
+int		push(t_pile_cntr *pile_cntr, char *name, char *way)
 {
 	t_lst	*new;
 
 	//printf("PUSH\n");
-	if ((new = new_elem(name, way, st_mode)) == NULL)
+	if ((new = new_elem(name, way)) == NULL)
 		return (ERROR);
 	if (pile_cntr->first == NULL)
 		pile_cntr->first = new;
@@ -44,8 +39,6 @@ int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *st_mode)
 		new->next = pile_cntr->first;
 		pile_cntr->first = new;
 	}
-	if (st_mode != NULL)
-		pile_cntr->st_mode = st_mode;
 	return (SUCCESS);
 }
 
@@ -64,12 +57,11 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 }
 
 
-int         add2file(t_file_cntr *cntr, char *name, char *way, mode_t *st_mode)
+int         add2fil(t_file_cntr *cntr, char *name, char *way)
 {
       t_lst	*new;
 
-	printf("add2file ----- >> %s, %zu\n", name, cntr->size);
-	if ((new = new_elem(name, way, st_mode)) == NULL)
+	if ((new = new_elem(name, way)) == NULL)
 		return (ERROR);
 	if (cntr->lst == NULL)
 		cntr->lst = new;
@@ -87,6 +79,7 @@ void 	push2stack(t_env *e)
 {
 	t_lst 	*lst;
 	char 		*tmp;
+	struct stat stt;
 	size_t 	i;
 
 	//printf("push2stack\n");
@@ -99,8 +92,9 @@ void 	push2stack(t_env *e)
 	i = 0;
 	while (i < e->file_cntr->size)
 	{
-		if (device(*lst->st_mode) == 'd' || device(*lst->st_mode) == 'l')
-			push(e->pile_cntr, lst->name, lst->way, lst->st_mode);
+		stt = add_stat(lst);
+		if (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l')
+			push(e->pile_cntr, lst->name, lst->way);
 		else
 			ft_putendl(lst->name); //a prevoir si flag l
 		i++;

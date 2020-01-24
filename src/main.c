@@ -22,15 +22,15 @@ void		excute_argv(t_env *e, char **av, int start, int end)
 		tmp = (av[start][0] == '/') ?
 			ft_strdup(av[start]) : ft_strjoin("./", av[start]);
 		if (!(stat(tmp, &stt)))
-			add2file(e->file_cntr, av[start], (av[start][0] == '/') ?
-				NULL : "./", &stt.st_mode);
+			add2fil(e->file_cntr, av[start], (av[start][0] == '/') ?
+				NULL : "./");
 		else
 			error(av[start], -1, ' ');
 		ft_strdel(&tmp);
 		start++;
 	}
 	if (e->file_cntr->lst == NULL)
-		push(e->pile_cntr, ".", NULL, NULL);
+		push(e->pile_cntr, ".", NULL);
 	else
 	{
 		TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
@@ -46,7 +46,7 @@ int				main(int ac, char **av)
 	int 		i;
 	char 		c;
 
-	printf("MAIN\n");
+	//printf("MAIN\n");
 	init_env(&e);
 	if ((i = parse_flags(av, &e)) == ERROR)
 		return (0);

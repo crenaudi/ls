@@ -7,7 +7,8 @@ t_lst *MergeLists(t_lst *first, t_lst *second, t_env *e)
       t_lst **tailp;
 
       tailp = &head;
-	while (first != NULL && second != NULL) {
+	while (first != NULL && second != NULL)
+	{
 		if (e->f_sort(first, second) == 1)
             {
 			*tailp = first;
@@ -27,48 +28,53 @@ t_lst *MergeLists(t_lst *first, t_lst *second, t_env *e)
             if (first == NULL || second == NULL)
                   return (head);
 	}
-      printf("pb first = NULL && second = NULL\n");
 	return (NULL);
 }
 
-// Sort the first n > 0 elements of the given list.
-// A sorted list of n is returned; the head is modified to point to the n+1st element.
 t_lst *TopDownMergeSort2(t_lst **headp, size_t n, t_env *e)
 {
 	t_lst *first;
       t_lst *second;
 
       first = *headp;
-	//assert(n >= 1);
-	//assert(first != NULL);
-	if (n < 1 && first != NULL)
+	if (n < 1 && first == NULL)
       {
             printf("pb n = %zu et:ou first = NULL\n", n);
             return (NULL);
       }
-	if (n == 1) {
-		// Detach and return the first entry as a sorted run
+	if (n == 1)
+	{
 		*headp = first->next;
 		first->next = NULL;
-		return first;
+		return (first);
 	}
-	// Recursively sort two sublists
 	first  = TopDownMergeSort2(headp, (n + 1) / 2, e);
 	second = TopDownMergeSort2(headp, n / 2, e);
-	// Merge the two together into one sorted list
-	return MergeLists(first, second, e);
+	return (MergeLists(first, second, e));
+}
+
+void         print_file(t_file_cntr *cntr)
+{
+      t_lst	*new;
+
+	new = cntr->lst;
+	while (new)
+	{
+		printf("...............%s\n", new->name);
+		new = new->next;
+	}
 }
 
 t_lst *TopDownMergeSort(t_env *e, t_lst *head, size_t n)
 {
 	t_lst *sorted;
 
-	printf("MERGE\n");
+	//printf("MERGE\n");
 	if (n == 0)
 		sorted = head;
 	else
 		sorted = TopDownMergeSort2(&head, n, e);
-	if (head == NULL)
-      	printf("pb head NULL\n"); // The list should be the length we were told
-	return sorted;
+	if (head != NULL)
+      	printf("pb head non NULL\n");
+	return (sorted);
 }

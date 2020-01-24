@@ -19,7 +19,7 @@ struct stat add_stat(t_lst *lst)
 
 	tmp = (lst->name[0] == '/') ?
 		ft_strdup(lst->name) : ft_strjoin(lst->way, lst->name);
-	stat(tmp, &stt);
+	lstat(tmp, &stt);
 	ft_strdel(&tmp);
 	return (stt);
 
@@ -28,22 +28,23 @@ struct stat add_stat(t_lst *lst)
 t_print_all	init_info2print(t_file_cntr *cntr)
 {
 	t_print_all		info;
-	struct stat 	*stat;
+	struct stat 	*stt;
 	size_t		i;
 	t_lst			*lst;
 
 	i = -1;
 	lst = cntr->lst;
-	if (!(stat = (struct stat *)malloc(sizeof(struct stat) * cntr->size)))
+	if (!(stt = (struct stat *)malloc(sizeof(struct stat) * cntr->size)))
 		ft_putstr("ERROR MALLOC");
 	while (++i < cntr->size)
 	{
-		stat[i] = add_stat(lst);
+		stt[i] = add_stat(lst);
 		lst = lst->next;
 	}
-	max_st_nb(stat, cntr->size, info.nb_max);
-	max_st_str(stat, cntr->size, info.str_max);
+	max_st_nb(stt, cntr->size, info.nb_max);
+	max_st_str(stt, cntr->size, info.str_max);
 	info.lst = cntr->lst;
+	info.stat = stt;
 	return (info);
 }
 
@@ -53,8 +54,8 @@ t_pile_cntr	*init_pile_cntr()
 
 	if (!(cntr = (t_pile_cntr *)malloc(sizeof(t_pile_cntr))))
 		return (NULL);
-	cntr->first = NULL;
 	ft_bzero(cntr, sizeof(t_pile_cntr));
+	cntr->first = NULL;
 	return (cntr);
 }
 
@@ -64,6 +65,7 @@ t_file_cntr	*init_file_cntr()
 
 	if (!(cntr = (t_file_cntr *)malloc(sizeof(t_file_cntr))))
 		return (NULL);
+	ft_bzero(cntr, sizeof(t_file_cntr));
 	cntr->lst = NULL;
 	cntr->size = 0;
 	return (cntr);

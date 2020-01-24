@@ -66,14 +66,12 @@ struct 					s_file_cntr
 struct					s_pile_cntr
 {
 	t_lst					*first;
-	mode_t    			      *st_mode;
 };
 
 struct					s_lst
 {
 	char					name[NAME_MAX];
 	char					way[PATH_MAX];
-	mode_t        			*st_mode;
 	struct s_lst			*next;
 };
 
@@ -121,13 +119,11 @@ void 					push2stack(t_env *e);
 t_file_cntr				*init_file_cntr();
 t_pile_cntr				*init_pile_cntr();
 t_print_all				init_info2print(t_file_cntr *cntr);
-t_lst					*new_elem(char *name, char *way, mode_t *st_mode);
+t_lst					*new_elem(char *name, char *way);
 size_t      			ft_lstlen(t_lst *lst);
 void					ft_swap_elem(t_lst *elem1, t_lst *elem2);
-int                           add2file(t_file_cntr *cntr, char *name,
-	char *way, mode_t *st_mode);
-int					push(t_pile_cntr *pile, char *name,
-	char *way, mode_t *st_mode);
+int                           add2fil(t_file_cntr *cntr, char *name, char *way);
+int					push(t_pile_cntr *pile, char *name, char *way);
 t_lst					*pop(t_pile_cntr *pile);
 void					print_pile(t_pile_cntr *pile);
 void					destroy_elem(t_lst *elem);
