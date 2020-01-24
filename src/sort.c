@@ -48,18 +48,18 @@ static int	cmpt(struct stat b1, struct stat b2, char *s1, char *s2)
 	return (0);
 }
 
-int		sort_t(t_file_cntr *files)
+int		sort_t(t_lst *first, t_lst *second)
 {
-	if (cmpt(add_stat(lst), add_stat(lst->next), lst->name,
-		lst->next->name) == 0)
+	if (cmpt(add_stat(first), add_stat(second), first->name,
+		second->name) == 0)
 		return (1);
 	return (0);
 }
 
-int		sort_rt(t_file_cntr *files)
+int		sort_rt(t_lst *first, t_lst *second)
 {
-	if (cmpt(add_stat(lst), add_stat(lst->next), lst->name,
-		lst->next->name) == 1)
+	if (cmpt(add_stat(first), add_stat(second), first->name,
+            second->name) == 1)
             return (1);
 	return (0);
 }

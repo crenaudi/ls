@@ -20,7 +20,7 @@ static int	check_permission(t_lst *elem)
 	doc = ft_strjoin(elem->way, elem->name);
 	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
 	{
-		if ((elem->st_mode & S_IRUSR) != S_IRUSR)
+		if ((*elem->st_mode & S_IRUSR) != S_IRUSR)
 		{
 			ft_putstr(doc);
 			ft_putendl(" :");
@@ -36,7 +36,7 @@ static int	check_permission(t_lst *elem)
 static void	sort_push_print(t_env *e, char *tmp)
 {
 	//printf("SORT PUSH PRINT\n");
-	e->f_sort(e->file_cntr);
+	TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
 	if (e->recursive == 1)
 	{
 		push2stack(e);

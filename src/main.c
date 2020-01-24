@@ -33,7 +33,7 @@ void		excute_argv(t_env *e, char **av, int start, int end)
 		push(e->pile_cntr, ".", NULL, NULL);
 	else
 	{
-		e->f_sort(e->file_cntr);
+		TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
 		push2stack(e);
 		destroy_lst(e->file_cntr->lst);
 		e->file_cntr->size = 0;
@@ -46,6 +46,7 @@ int				main(int ac, char **av)
 	int 		i;
 	char 		c;
 
+	printf("MAIN\n");
 	init_env(&e);
 	if ((i = parse_flags(av, &e)) == ERROR)
 		return (0);

@@ -63,7 +63,8 @@ void	ls_simple(t_env *e, char *way)
 
 	i = -1;
 	lst = e->file_cntr->lst;
-	print_way(way, e->recursive);
+	if (e->pile_cntr->first != NULL)
+		print_way(way, e->recursive);
 	while (lst)
 	{
 		ft_putendl(lst->name);

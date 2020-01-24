@@ -28,6 +28,7 @@ t_lst *MergeLists(t_lst *first, t_lst *second, t_env *e)
                   return (head);
 	}
       printf("pb first = NULL && second = NULL\n");
+	return (NULL);
 }
 
 // Sort the first n > 0 elements of the given list.
@@ -37,8 +38,10 @@ t_lst *TopDownMergeSort2(t_lst **headp, size_t n, t_env *e)
 	t_lst *first;
       t_lst *second;
 
-      first = *headp,
-	if (n >= 1 && first != NULL)
+      first = *headp;
+	//assert(n >= 1);
+	//assert(first != NULL);
+	if (n < 1 && first != NULL)
       {
             printf("pb n = %zu et:ou first = NULL\n", n);
             return (NULL);
@@ -59,6 +62,8 @@ t_lst *TopDownMergeSort2(t_lst **headp, size_t n, t_env *e)
 t_lst *TopDownMergeSort(t_env *e, t_lst *head, size_t n)
 {
 	t_lst *sorted;
+
+	printf("MERGE\n");
 	if (n == 0)
 		sorted = head;
 	else

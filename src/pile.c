@@ -15,18 +15,18 @@
 t_lst		*new_elem(char *name, char *way, mode_t *st_mode)
 {
 	t_lst			*new;
-	mode_t		mod;
+	//mode_t		mod;
 
 	if (!(new = (t_lst *)malloc(sizeof(t_lst))))
 		return (NULL);
 	if (name != NULL)
 		ft_strcpy(new->name, name);
 	if (way != NULL)
-		ft_strcpy(new->way, way);
+		ft_strcpy(new->way, way);/*
 	if (!(mod = (mode_t)malloc(sizeof(mode_t))))
-		return (NULL);
-	mod = *st_mode;
-	new->st_mode = mod;
+		return (NULL);*/
+	//mod = *st_mode;
+	new->st_mode = st_mode;
 	return (new);
 }
 
@@ -34,6 +34,7 @@ int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *st_mode)
 {
 	t_lst	*new;
 
+	//printf("PUSH\n");
 	if ((new = new_elem(name, way, st_mode)) == NULL)
 		return (ERROR);
 	if (pile_cntr->first == NULL)
@@ -44,7 +45,7 @@ int		push(t_pile_cntr *pile_cntr, char *name, char *way, mode_t *st_mode)
 		pile_cntr->first = new;
 	}
 	if (st_mode != NULL)
-		pile_cntr->st_mode = *st_mode;
+		pile_cntr->st_mode = st_mode;
 	return (SUCCESS);
 }
 
@@ -52,6 +53,7 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 {
 	t_lst	*tmp;
 
+	//printf("POP\n");
 	tmp = NULL;
 	tmp = pile_cntr->first;
 	if (pile_cntr == NULL)
@@ -66,6 +68,7 @@ int         add2file(t_file_cntr *cntr, char *name, char *way, mode_t *st_mode)
 {
       t_lst	*new;
 
+	printf("add2file ----- >> %s, %zu\n", name, cntr->size);
 	if ((new = new_elem(name, way, st_mode)) == NULL)
 		return (ERROR);
 	if (cntr->lst == NULL)
@@ -86,6 +89,7 @@ void 	push2stack(t_env *e)
 	char 		*tmp;
 	size_t 	i;
 
+	//printf("push2stack\n");
 	tmp = NULL;
 	lst = e->file_cntr->lst;
 	if (e->pile_cntr->first == NULL)
@@ -95,8 +99,8 @@ void 	push2stack(t_env *e)
 	i = 0;
 	while (i < e->file_cntr->size)
 	{
-		if (device(lst->st_mode) == 'd' || device(lst->st_mode) == 'l')
-			push(e->pile_cntr, lst->name, lst->way, &lst->st_mode);
+		if (device(*lst->st_mode) == 'd' || device(*lst->st_mode) == 'l')
+			push(e->pile_cntr, lst->name, lst->way, lst->st_mode);
 		else
 			ft_putendl(lst->name); //a prevoir si flag l
 		i++;

@@ -43,7 +43,7 @@ typedef struct s_file_cntr	t_file_cntr;
 typedef struct s_pile_cntr	t_pile_cntr;
 typedef struct s_lst		t_lst;
 typedef struct s_print_all	t_print_all;
-typedef void			(*t_fsrt)(t_file_cntr *files);
+typedef int				(*t_fsrt)(t_lst *first, t_lst *second);
 typedef void			(*t_fprt)(t_env *e, char *way);
 
 struct					s_env
@@ -66,14 +66,14 @@ struct 					s_file_cntr
 struct					s_pile_cntr
 {
 	t_lst					*first;
-	mode_t    			      st_mode;
+	mode_t    			      *st_mode;
 };
 
 struct					s_lst
 {
 	char					name[NAME_MAX];
 	char					way[PATH_MAX];
-	mode_t        			st_mode;
+	mode_t        			*st_mode;
 	struct s_lst			*next;
 };
 
@@ -99,10 +99,15 @@ void					ls_all(t_env *e, char *way);
 void					ft_putinfo(struct stat stat, char *name,
 	unsigned int nb_max[2], unsigned int str_max[2]);
 struct stat 			add_stat(t_lst *lst);
-void					sort_base(t_file_cntr *files);
-void					sort_r(t_file_cntr *files);
-void					sort_t(t_file_cntr *files);
-void					sort_rt(t_file_cntr *files);
+
+int		sort_base(t_lst *first, t_lst *second);
+int		sort_r(t_lst *first, t_lst *second);
+int		sort_t(t_lst *first, t_lst *second);
+int		sort_rt(t_lst *first, t_lst *second);
+t_lst 	*MergeLists(t_lst *first, t_lst *second, t_env *e);
+t_lst 	*TopDownMergeSort2(t_lst **headp, size_t n, t_env *e);
+t_lst 	*TopDownMergeSort(t_env *e, t_lst *head, size_t n);
+
 void					print_octet(struct stat *stat, int ln);
 void					time_patern(struct stat stat);
 void					nb_patern(int start, int nb);
