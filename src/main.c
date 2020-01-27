@@ -12,29 +12,30 @@
 
 #include "../includes/ft_ls.h"
 
-void		excute_argv(t_env *e, char **av, int start, int end)
+static void		excute_argv(t_env *e, char **av, int on, int to)
 {
-	char *tmp;
+	char 		*tmp;
 	struct stat stt;
+	int 		hav_wrg;
 
-	while (start < end)
+	hav_wrg = 0;
+	while (on < to)
 	{
-		tmp = (av[start][0] == '/') ?
-			ft_strdup(av[start]) : ft_strjoin("./", av[start]);
+		tmp = (av[on][0] == '/') ?
+			ft_strdup(av[on]) : ft_strjoin("./", av[on]);
 		if (!(stat(tmp, &stt)))
-			add2fil(e->file_cntr, av[start], (av[start][0] == '/') ?
-				NULL : "./");
-		else
-			error(av[start], -1, ' ');
+			addfl(e->file_cntr, av[on], (av[on][0] == '/') ? NULL : "./");
+		else if (++hav_wrg)
+			error(av[on], -1, ' ');
 		ft_strdel(&tmp);
-		start++;
+		on++;
 	}
 	if (e->file_cntr->lst == NULL)
-		push(e->pile_cntr, ".", NULL);
+		(hav_wrg == 0) ? push(e->pile_cntr, ".", NULL) : hav_wrg == 0;
 	else
 	{
 		TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
-		push2stack(e);
+		push2stack(e, "./");
 		destroy_lst(e->file_cntr->lst);
 		e->file_cntr->size = 0;
 	}
@@ -46,7 +47,6 @@ int				main(int ac, char **av)
 	int 		i;
 	char 		c;
 
-	//printf("MAIN\n");
 	init_env(&e);
 	if ((i = parse_flags(av, &e)) == ERROR)
 		return (0);

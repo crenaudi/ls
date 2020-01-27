@@ -57,7 +57,7 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 }
 
 
-int         add2fil(t_file_cntr *cntr, char *name, char *way)
+int         addfl(t_file_cntr *cntr, char *name, char *way)
 {
       t_lst	*new;
 
@@ -70,12 +70,11 @@ int         add2fil(t_file_cntr *cntr, char *name, char *way)
 		new->next = cntr->lst;
 		cntr->lst = new;
 	}
-	//print_file(cntr);
 	cntr->size += 1;
 	return (SUCCESS);
 }
 
-void 	push2stack(t_env *e)
+void 	push2stack(t_env *e, char *way)
 {
 	t_lst 	*lst;
 	char 		*tmp;
@@ -85,18 +84,18 @@ void 	push2stack(t_env *e)
 	//printf("push2stack\n");
 	tmp = NULL;
 	lst = e->file_cntr->lst;
-	if (e->pile_cntr->first == NULL)
-		tmp = "./";
-	else
-		tmp = e->pile_cntr->first->way;
 	i = 0;
 	while (i < e->file_cntr->size)
 	{
-		stt = add_stat(lst);
+		tmp = ft_strjoin(way, lst->name);
+		stat(tmp, &stt);
 		if (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l')
-			push(e->pile_cntr, lst->name, lst->way);
+			push(e->pile_cntr, lst->name, way);
 		else
-			ft_putendl(lst->name); //a prevoir si flag l
+			if (e->recursive != 1)
+				ft_putendl(lst->name); //a prevoir si flag l
+		lst = lst->next;
+		ft_strdel(&tmp);
 		i++;
 	}
 }
@@ -109,7 +108,7 @@ void		print_pile_cntr(t_pile_cntr *pile_cntr)
 	tmp = pile_cntr->first;
 	while (tmp != NULL)
 	{
-		printf("dans ma pile_cntr il y a %s\n", tmp->name);
+		printf("dans ma pile_cntr il y a %s et %s\n", tmp->name, tmp->way);
 		tmp = tmp->next;
 	}
 }

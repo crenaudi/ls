@@ -52,7 +52,7 @@ t_lst *TopDownMergeSort2(t_lst **headp, size_t n, t_env *e)
 	second = TopDownMergeSort2(headp, n / 2, e);
 	return (MergeLists(first, second, e));
 }
-
+/*
 void         print_file(t_file_cntr *cntr)
 {
       t_lst	*new;
@@ -64,17 +64,16 @@ void         print_file(t_file_cntr *cntr)
 		new = new->next;
 	}
 }
-
+*/
 t_lst *TopDownMergeSort(t_env *e, t_lst *head, size_t n)
 {
 	t_lst *sorted;
 
-	//printf("MERGE\n");
 	if (n == 0)
 		sorted = head;
 	else
 		sorted = TopDownMergeSort2(&head, n, e);
-	if (head != NULL)
-      	printf("pb head non NULL\n");
+	/*if (head != NULL)
+      	printf("pb head non NULL\n");*/
 	return (sorted);
 }

@@ -17,7 +17,6 @@ static int	check_permission(t_lst *elem)
 	char		*doc;
 	struct stat stt;
 
-	//printf("PERMISSION\n");
 	doc = ft_strjoin(elem->way, elem->name);
 	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
 	{
@@ -37,15 +36,18 @@ static int	check_permission(t_lst *elem)
 
 static void	sort_push_print(t_env *e, char *tmp)
 {
-	//printf("SORT PUSH PRINT\n");
+	char *way;
+
+	if (ft_strcmp(way, "./") != 0)
+		way = ft_strjoin(tmp, "/");
+	else
+		way = ft_strdup(tmp);
 	e->file_cntr->lst = TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
 	if (e->recursive == 1)
-	{
-		push2stack(e);
-		print_way(tmp, e->recursive);
-	}
+		push2stack(e, way);
 	e->f_print(e, tmp);
 	ft_strdel(&tmp);
+	ft_strdel(&way);
 	destroy_lst(e->file_cntr->lst);
 	e->file_cntr->size = 0;
 }
@@ -55,23 +57,19 @@ static void	read_file(DIR *dirp, t_env *e, t_lst *file)
 	struct dirent	*c;
 	struct stat		stt;
 	char			*tmp;
-	char			*way;
 
-	//printf("READ FILE\n");
 	if (check_permission(file) == 0)
 	{
 		while ((c = readdir(dirp)) != NULL)
 		{
 			lstat(tmp = ft_strjoin(file->way, c->d_name), &stt);
-			way = ft_strjoin(tmp, "/");
 			if (e->a == 1 || c->d_name[0] != '.')
-				add2fil(e->file_cntr, c->d_name, file->way);
+				addfl(e->file_cntr, c->d_name, file->way);
 			ft_strdel(&tmp);
-			ft_strdel(&way);
 		}
 		if (e->file_cntr->lst != NULL)
-			sort_push_print(e, ft_strjoin(file->way, file->name));
-		ft_strdel(&way);
+			sort_push_print(e, (file->way[0] == 0) ? ft_strdup("./") :
+				ft_strjoin(file->way, file->name));
 		ft_strdel(&tmp);
 		free(c);
 	}
@@ -84,7 +82,6 @@ static int is_var(t_env *e, t_lst *elem, char *s)
 	unsigned int 	nb[2];
 	int			i;
 
-	//printf("IS VAR\n");
 	i = 0;
 	lstat(s, &stt);
 	if (device(stt.st_mode) == 99 && e->l == 1)
@@ -111,7 +108,6 @@ void        run(t_env *e)
 
 	while ((elem = pop(e->pile_cntr)))
 	{
-		//printf("RUN : %s\n", elem->name);
       	tmp = ft_strjoin(elem->way, elem->name); // tmtc tacompri, faut quand même free toussa
       	if (is_var(e, elem, tmp) == 0)
       	{
@@ -125,5 +121,5 @@ void        run(t_env *e)
       }
       ft_strdel(&tmp);
       destroy_elem(elem);
-  }
+	}
 }
