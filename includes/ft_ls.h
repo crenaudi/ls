@@ -126,7 +126,7 @@ int						push(t_pile_cntr *pile, char *name, char *way);
 t_lst					*pop(t_pile_cntr *pile);
 void					print_pile(t_pile_cntr *pile);
 void					destroy_elem(t_lst *elem);
-void					destroy_lst(t_lst *lst);
+void					destroy_lst(t_lst **lst);
 void					destroy_cntr_file(t_file_cntr *cntr);
 void					destroy_cntr_pile(t_pile_cntr *cntr);
 

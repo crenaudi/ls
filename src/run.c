@@ -50,7 +50,7 @@ static void		sort_push_print(t_env *e, char *tmp)
 	e->f_print(e, tmp);
 	ft_strdel(&tmp);
 	ft_strdel(&way);
-	destroy_lst(e->file_cntr->lst);
+	destroy_lst(&e->file_cntr->lst);
 	e->file_cntr->size = 0;
 }
 
@@ -64,7 +64,7 @@ static void		read_file(DIR *dirp, t_env *e, t_lst *file)
 	{
 		while ((c = readdir(dirp)) != NULL)
 		{
-			lstat(tmp = ft_strjoin(file->way, c->d_name), &stt);
+			stat(tmp = ft_strjoin(file->way, c->d_name), &stt);
 			if (e->a == 1 || c->d_name[0] != '.')
 				addfl(e->file_cntr, c->d_name, file->way);
 			ft_strdel(&tmp);
@@ -118,7 +118,7 @@ void			run(t_env *e)
 		if (is_var(e, elem, tmp) == 0)
 		{
 			if ((dirp = opendir(tmp)) == NULL)
-				error(elem->name, -1, 'o');
+				error(elem->name, -2, 'o');
 			else
 			{
 				read_file(dirp, e, elem);

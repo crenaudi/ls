@@ -57,7 +57,7 @@ static void	excute_argv(t_env *e, char **av, int on, int to)
 	{
 		topdownmergesort(e, e->file_cntr->lst, e->file_cntr->size);
 		push2stack(e, "./");
-		destroy_lst(e->file_cntr->lst);
+		destroy_lst(&e->file_cntr->lst);
 		e->file_cntr->size = 0;
 	}
 }

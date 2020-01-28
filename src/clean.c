@@ -23,30 +23,30 @@ void	destroy_elem(t_lst *elem)
 	elem = NULL;
 }
 
-void	destroy_lst(t_lst *lst)
+void	destroy_lst(t_lst **lst)
 {
 	t_lst	*tmp;
 
-	while (lst != NULL)
+	while (*lst != NULL)
 	{
-		tmp = lst->next;
-		destroy_elem(lst);
-		lst = tmp;
+		tmp = (*lst)->next;
+		destroy_elem(*lst);
+		*lst = tmp;
 	}
-	lst = NULL;
+	*lst = NULL;
 }
 
 void	destroy_cntr_file(t_file_cntr *cntr)
 {
 	if (cntr->lst != NULL)
-		destroy_lst(cntr->lst);
+		destroy_lst(&cntr->lst);
 	cntr->size = 0;
 }
 
 void	destroy_cntr_pile(t_pile_cntr *cntr)
 {
 	if (cntr->first != NULL)
-		destroy_lst(cntr->first);
+		destroy_lst(&cntr->first);
 }
 
 void	clean_env(t_env *e)
