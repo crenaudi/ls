@@ -63,3 +63,16 @@ t_lst *TopDownMergeSort(t_env *e, t_lst *head, size_t n)
 		sorted = TopDownMergeSort2(&head, n, e);
 	return (sorted);
 }
+
+struct stat add_stat(t_lst *lst)
+{
+	struct stat stt;
+	char 		*tmp;
+
+	tmp = (lst->name[0] == '/') ?
+		ft_strdup(lst->name) : ft_strjoin(lst->way, lst->name);
+	lstat(tmp, &stt);
+	ft_strdel(&tmp);
+	return (stt);
+
+}

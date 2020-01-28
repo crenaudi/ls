@@ -38,7 +38,8 @@ static void	sort_push_print(t_env *e, char *tmp)
 {
 	char *way;
 
-	if (ft_strcmp(way, "./") != 0)
+	way = NULL;
+	if (ft_strcmp(tmp, "./") != 0)
 		way = ft_strjoin(tmp, "/");
 	else
 		way = ft_strdup(tmp);
@@ -108,6 +109,8 @@ void        run(t_env *e)
 	DIR 	*dirp;
 	char	*tmp;
 
+	tmp = NULL;
+	elem = NULL;
 	while ((elem = pop(e->pile_cntr)))
 	{
       	tmp = ft_strjoin(elem->way, elem->name); // tmtc tacompri, faut quand même free toussa

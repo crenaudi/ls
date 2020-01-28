@@ -21,7 +21,7 @@ OBJ = $(SRC:.c=.o)
 RM = rm -f
 
 %.o: %.c includes/ft_ls.h
-	$(CC) -o $@ -c $< $(CFLAGS)
+	$(CC) -o $@ -c $< $(CFLAGS) -g3
 
 .PHONY: all fclean re
 

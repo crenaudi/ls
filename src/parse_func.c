@@ -26,34 +26,52 @@ static void			type_flags(char *tmp, t_env *e)
 		e->f_sort = (ft_strchr(tmp, 't') != NULL) ? &sort_t : &sort_base;
 }
 
+char			*addflags(char **av, int *i)
+{
+	char	*sub;
+	char	*tmp;
+	char 	*flg;
+
+	sub = NULL;
+	tmp = NULL;
+	flg = NULL;
+	while (av[*i] != NULL && av[*i][0] == '-' && av[*i][1] != '-'
+		&& av[*i][1] != '\0')
+	{
+		sub = ft_strsub(av[*i], 1, ft_strlen(av[*i]));
+		tmp = ft_strjoin(flg, sub);
+		ft_strdel(&flg);
+		flg = ft_strdup(tmp);
+		ft_strdel(&tmp);
+		ft_strdel(&sub);
+		*i += 1;
+	}
+	return (flg);
+}
+
 int			parse_flags(char **av, t_env *e)
 {
 	char	*tmp;
 	int 	i;
-	int 	index;
+	int 	indx;
 
 	i = -1;
-	index = 1;
-	tmp = NULL;
-	while (av[index] != NULL && av[index][0] == '-' && av[index][1] != '-' && av[index][1] != '\0')
-	{
-		tmp = ft_strjoin(tmp, ft_strsub(av[index], 1, ft_strlen(av[index])));
-		index++;
-	}
+	indx = 1;
+	tmp = addflags(av, &indx);
 	if (tmp != NULL)
 	{
 		type_flags(tmp, e);
 		while (tmp[++i] != '\0')
-			if (tmp[i] != 'a' && tmp[i] != 'R' && tmp[i] != 'r' && tmp[i] != 'a'
-				&& tmp[i] != 't' && tmp[i] != 'l')
+			if (tmp[i] != 'a' && tmp[i] != 'R' && tmp[i] != 'r'
+				&& tmp[i] != 'a' && tmp[i] != 't' && tmp[i] != 'l')
 			{
-						error(NULL, -3, tmp[i]);
-						ft_strdel(&tmp);
-						return (ERROR);
+				error(NULL, -3, tmp[i]);
+				ft_strdel(&tmp);
+				return (ERROR);
 			}
-			ft_strdel(&tmp);
 	}
-	return (index);
+	ft_strdel(&tmp);
+	return (indx);
 }
 
 size_t      ft_lstlen(t_lst *lst)

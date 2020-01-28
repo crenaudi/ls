@@ -12,19 +12,6 @@
 
 #include "../includes/ft_ls.h"
 
-struct stat add_stat(t_lst *lst)
-{
-	struct stat stt;
-	char 		*tmp;
-
-	tmp = (lst->name[0] == '/') ?
-		ft_strdup(lst->name) : ft_strjoin(lst->way, lst->name);
-	lstat(tmp, &stt);
-	ft_strdel(&tmp);
-	return (stt);
-
-}
-
 struct stat add_stat_way(t_lst *lst, char *way)
 {
 	struct stat stt;
@@ -36,7 +23,6 @@ struct stat add_stat_way(t_lst *lst, char *way)
 	ft_strdel(&tmp);
 	ft_strdel(&way);
 	return (stt);
-
 }
 
 t_print_all	init_info2print(t_file_cntr *cntr, char *way)

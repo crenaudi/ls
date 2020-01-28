@@ -40,7 +40,8 @@ void	destroy_elem(t_lst *elem)
 	ft_memdel((void **)(&elem->name));
 	ft_memdel((void **)(&elem->way));
 	elem->next = NULL;
-	ft_memdel((void **)(elem));
+	free(elem);
+	elem = NULL;
 }
 
 void	destroy_lst(t_lst *lst)
@@ -61,19 +62,18 @@ void	destroy_cntr_file(t_file_cntr *cntr)
 	if (cntr->lst != NULL)
 		destroy_lst(cntr->lst);
 	cntr->size = 0;
-	ft_memdel((void **)(&cntr));
 }
 
 void	destroy_cntr_pile(t_pile_cntr *cntr)
 {
 	if (cntr->first != NULL)
 		destroy_lst(cntr->first);
-	ft_memdel((void **)(cntr));
 }
 
 void	clean_env(t_env *e)
 {
-	destroy_cntr_file(e->file_cntr);
+	ft_memdel((void **)(&e->file_cntr));
 	destroy_cntr_pile(e->pile_cntr);
+	ft_memdel((void **)(&e->pile_cntr));
 	ft_bzero(e, sizeof(t_env));
 }

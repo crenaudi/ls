@@ -41,7 +41,7 @@ static void		excute_argv(t_env *e, char **av, int on, int to)
 	}
 }
 
-int				main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_env		e;
 	int 		i;

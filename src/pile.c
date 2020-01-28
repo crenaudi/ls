@@ -18,10 +18,15 @@ t_lst		*new_elem(char *name, char *way)
 
 	if (!(new = (t_lst *)malloc(sizeof(t_lst))))
 		return (NULL);
+	ft_bzero(new, sizeof(t_lst));
 	if (name != NULL)
 		ft_strcpy(new->name, name);
+	else
+		ft_bzero(new->name, sizeof(char) * NAME_MAX);
 	if (way != NULL)
 		ft_strcpy(new->way, way);
+	else
+		ft_bzero(new->way, sizeof(char) * PATH_MAX);
 	return (new);
 }
 
@@ -90,7 +95,7 @@ void 	push2stack(t_env *e, char *way)
 		if ((ft_strcmp(lst->name, ".") != 0 && lst->name[1] != '.')
 			&& (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l'))
 			push(e->pile_cntr, lst->name, tmp = (lst->name[0] == '/') ?
-				NULL : way);
+				NULL : ft_strdup(way));
 		else
 			if (e->recursive != 1)
 				ft_putendl(lst->name); //a prevoir si flag l
