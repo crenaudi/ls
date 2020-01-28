@@ -29,7 +29,6 @@ int		push(t_pile_cntr *pile_cntr, char *name, char *way)
 {
 	t_lst	*new;
 
-	//printf("PUSH\n");
 	if ((new = new_elem(name, way)) == NULL)
 		return (ERROR);
 	if (pile_cntr->first == NULL)
@@ -46,7 +45,6 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 {
 	t_lst	*tmp;
 
-	//printf("POP\n");
 	tmp = NULL;
 	tmp = pile_cntr->first;
 	if (pile_cntr == NULL)
@@ -81,17 +79,18 @@ void 	push2stack(t_env *e, char *way)
 	struct stat stt;
 	size_t 	i;
 
-	//printf("push2stack\n");
 	tmp = NULL;
 	lst = e->file_cntr->lst;
 	i = 0;
 	while (i < e->file_cntr->size)
 	{
-		tmp = ft_strjoin(way, lst->name);
+		tmp = (lst->name[0] == '/') ?
+			ft_strdup(lst->name) : ft_strjoin(way, lst->name);
 		stat(tmp, &stt);
 		if ((ft_strcmp(lst->name, ".") != 0 && lst->name[1] != '.')
 			&& (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l'))
-			push(e->pile_cntr, lst->name, way);
+			push(e->pile_cntr, lst->name, tmp = (lst->name[0] == '/') ?
+				NULL : way);
 		else
 			if (e->recursive != 1)
 				ft_putendl(lst->name); //a prevoir si flag l
@@ -109,7 +108,8 @@ void		print_pile_cntr(t_pile_cntr *pile_cntr)
 	tmp = pile_cntr->first;
 	while (tmp != NULL)
 	{
-		printf("dans ma pile_cntr il y a %s et %s\n", tmp->name, tmp->way);
+		ft_putstr("dans ma pile_cntr il y a ");
+		ft_putendl(tmp->name);
 		tmp = tmp->next;
 	}
 }

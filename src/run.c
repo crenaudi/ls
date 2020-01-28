@@ -68,7 +68,8 @@ static void	read_file(DIR *dirp, t_env *e, t_lst *file)
 			ft_strdel(&tmp);
 		}
 		if (e->file_cntr->lst != NULL)
-			sort_push_print(e, (file->way[0] == 0) ? ft_strdup("./") :
+			sort_push_print(e, (file->way[0] == 0) ?
+				(file->name[0] == '/') ? file->name : ft_strdup("./") :
 				ft_strjoin(file->way, file->name));
 		ft_strdel(&tmp);
 		free(c);
@@ -84,14 +85,15 @@ static int is_var(t_env *e, t_lst *elem, char *s)
 
 	i = 0;
 	lstat(s, &stt);
-	if (device(stt.st_mode) == 99 && e->l == 1)
+	if (device(stt.st_mode) == 'l' && e->l == 1)
 	{
 		while (s[++i] != '\0')
 			if (s[i] == '/')
 				return (0);
-		stt = add_stat(elem);
-		max_st_nb(&stt, 1, &nb[2]);
-		max_st_str(&stt, 1, &str[2]);
+		nb[0] = ft_nblen(stt.st_nlink);
+		nb[1] =  ft_nblen(stt.st_size);
+		str[0] = 0;
+		str[1] = 0;
 		ft_putinfo(stt, elem->name, nb, str);
 		if (e->pile_cntr->first != NULL)
 			ft_putchar('\n');
@@ -110,16 +112,16 @@ void        run(t_env *e)
 	{
       	tmp = ft_strjoin(elem->way, elem->name); // tmtc tacompri, faut quand même free toussa
       	if (is_var(e, elem, tmp) == 0)
-      	{
+		{
 	    		if ((dirp = opendir(tmp)) == NULL)
 		  		error(elem->name, -1, 'o');
-	    	else
-	   	{
-		  	read_file(dirp, e, elem);
-		  	closedir(dirp);
-	  	}
-      }
-      ft_strdel(&tmp);
-      destroy_elem(elem);
+	    		else
+	   		{
+		  		read_file(dirp, e, elem);
+		  		closedir(dirp);
+	  		}
+      	}
+		ft_strdel(&tmp);
+      	destroy_elem(elem);
 	}
 }
