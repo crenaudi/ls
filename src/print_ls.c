@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:10 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/19 21:52:43 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:33:31 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	print_way(char *way, int rec)
 {
-	int	i;
-	int tmp;
-	int	idx;
+	int		i;
+	int		tmp;
+	int		idx;
 
 	idx = (rec == 1 || way[0] == '/') ? 0 : 2;
 	tmp = ft_strlen(way) - 1;
@@ -51,7 +51,7 @@ void	ft_putinfo(struct stat stat, char *name, unsigned int nb_max[2],
 	if (device(stat.st_mode) == 'l')
 	{
 		ft_putstr(name);
-		ft_putstr(" private -> ");
+		ft_putstr(" -> private");
 	}
 	ft_putendl(name);
 }
@@ -59,7 +59,7 @@ void	ft_putinfo(struct stat stat, char *name, unsigned int nb_max[2],
 void	ls_simple(t_env *e, char *way)
 {
 	int		i;
-	t_lst 	*lst;
+	t_lst	*lst;
 
 	i = -1;
 	lst = e->file_cntr->lst;
@@ -77,7 +77,7 @@ void	ls_simple(t_env *e, char *way)
 void	ls_all(t_env *e, char *way)
 {
 	t_print_all	info;
-	int i;
+	int			i;
 
 	i = -1;
 	info = init_info2print(e->file_cntr, way);

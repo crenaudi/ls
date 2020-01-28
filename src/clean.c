@@ -6,32 +6,11 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:09:22 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/17 23:11:55 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:58:26 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
-
-void		error(char *av, int error, char c)
-{
-	ft_putstr(LS);
-	if (error != -3)
-		ft_putstr(av);
-	if (error == -1)
-		ft_putendl(ERROR_01);
-	if (error == -2)
-		ft_putendl(ERROR_02);
-	if (error == -3)
-	{
-		ft_putstr(ERROR_03);
-		ft_putchar(c);
-		ft_putchar('\n');
-		ft_putstr(USAGE);
-		ft_putendl(ERROR_06);
-	}
-	if (error == 1)
-		ft_putendl(ERROR_04);
-}
 
 void	destroy_elem(t_lst *elem)
 {
@@ -40,20 +19,20 @@ void	destroy_elem(t_lst *elem)
 	ft_memdel((void **)(&elem->name));
 	ft_memdel((void **)(&elem->way));
 	elem->next = NULL;
-	free(elem);
+	ft_memdel((void **)(&elem));
 	elem = NULL;
 }
 
 void	destroy_lst(t_lst *lst)
 {
-	t_lst 	*tmp;
+	t_lst	*tmp;
 
 	while (lst != NULL)
-      {
-            tmp = lst->next;
+	{
+		tmp = lst->next;
 		destroy_elem(lst);
 		lst = tmp;
-      }
+	}
 	lst = NULL;
 }
 

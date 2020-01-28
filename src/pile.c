@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pile_cntr.c                                             :+:      :+:    :+:   */
+/*   pile.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 17:15:37 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/28 18:45:37 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 20:07:45 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_lst		*new_elem(char *name, char *way)
 	return (new);
 }
 
-int		push(t_pile_cntr *pile_cntr, char *name, char *way)
+int			push(t_pile_cntr *pile_cntr, char *name, char *way)
 {
 	t_lst	*new;
 
@@ -59,10 +59,9 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 	return (tmp);
 }
 
-
-int         addfl(t_file_cntr *cntr, char *name, char *way)
+int			addfl(t_file_cntr *cntr, char *name, char *way)
 {
-      t_lst	*new;
+	t_lst	*new;
 
 	if ((new = new_elem(name, way)) == NULL)
 		return (ERROR);
@@ -77,12 +76,12 @@ int         addfl(t_file_cntr *cntr, char *name, char *way)
 	return (SUCCESS);
 }
 
-void 	push2stack(t_env *e, char *way)
+void		push2stack(t_env *e, char *way)
 {
-	t_lst 	*lst;
-	char 		*tmp[2];
-	struct stat stt;
-	size_t 	i;
+	t_lst		*lst;
+	char		*tmp[2];
+	struct stat	stt;
+	size_t		i;
 
 	tmp[0] = NULL;
 	lst = e->file_cntr->lst;
@@ -98,24 +97,10 @@ void 	push2stack(t_env *e, char *way)
 			push(e->pile_cntr, lst->name, tmp[1] = (lst->name[0] == '/') ?
 				NULL : ft_strdup(way));
 		else
-			(e->recursive != 1) ? ft_putendl(lst->name) : ft_putchar(' ');
+			(e->recursive != 1) ? ft_putendl(lst->name) : NULL;
 		lst = lst->next;
 		ft_strdel(&tmp[0]);
 		ft_strdel(&tmp[1]);
 		i++;
-	}
-}
-
-void		print_pile_cntr(t_pile_cntr *pile_cntr)
-{
-	t_lst		*tmp;
-
-	tmp = NULL;
-	tmp = pile_cntr->first;
-	while (tmp != NULL)
-	{
-		ft_putstr("dans ma pile_cntr il y a ");
-		ft_putendl(tmp->name);
-		tmp = tmp->next;
 	}
 }

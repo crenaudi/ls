@@ -6,16 +6,16 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:56 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/18 18:58:27 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:57:27 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-struct stat add_stat_way(t_lst *lst, char *way)
+struct stat	add_stat_way(t_lst *lst, char *way)
 {
-	struct stat stt;
-	char 		*tmp;
+	struct stat	stt;
+	char		*tmp;
 
 	tmp = (lst->name[0] == '/') ?
 		ft_strdup(lst->name) : ft_strjoin(way, lst->name);
@@ -28,8 +28,8 @@ struct stat add_stat_way(t_lst *lst, char *way)
 t_print_all	init_info2print(t_file_cntr *cntr, char *way)
 {
 	t_print_all		info;
-	struct stat 	*stt;
-	size_t		i;
+	struct stat		*stt;
+	size_t			i;
 	t_lst			*lst;
 
 	i = -1;
@@ -48,7 +48,7 @@ t_print_all	init_info2print(t_file_cntr *cntr, char *way)
 	return (info);
 }
 
-t_pile_cntr	*init_pile_cntr()
+t_pile_cntr	*init_pile_cntr(void)
 {
 	t_pile_cntr	*cntr;
 
@@ -59,7 +59,7 @@ t_pile_cntr	*init_pile_cntr()
 	return (cntr);
 }
 
-t_file_cntr	*init_file_cntr()
+t_file_cntr	*init_file_cntr(void)
 {
 	t_file_cntr	*cntr;
 

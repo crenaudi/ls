@@ -6,17 +6,38 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2020/01/09 20:13:41 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 20:07:04 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-static void		excute_argv(t_env *e, char **av, int on, int to)
+void		error(char *av, int error, char c)
 {
-	char 		*tmp;
-	struct stat stt;
-	int 		hav_wrg;
+	ft_putstr(LS);
+	if (error != -3)
+		ft_putstr(av);
+	if (error == -1)
+		ft_putendl(ERROR_01);
+	if (error == -2)
+		ft_putendl(ERROR_02);
+	if (error == -3)
+	{
+		ft_putstr(ERROR_03);
+		ft_putchar(c);
+		ft_putchar('\n');
+		ft_putstr(USAGE);
+		ft_putendl(ERROR_06);
+	}
+	if (error == 1)
+		ft_putendl(ERROR_04);
+}
+
+static void	excute_argv(t_env *e, char **av, int on, int to)
+{
+	char		*tmp;
+	struct stat	stt;
+	int			hav_wrg;
 
 	hav_wrg = 0;
 	while (on < to)
@@ -34,7 +55,7 @@ static void		excute_argv(t_env *e, char **av, int on, int to)
 		(hav_wrg == 0) ? push(e->pile_cntr, ".", NULL) : hav_wrg == 0;
 	else
 	{
-		TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
+		topdownmergesort(e, e->file_cntr->lst, e->file_cntr->size);
 		push2stack(e, "./");
 		destroy_lst(e->file_cntr->lst);
 		e->file_cntr->size = 0;
@@ -44,8 +65,7 @@ static void		excute_argv(t_env *e, char **av, int on, int to)
 int			main(int ac, char **av)
 {
 	t_env		e;
-	int 		i;
-	char 		c;
+	int			i;
 
 	init_env(&e);
 	if ((i = parse_flags(av, &e)) == ERROR)
@@ -53,6 +73,5 @@ int			main(int ac, char **av)
 	excute_argv(&e, av, i, ac);
 	run(&e);
 	clean_env(&e);
-	read(0,&c,1);
 	return (0);
 }

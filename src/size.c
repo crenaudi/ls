@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:10 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/25 20:51:04 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:46:17 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void		print_octet(struct stat *stat, int ln)
 
 void		max_st_nb(struct stat *stat, int ln, unsigned int nb_max[2])
 {
-	int			i;
+	int				i;
 	unsigned int	link_current;
 	unsigned int	size_current;
 
 	i = 0;
-	nb_max[0]= 0;
+	nb_max[0] = 0;
 	nb_max[1] = 0;
 	while (i < ln)
 	{

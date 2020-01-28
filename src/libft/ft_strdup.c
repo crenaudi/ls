@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 16:53:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2018/11/19 19:28:00 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:40:22 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char			*ft_strdup(const char *src)
 
 	i = 0;
 	if (src == NULL)
-		return(NULL);
+		return (NULL);
 	if (!(copy = (char *)malloc(sizeof(char) * (forbidden_strlen(src) + 1))))
 		return (0);
 	while (src[i] != '\0')

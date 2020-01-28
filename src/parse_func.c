@@ -6,13 +6,13 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2020/01/09 19:28:50 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:45:40 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-static void			type_flags(char *tmp, t_env *e)
+static void		type_flags(char *tmp, t_env *e)
 {
 	e->a = (ft_strchr(tmp, 'a') != NULL) ? 1 : 0;
 	e->recursive = (ft_strchr(tmp, 'R') != NULL) ? 1 : 0;
@@ -30,7 +30,7 @@ char			*addflags(char **av, int *i)
 {
 	char	*sub;
 	char	*tmp;
-	char 	*flg;
+	char	*flg;
 
 	sub = NULL;
 	tmp = NULL;
@@ -49,11 +49,11 @@ char			*addflags(char **av, int *i)
 	return (flg);
 }
 
-int			parse_flags(char **av, t_env *e)
+int				parse_flags(char **av, t_env *e)
 {
 	char	*tmp;
-	int 	i;
-	int 	indx;
+	int		i;
+	int		indx;
 
 	i = -1;
 	indx = 1;
@@ -74,15 +74,15 @@ int			parse_flags(char **av, t_env *e)
 	return (indx);
 }
 
-size_t      ft_lstlen(t_lst *lst)
+size_t			ft_lstlen(t_lst *lst)
 {
-      size_t      i;
+	size_t	i;
 
-      i = 0;
-      while (lst != NULL)
-      {
-            i++;
-            lst = lst->next;
-      }
-      return (i);
+	i = 0;
+	while (lst != NULL)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
 }

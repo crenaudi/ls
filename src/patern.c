@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 20:28:29 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/11/25 21:45:14 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:53:56 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		id_patern(int start, int id)
 {
 	int		i;
 
-	i = start - ft_nblen(id);;
+	i = start - ft_nblen(id);
 	ft_putnbr(id);
 	while (i-- > 0)
 		ft_putchar(' ');

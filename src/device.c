@@ -6,13 +6,13 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:09:15 by crenaudi          #+#    #+#             */
-/*   Updated: 2019/12/20 19:40:15 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 18:41:41 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-char	device(mode_t st_mode)
+char		device(mode_t st_mode)
 {
 	if ((st_mode & S_IFIFO) == S_IFIFO)
 		return ('p');

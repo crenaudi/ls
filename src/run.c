@@ -6,16 +6,16 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:32 by crenaudi          #+#    #+#             */
-/*   Updated: 2020/01/09 20:19:02 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/28 20:06:27 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-static int	check_permission(t_lst *elem)
+static int		check_permission(t_lst *elem)
 {
 	char		*doc;
-	struct stat stt;
+	struct stat	stt;
 
 	doc = ft_strjoin(elem->way, elem->name);
 	if (ft_strcmp(elem->name, ".") != 0 && ft_strcmp(elem->name, "..") != 0)
@@ -34,16 +34,17 @@ static int	check_permission(t_lst *elem)
 	return (0);
 }
 
-static void	sort_push_print(t_env *e, char *tmp)
+static void		sort_push_print(t_env *e, char *tmp)
 {
-	char *way;
+	char	*way;
 
 	way = NULL;
 	if (ft_strcmp(tmp, "./") != 0)
 		way = ft_strjoin(tmp, "/");
 	else
 		way = ft_strdup(tmp);
-	e->file_cntr->lst = TopDownMergeSort(e, e->file_cntr->lst, e->file_cntr->size);
+	e->file_cntr->lst = topdownmergesort(e, e->file_cntr->lst,
+			e->file_cntr->size);
 	if (e->recursive == 1)
 		push2stack(e, way);
 	e->f_print(e, tmp);
@@ -53,7 +54,7 @@ static void	sort_push_print(t_env *e, char *tmp)
 	e->file_cntr->size = 0;
 }
 
-static void	read_file(DIR *dirp, t_env *e, t_lst *file)
+static void		read_file(DIR *dirp, t_env *e, t_lst *file)
 {
 	struct dirent	*c;
 	struct stat		stt;
@@ -69,30 +70,30 @@ static void	read_file(DIR *dirp, t_env *e, t_lst *file)
 			ft_strdel(&tmp);
 		}
 		if (e->file_cntr->lst != NULL)
-			sort_push_print(e, (file->way[0] == 0) ?
-				(file->name[0] == '/') ? file->name : ft_strdup("./") :
+		{
+			tmp = (file->name[0] == '/') ? ft_strdup(file->name)
+				: ft_strdup("./");
+			sort_push_print(e, (file->way[0] == 0) ? ft_strdup(tmp) :
 				ft_strjoin(file->way, file->name));
+		}
 		ft_strdel(&tmp);
 		free(c);
 	}
 }
 
-static int is_var(t_env *e, t_lst *elem, char *s)
+static int		is_var(t_env *e, t_lst *elem, char *s)
 {
 	struct stat		stt;
-	unsigned int 	str[2];
-	unsigned int 	nb[2];
-	int			i;
+	unsigned int	str[2];
+	unsigned int	nb[2];
+	int				i;
 
 	i = 0;
 	lstat(s, &stt);
 	if (device(stt.st_mode) == 'l' && e->l == 1)
 	{
-		while (s[++i] != '\0')
-			if (s[i] == '/')
-				return (0);
 		nb[0] = ft_nblen(stt.st_nlink);
-		nb[1] =  ft_nblen(stt.st_size);
+		nb[1] = ft_nblen(stt.st_size);
 		str[0] = 0;
 		str[1] = 0;
 		ft_putinfo(stt, elem->name, nb, str);
@@ -103,28 +104,29 @@ static int is_var(t_env *e, t_lst *elem, char *s)
 	return (0);
 }
 
-void        run(t_env *e)
+void			run(t_env *e)
 {
 	t_lst	*elem;
-	DIR 	*dirp;
+	DIR		*dirp;
 	char	*tmp;
 
 	tmp = NULL;
 	elem = NULL;
 	while ((elem = pop(e->pile_cntr)))
 	{
-      	tmp = ft_strjoin(elem->way, elem->name); // tmtc tacompri, faut quand même free toussa
-      	if (is_var(e, elem, tmp) == 0)
+		tmp = ft_strjoin(elem->way, elem->name);
+		if (is_var(e, elem, tmp) == 0)
 		{
-	    		if ((dirp = opendir(tmp)) == NULL)
-		  		error(elem->name, -1, 'o');
-	    		else
-	   		{
-		  		read_file(dirp, e, elem);
-		  		closedir(dirp);
-	  		}
-      	}
+			if ((dirp = opendir(tmp)) == NULL)
+				error(elem->name, -1, 'o');
+			else
+			{
+				read_file(dirp, e, elem);
+				closedir(dirp);
+			}
+		}
 		ft_strdel(&tmp);
-      	destroy_elem(elem);
+		if (elem->name[0] != 0)
+			destroy_elem(elem);
 	}
 }
