@@ -116,7 +116,7 @@ void				max_st_str(struct stat *stat, int ln,
 void 				push2stack(t_env *e, char *way);
 t_file_cntr			*init_file_cntr();
 t_pile_cntr			*init_pile_cntr();
-t_print_all			init_info2print(t_file_cntr *cntr);
+t_print_all			init_info2print(t_file_cntr *cntr, char *way);
 t_lst				*new_elem(char *name, char *way);
 size_t      		ft_lstlen(t_lst *lst);
 void				ft_swap_elem(t_lst *elem1, t_lst *elem2);

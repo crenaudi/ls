@@ -25,7 +25,21 @@ struct stat add_stat(t_lst *lst)
 
 }
 
-t_print_all	init_info2print(t_file_cntr *cntr)
+struct stat add_stat_way(t_lst *lst, char *way)
+{
+	struct stat stt;
+	char 		*tmp;
+
+	tmp = (lst->name[0] == '/') ?
+		ft_strdup(lst->name) : ft_strjoin(way, lst->name);
+	lstat(tmp, &stt);
+	ft_strdel(&tmp);
+	ft_strdel(&way);
+	return (stt);
+
+}
+
+t_print_all	init_info2print(t_file_cntr *cntr, char *way)
 {
 	t_print_all		info;
 	struct stat 	*stt;
@@ -38,7 +52,7 @@ t_print_all	init_info2print(t_file_cntr *cntr)
 		ft_putstr("ERROR MALLOC");
 	while (++i < cntr->size)
 	{
-		stt[i] = add_stat(lst);
+		stt[i] = add_stat_way(lst, ft_strjoin(way, "/"));
 		lst = lst->next;
 	}
 	max_st_nb(stt, cntr->size, info.nb_max);

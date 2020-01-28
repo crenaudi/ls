@@ -52,14 +52,14 @@ int		sort_t(t_lst *first, t_lst *second)
 {
 	if (cmpt(add_stat(first), add_stat(second), first->name,
 		second->name) == 0)
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }
 
 int		sort_rt(t_lst *first, t_lst *second)
 {
 	if (cmpt(add_stat(first), add_stat(second), first->name,
-            second->name) == 1)
+            second->name) == 0)
             return (1);
 	return (0);
 }

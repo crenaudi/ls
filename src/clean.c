@@ -35,13 +35,12 @@ void		error(char *av, int error, char c)
 
 void	destroy_elem(t_lst *elem)
 {
-	//ft_memdel((void **)(&elem->name));
-	//ft_memdel((void **)(&elem->way));
 	ft_bzero(elem->name, sizeof(char) * NAME_MAX);
 	ft_bzero(elem->way, sizeof(char) * PATH_MAX);
-	//free(&elem->st_mode);
+	ft_memdel((void **)(&elem->name));
+	ft_memdel((void **)(&elem->way));
 	elem->next = NULL;
-	//free(elem);
+	ft_memdel((void **)(elem));
 }
 
 void	destroy_lst(t_lst *lst)

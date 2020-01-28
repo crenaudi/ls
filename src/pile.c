@@ -89,7 +89,8 @@ void 	push2stack(t_env *e, char *way)
 	{
 		tmp = ft_strjoin(way, lst->name);
 		stat(tmp, &stt);
-		if (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l')
+		if ((ft_strcmp(lst->name, ".") != 0 && lst->name[1] != '.')
+			&& (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l'))
 			push(e->pile_cntr, lst->name, way);
 		else
 			if (e->recursive != 1)

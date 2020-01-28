@@ -80,7 +80,7 @@ void	ls_all(t_env *e, char *way)
 	int i;
 
 	i = -1;
-	info = init_info2print(e->file_cntr);
+	info = init_info2print(e->file_cntr, way);
 	if (e->recursive == 1)
 		print_way(way, e->recursive);
 	print_octet(info.stat, e->file_cntr->size);
