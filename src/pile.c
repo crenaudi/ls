@@ -80,27 +80,28 @@ int         addfl(t_file_cntr *cntr, char *name, char *way)
 void 	push2stack(t_env *e, char *way)
 {
 	t_lst 	*lst;
-	char 		*tmp;
+	char 		*tmp[2];
 	struct stat stt;
 	size_t 	i;
 
-	tmp = NULL;
+	tmp[0] = NULL;
 	lst = e->file_cntr->lst;
 	i = 0;
 	while (i < e->file_cntr->size)
 	{
-		tmp = (lst->name[0] == '/') ?
+		tmp[1] = NULL;
+		tmp[0] = (lst->name[0] == '/') ?
 			ft_strdup(lst->name) : ft_strjoin(way, lst->name);
-		stat(tmp, &stt);
+		stat(tmp[0], &stt);
 		if ((ft_strcmp(lst->name, ".") != 0 && lst->name[1] != '.')
 			&& (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l'))
-			push(e->pile_cntr, lst->name, tmp = (lst->name[0] == '/') ?
+			push(e->pile_cntr, lst->name, tmp[1] = (lst->name[0] == '/') ?
 				NULL : ft_strdup(way));
 		else
-			if (e->recursive != 1)
-				ft_putendl(lst->name); //a prevoir si flag l
+			(e->recursive != 1) ? ft_putendl(lst->name) : ft_putchar(' ');
 		lst = lst->next;
-		ft_strdel(&tmp);
+		ft_strdel(&tmp[0]);
+		ft_strdel(&tmp[1]);
 		i++;
 	}
 }
