@@ -59,48 +59,33 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 	return (tmp);
 }
 
-int			addfl(t_file_cntr *cntr, char *name, char *way)
+static void		push2stack_rec(t_env *e, t_lst *lst, char *way, size_t n)
 {
-	t_lst	*new;
+	char		*tmp[2];
+	struct stat	stt;
 
-	if ((new = new_elem(name, way)) == NULL)
-		return (ERROR);
-	if (cntr->lst == NULL)
-		cntr->lst = new;
+	if (--n)
+		push2stack_rec(e, lst->next, way, n);
+	tmp[1] = NULL;
+	tmp[0] = (lst->name[0] == '/') ?
+	ft_strdup(lst->name) : ft_strjoin(way, lst->name);
+	stat(tmp[0], &stt);
+	if ((ft_strcmp(lst->name, ".") != 0 && lst->name[1] != '.')
+		&& (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l'))
+		push(e->pile_cntr, lst->name, tmp[1] = (lst->name[0] == '/') ?
+			NULL : ft_strdup(way));
 	else
-	{
-		new->next = cntr->lst;
-		cntr->lst = new;
-	}
-	cntr->size += 1;
-	return (SUCCESS);
+		(e->recursive != 1) ? ft_putendl(lst->name) : NULL;
+	ft_strdel(&tmp[0]);
+	ft_strdel(&tmp[1]);
 }
 
 void		push2stack(t_env *e, char *way)
 {
 	t_lst		*lst;
-	char		*tmp[2];
-	struct stat	stt;
-	size_t		i;
+	size_t	size;
 
-	tmp[0] = NULL;
 	lst = e->file_cntr->lst;
-	i = 0;
-	while (i < e->file_cntr->size)
-	{
-		tmp[1] = NULL;
-		tmp[0] = (lst->name[0] == '/') ?
-			ft_strdup(lst->name) : ft_strjoin(way, lst->name);
-		stat(tmp[0], &stt);
-		if ((ft_strcmp(lst->name, ".") != 0 && lst->name[1] != '.')
-			&& (device(stt.st_mode) == 'd' || device(stt.st_mode) == 'l'))
-			push(e->pile_cntr, lst->name, tmp[1] = (lst->name[0] == '/') ?
-				NULL : ft_strdup(way));
-		else
-			(e->recursive != 1) ? ft_putendl(lst->name) : NULL;
-		lst = lst->next;
-		ft_strdel(&tmp[0]);
-		ft_strdel(&tmp[1]);
-		i++;
-	}
+	size = e->file_cntr->size;
+	push2stack_rec(e, lst, way, size);
 }

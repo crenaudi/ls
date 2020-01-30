@@ -20,7 +20,11 @@ void		error(char *av, int error, char c)
 	if (error == -1)
 		ft_putendl(ERROR_01);
 	if (error == -2)
+	{
 		ft_putendl(ERROR_02);
+		if (c == 'r')
+			ft_putchar('\n');
+	}
 	if (error == -3)
 	{
 		ft_putstr(ERROR_03);
@@ -31,6 +35,23 @@ void		error(char *av, int error, char c)
 	}
 	if (error == 1)
 		ft_putendl(ERROR_04);
+}
+
+int			addfl(t_file_cntr *cntr, char *name, char *way)
+{
+	t_lst	*new;
+
+	if ((new = new_elem(name, way)) == NULL)
+		return (ERROR);
+	if (cntr->lst == NULL)
+		cntr->lst = new;
+	else
+	{
+		new->next = cntr->lst;
+		cntr->lst = new;
+	}
+	cntr->size += 1;
+	return (SUCCESS);
 }
 
 static void	excute_argv(t_env *e, char **av, int on, int to)

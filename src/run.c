@@ -114,11 +114,14 @@ void			run(t_env *e)
 	elem = NULL;
 	while ((elem = pop(e->pile_cntr)))
 	{
-		tmp = ft_strjoin(elem->way, elem->name);
-		if (is_var(e, elem, tmp) == 0)
+		if (is_var(e, elem, tmp = ft_strjoin(elem->way, elem->name)) == 0)
 		{
 			if ((dirp = opendir(tmp)) == NULL)
-				error(elem->name, -2, 'o');
+			{
+				if (e->recursive == 1)
+					print_way(tmp, 1);
+				error(elem->name, -2, 'r');
+			}
 			else
 			{
 				read_file(dirp, e, elem);
@@ -126,7 +129,6 @@ void			run(t_env *e)
 			}
 		}
 		ft_strdel(&tmp);
-		if (elem->name[0] != 0)
-			destroy_elem(elem);
+		destroy_elem(elem);
 	}
 }

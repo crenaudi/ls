@@ -20,6 +20,8 @@ char		device(mode_t st_mode)
 		return ('l');
 	if ((st_mode & S_IFCHR) == S_IFCHR)
 		return ('c');
+	if ((st_mode & S_IFSOCK) == S_IFSOCK)
+		return ('s');
 	if ((st_mode & S_IFDIR) == S_IFDIR)
 		return ('d');
 	if ((st_mode & S_IFBLK) == S_IFBLK)
