@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:43 by crenaudi          #+#    #+#             */
-/*   Updated: 2020/01/28 20:07:04 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/31 18:56:14 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,55 @@ int			addfl(t_file_cntr *cntr, char *name, char *way)
 	return (SUCCESS);
 }
 
+static void	check_argv(t_env *e, t_file_cntr *wrong_av_cntr)
+{
+	t_lst	*tmp;
+	char	c;
+
+	if (e->file_cntr->lst == NULL && wrong_av_cntr->lst == NULL)
+		push(e->pile_cntr, ".", NULL);
+	if (wrong_av_cntr->lst != NULL)
+	{
+		c = 33;
+		while (c <= 126)
+		{
+			tmp = wrong_av_cntr->lst;
+			while (tmp)
+			{
+				if (tmp->name[0] == c)
+					error(tmp->name, -1, ' ');
+				tmp = tmp->next;
+			}
+			c++;
+		}
+		destroy_cntr_file(wrong_av_cntr);
+	}
+	ft_memdel((void **)(&wrong_av_cntr));
+}
+
 static void	excute_argv(t_env *e, char **av, int on, int to)
 {
 	char		*tmp;
 	struct stat	stt;
-	int			hav_wrg;
+	t_file_cntr	*wrong_av_cntr;
 
-	hav_wrg = 0;
+	wrong_av_cntr = init_file_cntr();
 	while (on < to)
 	{
 		tmp = (av[on][0] == '/') ?
 			ft_strdup(av[on]) : ft_strjoin("./", av[on]);
-		if (!(stat(tmp, &stt)))
+		if (!(stat(tmp, &stt)) && e->need_way++ >= 0)
 			addfl(e->file_cntr, av[on], (av[on][0] == '/') ? NULL : "./");
-		else if (++hav_wrg)
-			error(av[on], -1, ' ');
+		else
+			addfl(wrong_av_cntr, av[on], NULL);
 		ft_strdel(&tmp);
 		on++;
 	}
-	if (e->file_cntr->lst == NULL)
-		(hav_wrg == 0) ? push(e->pile_cntr, ".", NULL) : hav_wrg == 0;
-	else
+	check_argv(e, wrong_av_cntr);
+	if (e->file_cntr->lst != NULL)
 	{
-		topdownmergesort(e, e->file_cntr->lst, e->file_cntr->size);
+		e->file_cntr->lst = topdownmergesort(e, e->file_cntr->lst,
+			e->file_cntr->size);
 		push2stack(e, "./");
 		destroy_lst(&e->file_cntr->lst);
 		e->file_cntr->size = 0;

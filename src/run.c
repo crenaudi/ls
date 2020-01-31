@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 13:08:32 by crenaudi          #+#    #+#             */
-/*   Updated: 2020/01/28 20:06:27 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/31 18:50:51 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,21 @@ static int		check_permission(t_lst *elem)
 
 static void		sort_push_print(t_env *e, char *tmp)
 {
+	t_lst	*lst;
 	char	*way;
 
+	lst = e->file_cntr->lst;
 	way = NULL;
 	if (ft_strcmp(tmp, "./") != 0)
 		way = ft_strjoin(tmp, "/");
 	else
 		way = ft_strdup(tmp);
+	while (lst)
+	{
+		ft_bzero(lst->way, sizeof(char) * PATH_MAX);
+		ft_strcpy(lst->way, way);
+		lst = lst->next;
+	}
 	e->file_cntr->lst = topdownmergesort(e, e->file_cntr->lst,
 			e->file_cntr->size);
 	if (e->recursive == 1)

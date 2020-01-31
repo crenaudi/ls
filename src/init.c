@@ -43,6 +43,11 @@ t_print_all	init_info2print(t_file_cntr *cntr, char *way)
 	}
 	max_st_nb(stt, cntr->size, info.nb_max);
 	max_st_str(stt, cntr->size, info.str_max);
+	if (way[0] == '/')
+	{
+		info.str_max[0] = 12;
+		info.str_max[1] = 12;
+	}
 	info.lst = cntr->lst;
 	info.stat = stt;
 	return (info);
@@ -77,6 +82,7 @@ void		init_env(t_env *e)
 	e->f_sort = &sort_base;
 	e->f_print = &ls_simple;
 	e->recursive = 0;
+	e->need_way = 0;
 	e->a = 0;
 	e->l = 0;
 	e->pile_cntr = init_pile_cntr();

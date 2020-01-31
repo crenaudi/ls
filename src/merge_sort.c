@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 18:29:52 by crenaudi          #+#    #+#             */
-/*   Updated: 2020/01/28 20:10:09 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:55:43 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_lst			*topdownmergesort2(t_lst **headp, size_t n, t_env *e)
 	t_lst	*second;
 
 	first = *headp;
-	if (n < 1 && first == NULL)
+	if (n < 1 || first == NULL)
 	{
 		ft_putstr("pb n et:ou first = NULL\n");
 		return (NULL);

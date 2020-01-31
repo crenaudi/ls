@@ -17,9 +17,11 @@ int			sort_base(t_lst *first, t_lst *second)
 	int i;
 
 	i = 0;
-	while (first->name[i] == second->name[i])
+	while (first->name[i] == second->name[i]
+		&& first->name[i] != '\0' && second->name[i] != '\0')
 		i++;
-	if (first->name[i] <= second->name[i])
+	if (first->name[i] <= second->name[i]
+		&& first->name[i] != '\0' && second->name[i] != '\0')
 		return (1);
 	return (0);
 }
@@ -29,9 +31,11 @@ int			sort_r(t_lst *first, t_lst *second)
 	int		i;
 
 	i = 0;
-	while (first->name[i] == second->name[i])
+	while (first->name[i] == second->name[i]
+		&& first->name[i] != '\0' && second->name[i] != '\0')
 		i++;
-	if (first->name[i] >= second->name[i])
+	if (first->name[i] >= second->name[i]
+		&& first->name[i] != '\0' && second->name[i] != '\0')
 		return (1);
 	return (0);
 }

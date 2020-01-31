@@ -53,6 +53,7 @@ struct					s_env
 	int					a;
 	int					l;
 	int					recursive;
+	int					need_way;
 	t_file_cntr			*file_cntr;
 	t_pile_cntr			*pile_cntr;
 };

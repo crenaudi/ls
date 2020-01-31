@@ -6,7 +6,7 @@
 /*   By: crenaudi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 17:15:37 by crenaudi          #+#    #+#             */
-/*   Updated: 2020/01/28 20:07:45 by crenaudi         ###   ########.fr       */
+/*   Updated: 2020/01/31 16:50:20 by crenaudi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_lst		*pop(t_pile_cntr *pile_cntr)
 	return (tmp);
 }
 
-static void		push2stack_rec(t_env *e, t_lst *lst, char *way, size_t n)
+static void	push2stack_rec(t_env *e, t_lst *lst, char *way, size_t n)
 {
 	char		*tmp[2];
 	struct stat	stt;
@@ -67,6 +67,7 @@ static void		push2stack_rec(t_env *e, t_lst *lst, char *way, size_t n)
 	if (--n)
 		push2stack_rec(e, lst->next, way, n);
 	tmp[1] = NULL;
+	tmp[0] = NULL;
 	tmp[0] = (lst->name[0] == '/') ?
 	ft_strdup(lst->name) : ft_strjoin(way, lst->name);
 	stat(tmp[0], &stt);
@@ -82,7 +83,7 @@ static void		push2stack_rec(t_env *e, t_lst *lst, char *way, size_t n)
 
 void		push2stack(t_env *e, char *way)
 {
-	t_lst		*lst;
+	t_lst	*lst;
 	size_t	size;
 
 	lst = e->file_cntr->lst;

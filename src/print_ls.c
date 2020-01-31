@@ -63,7 +63,7 @@ void	ls_simple(t_env *e, char *way)
 
 	i = -1;
 	lst = e->file_cntr->lst;
-	if (e->recursive == 1)
+	if (e->recursive == 1 || e->need_way > 0)
 		print_way(way, e->recursive);
 	while (lst)
 	{
@@ -81,7 +81,7 @@ void	ls_all(t_env *e, char *way)
 
 	i = -1;
 	info = init_info2print(e->file_cntr, way);
-	if (e->recursive == 1)
+	if (e->recursive == 1 || e->need_way > 0)
 		print_way(way, e->recursive);
 	print_octet(info.stat, e->file_cntr->size);
 	while (info.lst)
